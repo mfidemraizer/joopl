@@ -1,122 +1,140 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>jOOPL by mfidemraizer</title>
-  </head>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{ joopl };</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.9.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href=".&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href=".&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href=".&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.9.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
 
-  <body>
-    <div id="container">
-      <div class="inner">
-
-        <header>
-          <h1>jOOPL</h1>
-          <h2>jOOPL is here to offer object-oriented programming and no more, just a tiny, simple and effective library that is going to support your JavaScript developments in the Web and anywhere.</h2>
-        </header>
-
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/mfidemraizer/joopl/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/mfidemraizer/joopl/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/mfidemraizer/joopl" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
-          <h1>Introduction</h1>
-
-<p>There are many JavaScript libraries that are correctly and nicely implementing object-oriented approaches, but non of them provides these features only - <em>for example, adding AJAX capabilities, DOM manipulation, ...</em> -</p>
-
-<p>jOOPL is here to offer object-oriented programming and no more, just a tiny, simple and effective library that is going to support your JavaScript developments in the Web and anywhere.</p>
-
-<h2>Why jOOPL?</h2>
-
-<p>Web development is going forward at the same speed as the Web does itself. Now this is an internet of applications and this fact is affecting complexity. </p>
-
-<p>Currently object-oriented programming has proven along lot of years that is a productive, near to human mind and cost-effective way of implementing small to large software solutions and, now, in the Web 2.0 and 3.0 times, software applications are more than a Web page showing information since current evolving paradigm is cloud computing, which enables devices, services and programs to connect themselves over the network.</p>
-
-<p>But object-oriented approach has evolved in Web servers and Web clients are somehow using old ways of doing things, excepting selected and famous JavaScript libraries.</p>
-
-<p>That is why jOOPL is here: a small and simple, but yet powerful library that gives developers the power of creating classes, interfaces, take advantage of inheritance, polymorphism and encapsulation, in order to take the Web to the next level with re-usable, scalable, well-written and easy-to-understand custom JavaScript objects. </p>
-
-<h2>Code sample</h2>
-
-<p>Here is a sample usage of jOOPL. Greatly using inheritance, "C" class will print "Hello world!" by chaining "SayHello" method's implementations:</p>
-
-<pre><code>      $namespace.register("jOOPL.Sample");
-
-      jOOPL.Sample.A = $class.declare
-          (
-      // Constructor
-              function (args) {
-              },
-      // Methods
-              {
-              SayHello: function () {
-                  document.write("hello");
-              }
-          }
-          );
-
-      jOOPL.Sample.B = $class.declare
-          (
-              function (args) {
-              },
-              {
-                  SayHello: function () {
-                      this.$base.SayHello();
-                      document.write(" world");
-                  }
-              },
-              jOOPL.Sample.A
-          );
-
-      jOOPL.Sample.IHelloable = $interface.declare(
-              {
-                  SayHello: function () {
-                      throw $new(NotImplementedException);
-                  }
-              }
-          );
-
-      $namespace.alias(jOOPL.Sample, "Sample");
-
-      Sample.C = $class.declare
-          (
-              function (args) {
-              },
-              {
-                  SayHello: function () {
-                      this.$base.SayHello();
-                      document.write("!");
-                  }
-              },
-              jOOPL.Sample.B,
-              jOOPL.Sample.IHelloable
-          );
-
-      $namespace.using("jOOPL.Sample");
-
-      var instance = $new(C);
-      instance.SayHello();
-</code></pre>
-        </section>
-
-        <footer>
-          jOOPL is maintained by <a href="https://github.com/mfidemraizer">mfidemraizer</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
+<div id="doc">
+    <div id="bd" class="yui3-g">
+        <div class="yui3-u-1-4">
+		    <div id="hd" class="yui3-g header">
+		        <div class="yui3-u-3-4">
+		            
+		                <h1><img src="https:&#x2F;&#x2F;download-codeplex.sec.s-msft.com&#x2F;Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+		            
+		        </div>
+		        <div class="yui3-u-1-4 version">
+		            <em>2.2.0</em>
+		        </div>
+		    </div>
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">Table of contents</h2>
         
-      </div>
+    <h3>Quick links</h3>
+    <ul id="quick-links">
+        <li><a href=".&#x2F;index.html">Back to main page</a></li>
+        <li><a href=".&#x2F;classes/$namespace.html#method_register">Creating namespaces</a></li>
+        <li><a href=".&#x2F;classes/$namespace.html#method_using">Importing namespaces</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-define">Defining a class</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-constructors">Class constructors</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-properties">Class properties</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-events">Class events, custom events</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-inheritance">Inheritance how-to</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
+        <li><a href=".&#x2F;classes/$def.html#class-base">Calling base class members how-to</a></li>
+    </ul>
+
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs" style="display: none">
+            <li><a href="#api-classes">Classes</a></li>
+            <li style="display: none"><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href=".&#x2F;classes/$def.html">$def</a></li>
+            
+                <li><a href=".&#x2F;classes/$namespace.html">$namespace</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules" style="display: none">
+            
+            </ul>
+        </div>
     </div>
-  </body>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                            <div class="apidocs">
+        <div id="docs-main" class="content">
+            <h2>Welcome to the official jOOPL documentation site!</h2>
+            <p>jOOPL stands for <strong>J</strong>avaScript <strong>O</strong>bject-<strong>O</strong>riented <strong>P</strong>rogramming <strong>L</strong>ibrary.</p>
+            <p>JavaScript has a limited but yet useful type definition system. In comparison to other modern programming languages like C#, Java, Ruby, Python and many others, JavaScript is not class-oriented but prototype-oriented.</p>
+            <p>Maybe prototypes are enough for simple developments, but when things get harder, out-of-the-box JavaScript type definition syntax gets bloated and harder to maintain.</p>
+            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it conserves 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
+
+            <h3>Ok, wait. Why jOOPL? Why object-oriented programming?</h3>
+            <p>It is all about taking the client-side Web and server development to the next level: <strong>let's create true reusable and maintainable JavaScript 
+            software pieces based on good practices and on top of a incredibly simple type definition syntax!</strong></p>
+            <p>jOOPL is just class-based object-oriented programming and it fully supports:</p>
+            
+            <ol>
+                <li>Namespaces</li>
+                <li>Inheritance</li>
+                <li>Polymorphism</li>
+                <li>Encapsulation</li>
+                <li>ECMA-Script 5.x and 6 properties</li>
+                <li>Exclusive, easy-to-use and powerful custom events!</li>
+            </ol>
+
+            <p>And it is a tiny JavaScript library when minimized (<i>~8KB</i>)!!</p>
+
+            <h3>I see, I see (blah, blah...). And what about a hello world sample? ;-)</h3>
+            <p>The next code listing creates a namespace called <i>samples</i>. A class <i>ClassA</i> in the namespace (the <i>this</i> keyword
+            represents the registered namespace) implements a method to say "hello world!" and, finally, an instance of the whole class is created in order to call the method to say <i>hello world!</i>:</p>
+            <pre>
+$namespace.register("samples", function() {
+    this.ClassA = $def({
+        $members: {
+            helloWorld: function() {
+                alert("hello world!");
+            }
+        }
+    });
+
+    var instanceOfClassA = new this.ClassA();
+    instanceOfClassA.helloWorld();
+});
+            </pre>
+        </div>
+    </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src=".&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src=".&#x2F;assets/js/yui-prettify.js"></script>
+<script src=".&#x2F;assets/../api.js"></script>
+<script src=".&#x2F;assets/js/api-filter.js"></script>
+<script src=".&#x2F;assets/js/api-list.js"></script>
+<script src=".&#x2F;assets/js/api-search.js"></script>
+<script src=".&#x2F;assets/js/apidocs.js"></script>
+</body>
 </html>

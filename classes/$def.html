@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>$def - { joopl };</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.9.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.9.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="bd" class="yui3-g">
+        <div class="yui3-u-1-4">
+		    <div id="hd" class="yui3-g header">
+		        <div class="yui3-u-3-4">
+		            
+		                <h1><img src="https:&#x2F;&#x2F;download-codeplex.sec.s-msft.com&#x2F;Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+		            
+		        </div>
+		        <div class="yui3-u-1-4 version">
+		            <em>2.2.0</em>
+		        </div>
+		    </div>
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">Table of contents</h2>
+        
+    <h3>Quick links</h3>
+    <ul id="quick-links">
+        <li><a href="..&#x2F;index.html">Back to main page</a></li>
+        <li><a href="..&#x2F;classes/$namespace.html#method_register">Creating namespaces</a></li>
+        <li><a href="..&#x2F;classes/$namespace.html#method_using">Importing namespaces</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-define">Defining a class</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-constructors">Class constructors</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-properties">Class properties</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-events">Class events, custom events</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-inheritance">Inheritance how-to</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-base">Calling base class members how-to</a></li>
+    </ul>
+
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs" style="display: none">
+            <li><a href="#api-classes">Classes</a></li>
+            <li style="display: none"><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/$def.html">$def</a></li>
+            
+                <li><a href="..&#x2F;classes/$namespace.html">$namespace</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules" style="display: none">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>$def</h1>
+
+<div class="box intro">
+    <h2><a id="index"></a> Index</h2>
+
+<ul>
+<li>1.0. <a href="#class-define">Defining a class</a>
+<ul><li>1.1. <a href="#class-fields">Fields</a></li>
+<li>1.2. <a href="#class-constructors">Constructors</a></li>
+<li>1.3. <a href="#class-properties">Properties</a></li>
+<li>1.4. <a href="#class-methods">Methods/Functions</a></li>
+<li>1.5. <a href="#class-events">Events</a></li></ul></li>
+<li>2.0. <a href="#class-instances">Creating instances of classes - the <code>new</code> operator</a></li>
+<li>3.0. <a href="#class-oop">Object-oriented programming on JavaScript with jOOPL</a>
+<ul><li>3.1. <a href="#class-inheritance">Class inheritance</a></li>
+<li>3.2. <a href="#class-polymorphism">Inheritance with polymorphism</a>
+<ul><li>3.2.1. <a href="#class-base">The <code>this.$base</code> keyword</a></li>
+<li>3.2.2. <a href="#class-baseconstructor">The derived class constructor calls the parent's class constructor</a></li>
+<li>3.2.3. <a href="#class-basecallsderived">A base class member calls the most specialized implementation</a></li></ul></li></ul></li>
+</ul>
+
+<h3><a id="class-define"></a> 1. Defining a class (<a href="#index">Back to index</a>)</h3>
+
+<p>The <code>$def</code> operator is required in order to define classes. In fact, <code>$def</code> is a function and it accepts an object of arguments as
+input parameter. The essential parameters are:</p>
+
+<ul>
+<li><strong>$constructor</strong> <em>(optional)</em>. The constructor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.</li>
+<li><strong>$members</strong> <em>(optional)</em>. An object containing the methods and properties for the whole class.</li>
+</ul>
+
+<p>A basic class may look like the next code listing:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    // Constructor 
+    $constructor: function() {
+        this.$_.name = null;
+    },
+    $members: {
+        get name() {
+            return this.$_.name;
+        }
+
+        set name(value) {
+            this.$_.name = value;
+        }
+
+        sayYourName: function() {
+            alert("Hey, " + this.name)
+        }
+    }
+});
+</code></pre>
+
+<h4><a id="class-fields"></a> 1.1 Class fields (<a href="#index">Back to index</a>)</h4>
+
+<p>A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).</p>
+
+<p>Any class constructor, property or method has a reserved variable called <code>$_</code> accessible through <code>this.$_</code> on which class fields can be declared and
+manipulated. For example, <code>this.$_.myName = "Matias";</code> will declare a class field called <code>myName</code> with a default value <code>Matías</code>.</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $constructor: function() {
+        // This is a class field:
+        this.$_.value = "A string for the class field";
+    }
+});
+</code></pre>
+
+<h4><a id="class-constructors"></a> 1.2 Constructors (<a href="#index">Back to index</a>)</h4>
+
+<p>In classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing 
+the whole class.</p>
+
+<p>For example, class constructors are the place to define class fields:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    // Constructor 
+    $constructor: function() {
+        this.$_.myName = "Matias";
+    }
+});
+</code></pre>
+
+<p>In instance, the class constructor has access to the already declared methods and properties:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    // Constructor 
+    $constructor: function() {
+        this.$_.myName = "Matias";
+
+        // The "someMethod()" method can be called from the constructor!
+        this.initialize();
+    }
+
+    $members :{
+        initialize: function() {
+            alert("hello world called from the constructor!")
+        }
+    }
+});
+</code></pre>
+
+<h5>See also</h5>
+
+<ul>
+<li><a href="#class-baseconstructor">Call parent class constructor</a></li>
+</ul>
+
+<h4><a id="class-properties"></a> 1.3 Properties (<a href="#index">Back to index</a>)</h4>
+
+<p>Any class can declare properties. Apparently, a property looks like a variable in its usage, but it differs from variables on
+how they are declared.</p>
+
+<p>Properties are the best way to encapsulate the access to private resources held by the class like class fields or calculated values. </p>
+
+<p>A property is composed by two possible parts (it can have both or only one of them)</p>
+
+<ul>
+<li><strong>Getter</strong>. It is a block like a function defining how a value is obtained.</li>
+<li><strong>Setter</strong>. It is a block like a function defining how to set a value.</li>
+</ul>
+
+<p>For example, without properties, an object would look like the next code listing:</p>
+
+<pre class="code prettyprint"><code>var myObject = {
+    name: "Matias",
+    age: 28
+};
+</code></pre>
+
+<p>And once the <code>myObject</code> variable holds the new object, both <code>name</code> and <code>age</code> can be altered:</p>
+
+<pre class="code prettyprint"><code>myObject.name = "John";
+myObject.age = 33;
+</code></pre>
+
+<p>But what happens if there is a need to constraint the <code>name</code> and <code>age</code> variables? A primitive solution would be:</p>
+
+<pre class="code prettyprint"><code>var possibleName = "John";
+var possibleAge = 33;
+
+if(possibleName != "John") {
+    myObject.name = possibleName;
+} else {
+    throw Error("Sorry, John, I do not like you!")
+}
+
+if(possibleAge &gt; 30) {
+    myObject.age = possibleAge;
+} else {
+    throw Error("You are too young! Please try again in some years...");
+}
+</code></pre>
+
+<p>This is how the above code would be implemented using properties:</p>
+
+<pre class="code prettyprint"><code>var myObject = {
+    // Some regular variables
+    _name: null,
+    _age: null,
+
+    // A getter for the _name variable:
+    get name() { 
+        return this._name; 
+    },
+    // A setter for the _name variable. The setter defines the validation logic!
+    set name(value) { 
+        if(value != "John") {
+            this._name = value; 
+        } else {
+            throw Error("Sorry, John, I do not like you!")
+        }
+    },
+
+    // A getter for the _name variable:
+    get age() { 
+        return this._age;
+    },
+    // A setter for the _name variable. The setter also defines the validation logic here!
+    set age(value) {
+        if(value &gt; 30) {
+            myObject.age = value;
+        } else {
+            throw Error("You are too young! Please try again in some years...");
+        }
+    }
+}
+</code></pre>
+
+<p>Now, if some code tries to assign "John" or an age lesser than 30, the properties setters will throw the error, but this time
+the validation logic is encapsulated:</p>
+
+<pre class="code prettyprint"><code>myObject.name = "John" // ERROR
+myObject.name = "Matias" // OK
+
+myObject.age = 28 // ERROR
+myObject.age = 33 // OK
+</code></pre>
+
+<p>jOOPL fully supports JavaScript 1.8.x properties like the described before:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $constructor: {
+        // Define a class field for later provide access to it through a property getter and setter
+        this.$_.name = null;
+    },
+    $members: {
+        // Gets the value held by the this.$_.name class field:
+        get name() {
+            return this.$_.name;
+        },
+
+        // Sets a new value to the this.$_.name class field:
+        set name(value) {
+            this.$_.name = value;
+        }
+    }
+});
+
+var instance = new A();
+
+// Set the 'name' property value
+a.name = "Matias";
+
+// Gets the name property value
+alert(a.name); // Alerts "Matias"
+</code></pre>
+
+<h4><a id="class-methods"></a> 1.4  Methods/Functions (<a href="#index">Back to index</a>)</h4>
+
+<p>Methods (<em>also known as functions</em>) are the behavior of classes. They are the actions that can be performed by the class. Examples
+of methods can be:</p>
+
+<ul>
+<li>do</li>
+<li>create</li>
+<li>notify</li>
+<li>write</li>
+<li>build</li>
+<li>...</li>
+</ul>
+
+<p>Class methods are defined as regular JavaScript functions and as part of the <code>$members</code> in a class definition:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $members: {
+        do: function() {
+            return "do what?";
+        }
+    }
+});
+</code></pre>
+
+<h5>See also</h5>
+
+<ul>
+<li><a href="#class-polymorphism">Polymorphism</a></li>
+</ul>
+
+<h4><a id="class-events"></a> 1.5  Events (<a href="#index">Back to index</a>)</h4>
+
+<h5>Events glossary</h5>
+
+<ul>
+<li><strong>Event</strong>. It is an observable action. Classes defining them or others can subscribe to events and react to them.</li>
+<li><strong>Event handler</strong>. It is a function assigned to the event which is called when the event happens.</li>
+</ul>
+
+<p>Events are the new jOOPL's out-of-the-box feature that enables any class to create observable objects.</p>
+
+<p>An observable object is a one emitting notifications when something happens within it. For example, an event may be:</p>
+
+<ul>
+<li>When some button is clicked.</li>
+<li>An asynchronous operation completed.</li>
+<li>An item was added to a list.</li>
+</ul>
+
+<p>Events are class members like properties and methods, but they are special in terms of how they are declared. For example, 
+if a class needs to implement an event to notify to others that it said "hello world", an event "saying" would be declared this way:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $members: {
+        $events: ["saying"]
+    }
+});
+</code></pre>
+
+<p>The above code declares an event "saying". Events are declared as an array of identifiers (names) as value of the <code>$events</code> special member. Once
+an event is declared, the next step is triggering/raising/firing it somewhere in the whole class:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $members: {
+        $events: ["saying"],
+
+        helloWorld: function() {
+            // This is triggering the event. jOOPL has created an special function called
+            // 'saying' which can receive an object of arguments so the object suscribed to
+            // the class event will receive the whole argument 'text'
+            this.saying({ text: "yes, the object is about to say 'hello world'!"});
+
+            // The event 'saying' notified that the class A was about saying something
+            // and, finally, now it says "hello world!" using an alert.
+            alert("hello world!")
+        }
+    }
+});
+</code></pre>
+
+<p>Finally, the last step is listening for the <code>saying</code> event. For that matter, an instance of A is created and the code will set an event handler in order
+to do an action when the <code>A</code> class instance says something:</p>
+
+<pre class="code prettyprint"><code>var instance = new A();
+
+instance.saying = function(args) {
+    // The <code>args</code> input argument will hold the text set when the event was triggered
+    alert("The instance said: " + args.text);
+};
+</code></pre>
+
+<p>Once an event handler added to an event, it is possible to <em>unsuscribe</em> from it: it is as easy as trying to set the same handler to the event.</p>
+
+<p>For example:</p>
+
+<pre class="code prettyprint"><code>var instance = new A();
+
+var handler = function(args) {
+}
+
+// This adds an event handler to the event
+instance.saying = handler;
+
+// Setting the same handler again removes it from the event.
+instance.saying = handler;
+</code></pre>
+
+<h3><a id="class-instances"></a> 2. Creating instances of classes (<a href="#index">Back to index</a>)</h3>
+
+<p>Once a class is defined using the <code>$def</code> keyword, an instance of the class must be created in order to use it. </p>
+
+<p>In jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard
+<code>new</code> operator:</p>
+
+<pre class="code prettyprint"><code>var A = $def({
+    $members: {
+        someMethod: function() {
+            alert("hello world");
+        }
+    }
+});
+
+// Creating an instance of A:
+var instance = new A();
+
+// Now the instance variable - a reference to an object of type A - 
+// has its instance methods available to be called:
+instance.someMethod();
+</code></pre>
+
+<h3><a id="class-oop"></a> 3. Object-oriented programming on JavaScript using jOOPL (<a href="#index">Back to index</a>)</h3>
+
+<p>Defining classes and creating instances of it using the <code>$def</code> and <code>new</code> operator respectively are just the most basic features of jOOPL.</p>
+
+<p>jOOPL introduces an state-of-the-art and powerful class inheritance and polymoprhism mechanism that elevates the JavaScript language to 
+what makes something true object-oriented programming:</p>
+
+<ul>
+<li><strong>Inheritance</strong>. Classes can inherit from others in order to share their behaviors, properties and events.</li>
+<li><strong>Polymorphism</strong>. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.</li>
+<li><strong>Encapsulation</strong>. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.</li>
+</ul>
+
+<h4><a id="class-inheritance"></a> 3.1 Class inheritance (<a href="#index">Back to index</a>)</h4>
+
+<p>Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.</p>
+
+<p>The <code>$def</code> keyword supports an additional and optional parameter called <code>$extends</code> which specifies that the declaring class extends another class.</p>
+
+<p>A class <code>A</code> may implement some methods and properties and a class <code>B</code> can inherit <code>A</code> and it will not need to implement them as all members from <code>A</code>
+are already available as members of <code>B</code>:</p>
+
+<pre class="code prettyprint"><code>// Defining a class A having a method "do()"
+var A = $def({
+    $members: {
+        do: function() {
+            // Do some stuff
+        }
+    }
+});
+
+// Class B extends A
+var B = $def({
+    $extends: A
+});
+
+var instance = new B();
+
+// The B instance can invoke the do() function 
+// inherited from A
+instance.do();
+</code></pre>
+
+<p>jOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (<em>no multi-inheritance</em>), but any
+class can inherit other. There is no limitation of how many levels of inheritance can implement an hierarchy. </p>
+
+<p>An important detail is that, if a class does not directly inherit a class (there is no <code>$extend</code> input parameter for <code>$def</code> keyword), it will 
+implicitly inherit the top-most class <code>Object</code> implemented as a plain JavaScript prototype, which provides basic methods and properties that any class 
+will contain. At the end of the day, <strong>any class inherits Object</strong>.</p>
+
+<h4><a id="class-polymorphism"></a> 3.2 Inheritance with polymorphism (<a href="#index">Back to index</a>)</h4>
+
+<p>Polymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base
+implementation found in the parent class. </p>
+
+<p>For example, there is a class called <code>Salutation</code> which implements a method/function <code>sayHello</code> and it returns <strong>"hello world"</strong>, and there is a derived class
+<code>SpecializedSalutation</code> that inherits <code>Salutation</code> class, the whole derived class can override the <code>sayHello</code> method and make it say <strong>"Hello, world!"</strong>:</p>
+
+<pre class="code prettyprint"><code>var Salutator = $def({
+    $members: {
+        sayHello: function() {
+            return "hello world"
+        }
+    }
+});
+
+var SpecializedSalutator = $def({
+    $extends: Salutator,
+    $members: {
+        // Overrides the parent class sayHello implementation
+        sayHello: function() {
+            return "Hello, world!";
+        }
+    }
+});
+
+var instance = new SpecializedSalutator();
+var text = instance.sayHello();
+
+// This will alert "Hello, world!" as the class has overriden the default implementation
+// which was returning "hello world"
+alert(text); 
+</code></pre>
+
+<h5><a id="class-base"></a> 3.2.1 The <code>this.$base</code> keyword (<a href="#index">Back to index</a>)</h5>
+
+<p>Any method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
+overriden member.</p>
+
+<p>The overriden members may or may not call the parent class member implementation using the <code>this.$base</code> keyword. </p>
+
+<p>For example, there is a class <code>Calculator</code> having a method <code>add</code>, and a specialized calculator called <code>UnsignedCalculator</code> which makes any addition an absolute result,
+the code would look like this:</p>
+
+<pre class="code prettyprint"><code>var Calculator = $def({
+    $members: {
+        add: function(num1, num2) {
+            // It simply adds num2 to num1
+            return num1 + num2;
+        }
+    }
+});
+
+var UnsignedCalculator = $def({
+    $members: {
+        add: function(num1, num2) {
+            // This is calling the "add"'s parent class implementation
+            var result = this.$base.add(num1, num2);
+
+            // Now the result from calling the base implementation of this method
+            // is converted to an unsigned number
+            return Math.abs(result);
+        }
+    }
+});
+</code></pre>
+
+<h5><a id="class-baseconstructor"></a> 3.2.2 The derived class constructor calls the parent's class constructor (<a href="#index">Back to index</a>)</h5>
+
+<p>Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
+hierarchy requires some construction-time initialization:</p>
+
+<pre class="code prettyprint"><code>// The top-most parent class Person defines basic data
+// and provides getter and setter properties in order to
+// get or set the whole contained data.
+//
+// The constructor receives as arguments the default data.
+var Person = $def({
+    $constructor: function(args) {
+        this.$_.name = args.name;
+        this.$_.secondName = args.secondName;
+        this.$_.age = args.age;
+    },
+    $members: {
+        get name() {
+            return this.$_.name;
+        },
+        set name(value) {
+            this.$_.name = value;
+        },
+
+        get secondName() {
+            return this.$_.secondName;
+        },
+        set secondName(value) {
+            this.$_.secondName = value;
+        }
+
+        get age(){
+            return this.$_.age;
+        },
+        set age(value) {
+            this.$_.age = value;
+        }
+    }
+});
+
+// The Employee class inherits Person and adds
+// more data. The Employee constructor both defines
+// new class fields and calls the Person's constructor
+// by invoking this.$base.$ctor(args), thus the base constructor
+// will receive the expected arguments.
+var Employee = $def({
+   $extends: Person,
+   $constructor: function(args) {
+        this.$base.$ctor(args);
+
+        this.$_.companyName = args.companyName;
+        this.$_.salary = args.salary;
+   } 
+});
+
+// Now this is creating an instance of Employee. As the Employee constructor
+// calls its base Person class' constructor, it will be correctly initialized 
+// with the data passed as constructor arguments:
+var instance = new Employee({
+    name: "Matias",
+    secondName: "Fidemraizer",
+    age: 28,
+    companyName: "ACME",
+    salary: 99999
+});
+
+alert(instance.name); // Popups "Matias"
+alert(instance.secondName); // Popups "Fidemraizer"
+alert(instance.age); // Popups "28"
+alert(instance.companyName); // Popups "ACME"
+alert(instance.salary); // Popups "99999"
+</code></pre>
+
+<h5><a id="class-basecallsderived"></a> 3.2.3 A base class member calls the most specialized implementation (<a href="#index">Back to index</a>)</h5>
+
+<p>Sometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.</p>
+
+<p>For example, a parent class <code>Polygon</code> overrides the default JavaScript <code>toString()</code> method in order to calculate the polygon area and
+return it as a string. That is, <code>Polygon</code> implements a <code>calcArea</code> method. Now <code>Square</code> inherits <code>Polygon</code> and overrides the <code>calcArea</code>
+method and performs the whole area calculation. The <code>Square</code> class will now need to override the base <code>toString()</code> <code>Polygon</code>'s method in order to
+show the area.</p>
+
+<p>In jOOPL, the most derived or specialized member is accessed through the special class field <code>this.$_.$derived</code>. </p>
+
+<p>Here is a sample of the above explanation:</p>
+
+<pre class="code prettyprint"><code>var Polygon = $def({
+    $members: {
+        calcArea: function() {
+            // A generic polygon will not know how to calculate the area. The
+            // derived classes will do it!
+        },
+
+        toString: function() {
+            // See how calcArea() from the most derived class is accessed:
+            return "The area of this polygon is: '" + this.$_.$derived.calcArea(); + "'";
+        }
+    }
+});
+
+var Square = $def({
+    $constructor: function(args) {
+        this.$_.x = args.x;
+        this.$_.y = args.y;
+    },
+    $extends: Polygon,
+    $members: {
+        get x() {
+            return this.$_.x;
+        },
+        get y() {
+            return this.$_.y;
+        },
+
+        calcArea: function() {
+            return this.x * this.y;
+        }
+    }
+});
+
+var instance = new Square(20, 30);
+
+// This will alert "The area of this polygon is: '600'""
+alert(instance.toString());
+</code></pre>
+</div>
+
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;joopl.js.html#l507"><code>joopl.js:507</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

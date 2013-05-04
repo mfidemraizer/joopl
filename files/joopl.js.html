@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>joopl.js - { joopl };</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.9.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.9.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="bd" class="yui3-g">
+        <div class="yui3-u-1-4">
+		    <div id="hd" class="yui3-g header">
+		        <div class="yui3-u-3-4">
+		            
+		                <h1><img src="https:&#x2F;&#x2F;download-codeplex.sec.s-msft.com&#x2F;Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+		            
+		        </div>
+		        <div class="yui3-u-1-4 version">
+		            <em>2.2.0</em>
+		        </div>
+		    </div>
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">Table of contents</h2>
+        
+    <h3>Quick links</h3>
+    <ul id="quick-links">
+        <li><a href="..&#x2F;index.html">Back to main page</a></li>
+        <li><a href="..&#x2F;classes/$namespace.html#method_register">Creating namespaces</a></li>
+        <li><a href="..&#x2F;classes/$namespace.html#method_using">Importing namespaces</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-define">Defining a class</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-constructors">Class constructors</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-properties">Class properties</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-events">Class events, custom events</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-inheritance">Inheritance how-to</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
+        <li><a href="..&#x2F;classes/$def.html#class-base">Calling base class members how-to</a></li>
+    </ul>
+
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs" style="display: none">
+            <li><a href="#api-classes">Classes</a></li>
+            <li style="display: none"><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/$def.html">$def</a></li>
+            
+                <li><a href="..&#x2F;classes/$namespace.html">$namespace</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules" style="display: none">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: joopl.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿&#x2F;&#x2F; (c) joopl
+&#x2F;&#x2F; By Matías Fidemraizer (http:&#x2F;&#x2F;www.matiasfidemraizer.com) (http:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;mfidemraizer&#x2F;en)
+&#x2F;&#x2F; -------------------------------------------------
+&#x2F;&#x2F; http:&#x2F;&#x2F;joopl.codeplex.com
+&#x2F;&#x2F;
+&#x2F;&#x2F; Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+&#x2F;&#x2F; you may not use this file except in compliance with the License.
+&#x2F;&#x2F; You may obtain a copy of the License at
+&#x2F;&#x2F;
+&#x2F;&#x2F;     http:&#x2F;&#x2F;www.apache.org&#x2F;licenses&#x2F;LICENSE-2.0
+&#x2F;&#x2F;
+&#x2F;&#x2F; Unless required by applicable law or agreed to in writing, software
+&#x2F;&#x2F; distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+&#x2F;&#x2F; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+&#x2F;&#x2F; See the License for the specific language governing permissions and
+&#x2F;&#x2F; limitations under the License.
+
+&#x2F;&#x2F; Keywords
+var $namespace = null; &#x2F;&#x2F; Holds an object to manage namespaces
+var $def = null; &#x2F;&#x2F; Declares a class
+var $interfacedef = null; &#x2F;&#x2F; A shortcut to $interface.declare(...)
+var $implements = null; &#x2F;&#x2F; Holds a function to check if an object implements an interface
+var $global = {}; &#x2F;&#x2F; Represents the global scope.
+
+(function (undefined) {
+    &quot;use strict&quot;;
+
+    var version = &quot;2.2.0&quot;;
+
+    &#x2F;&#x2F; An object containing a set of core features used by jOOPL
+    var TypeUtil = {
+        &#x2F;&#x2F; Determines if some identifier is a jOOPL keyword.
+        isSystemReservedName: function (name) {
+            var reserved = false
+
+            switch (name.toLowerCase()) {
+                case &quot;$ctor&quot;:
+                case &quot;$bctor&quot;:
+                case &quot;$global&quot;:
+                case &quot;$def&quot;:
+                case &quot;$interfacedef&quot;:
+                case &quot;$new&quot;:
+                case &quot;$namespace&quot;:
+                case &quot;$extends&quot;:
+                case &quot;$implements&quot;:
+                case &quot;$_&quot;:
+                case &quot;joopl&quot;:
+                case &quot;typeKind&quot;:
+                    return true;
+
+                default:
+                    return false;
+            }
+        },
+
+        &#x2F;&#x2F;  Creates a property on the given class definition based on a provided property descriptor.
+        &#x2F;&#x2F; @classDef: The class definition (it must be the constructor function!
+        &#x2F;&#x2F; @name: The property name
+        &#x2F;&#x2F; @descriptor: An object representing the property descriptor
+        &#x2F;&#x2F; @context: An optional context object that will work as the &quot;this&quot; keyword binder for the getter and&#x2F;or setter when defining the property.
+        createPropertyFromDescriptor: function (classDef, name, descriptor, context) {
+            if (context) {
+                if (descriptor.get) {
+                    descriptor.get = descriptor.get.bind(context);
+                }
+
+                if (descriptor.set) {
+                    descriptor.set = descriptor.set.bind(context);
+                }
+            }
+
+            Object.defineProperty(
+                context ? context : classDef.prototype,
+                name,
+                descriptor
+            );
+        },
+
+        &#x2F;&#x2F; Creates a property.
+        &#x2F;&#x2F; @classDef: A class definition (it must be the class constructor function).
+        &#x2F;&#x2F; @name: The property name.
+        &#x2F;&#x2F; @getter: The getter parameterless function.
+        &#x2F;&#x2F; @setter: The setter function with a parameter representing the value to set.
+        &#x2F;&#x2F; @inmutable: A boolean flag specifying if the created property is configurable or not.
+        createProperty: function (classDef, name, getter, setter, inmutable) {
+            if (inmutable == undefined) {
+                inmutable = false;
+            }
+
+            if (!classDef.prototype.hasOwnProperty(name)) {
+                &#x2F;&#x2F; This case is for a read-write property
+                if (getter &amp;&amp; setter) {
+
+                    Object.defineProperty(
+                        classDef.prototype,
+                        name, {
+                            get: getter,
+                            set: setter,
+                            configurable: !inmutable,
+                            enumerable: true
+                        }
+                    );
+                } else if (getter) { &#x2F;&#x2F; This case is for a read-only property
+                    Object.defineProperty(
+                        classDef.prototype,
+                        name, {
+                            get: getter,
+                            configurable: !inmutable,
+                            enumerable: true
+                        }
+                    );
+                } else if (setter) { &#x2F;&#x2F; This case is for a write-only property
+                    Object.defineProperty(
+                        classDef.prototype,
+                        name, {
+                            set: setter,
+                            configurable: !inmutable,
+                            enumerable: true
+                        }
+                    );
+                }
+            }
+        },
+
+        createEvent: function (source, name) {
+            if (source.hasOwnProperty(name)) {
+                throw Error(&quot;The source object has already defined an event called &#x27;&quot; + name + &quot;&#x27;&quot;);
+            }
+            var eventManager = new $global.joopl.EventManager({ source: source });
+
+            Object.defineProperty(
+                source,
+                name,
+                {
+                    get: function () {
+                        return eventManager[name];
+                    },
+                    set: function (value) {
+                        eventManager[name] = value;
+                    },
+                    configurable: false,
+                    enumerable: true
+                }
+            );
+
+            eventManager.register(name);
+        },
+
+        &#x2F;&#x2F; Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the constructor of the whole class instance.
+        &#x2F;&#x2F; @instance: The class instance
+        &#x2F;&#x2F; @args: The constructor arguments.
+        buildObject: function (instance, args, callConstructor) {
+            if (typeof instance.$base == &quot;function&quot;) {
+                instance.$base = new instance.$base(args, false);
+                instance.$_ = instance.$base.$_;
+            } else {
+                instance.$_ = {};
+            }
+
+            if (callConstructor) {
+                instance.$ctor.call(instance, args);
+            }
+
+            if (instance.$base != null &amp;&amp; instance.$base != undefined &amp;&amp; instance.$base.$base != null &amp;&amp; instance.$base.$base != undefined) {
+                instance.$_.$base = instance.$base.$base;
+            }
+
+            instance.$_.$derived = instance;
+
+            return instance;
+        },
+
+        &#x2F;&#x2F; Builds a given class inheritance with the given parent class.
+        &#x2F;&#x2F; @derived: The child class.
+        &#x2F;&#x2F; @parent: The parent class.
+        buildInheritance: function (derived, parent) {
+            if (parent != null) {
+                &#x2F;&#x2F; Adding all class fields to the derived class...
+                for (var fieldName in parent.prototype.$_) {
+                    if (!derived.prototype.$_[fieldName]) {
+                        derived.prototype.$_[fieldName] = parent.prototype.$_[fieldName];
+                    }
+                }
+
+                var propertyDescriptor = null;
+
+                &#x2F;&#x2F; Adding both methods and properties to the derived class...
+                for (var memberName in parent.prototype) {
+                    propertyDescriptor = Object.getOwnPropertyDescriptor(parent.prototype, memberName);
+
+                    &#x2F;&#x2F; If it has a property descriptor...
+                    if (propertyDescriptor) {
+                        &#x2F;&#x2F; and the value of the descriptor is a function it means that it&#x27;s inheriting a method.
+                        if (typeof propertyDescriptor.value == &quot;function&quot;) {
+                            derived.prototype[memberName] = parent.prototype[memberName];
+                        } else { &#x2F;&#x2F; If not, it is a property accessor.
+                            this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
+                        }
+                    } else if (typeof parent.prototype[memberName] == &quot;function&quot;) { &#x2F;&#x2F; It can also happen that it&#x27;s a function defined in the $global.joopl.Object prototype...
+                        derived.prototype[memberName] = parent.prototype[memberName];
+                    }
+                }
+            }
+
+            return parent ? parent.prototype : null;
+        },
+
+        &#x2F;&#x2F; Whether determines if some object reference has an associated value (object) and returns true&#x2F;false.
+        &#x2F;&#x2F; @someRef: The object reference.
+        hasValue: function (someRef) {
+            return someRef !== undefined &amp;&amp; someRef != null;
+        },
+
+        &#x2F;&#x2F; Whether determines if some object reference holds a function and returns true&#x2F;false.
+        &#x2F;&#x2F; @someRef: The object reference.
+        isFunction: function (someRef) {
+            return typeof someRef === &quot;function&quot;;
+        }
+    };
+
+    Object.freeze(TypeUtil);
+
+
+    &#x2F;**
+    The &#x60;$namespace&#x60; keyword represents an static object holding methods&#x2F;functions to manage namespaces.
+
+    @class $namespace
+    *&#x2F;
+    $namespace = {
+        &#x2F;**
+        Registers a namespace. The whole method supports two scenarios:
+
+        - Register a namespace and later add members by accessing it with its full path (i.e. $global.your.namespace).
+        - Register a namespace and create a scoped function where the &#x60;this&#x60; keyword holds the registered namespace.
+
+        In both scenarios, jOOPL will check if the whole namespace path is already registered. If it is not the case, it will register the
+        namespace path, and if it was already registered, it just skips the namespace path registration.
+        
+        ####1. Simple register a namespace
+        The first use case of the &#x60;$namespace.register&#x60; method is just about registering a namespace and later access it with its full path:
+            
+            $namespace.register(&quot;joopl.samples&quot;);
+
+            $global.joopl.samples.SomeClass = $def({ 
+                $members: {
+                    someMethod: function() {}
+                }
+            });
+
+        ####2. Register a namespace and add classes or other members inside a scoped function
+        The second use case of the &#x60;$namespace.register&#x60; is the most powerful one: both register the whole namespace and add members to the
+        it in the same operation and with a shorter syntax. 
+
+        &#x60;$namespace.register&#x60; supports a second parameter in addition to the namespace path called &#x60;scopedFunc&#x60;. It is a parameterless function that, when
+        executed,  the &#x60;this&#x60; keyword in the scope of the function (i.e. *the function body*) will be the childest registered namespace. For example:
+
+            $namespace.register(&quot;joopl.samples&quot;, function() {
+                &#x2F;&#x2F; The this keyword now is the &#x27;samples&#x27; namespace! 
+                &#x2F;&#x2F; That&#x27;s great because there is no need to access to the full namespace path
+                &#x2F;&#x2F; to work on adding members to it!
+                this.ClassA = $def({
+                    $members: {
+                        someMethod: function() {
+                            return &quot;hello world&quot;;
+                        }
+                    }
+                })
+            });
+
+       @method register
+       @param path {String} A namespace path. For example, &quot;joopl.sample&quot; will register &quot;joopl&quot; and its child &quot;sample&quot;. 
+       @param copedFunc {Function} A parameterless function representing the scope where the &#x60;this&#x60; keyword is the childest registered namespace (for example, registering &quot;joopl.sample&#x27;, the &#x60;this&#x60; keyword will be the *sample* namespace).
+        *&#x2F;
+        register: function (path, scopedFunc) {
+            var nsIdentifiers = typeof path == &quot;string&quot; ? path.split(&quot;.&quot;) : null;
+
+            &#x2F;&#x2F; The parent namespace of everything is the reserved $global object!
+            var parentNs = $global;
+            var currentNs = null;
+
+            for (var nsIndex = 0; nsIndex &lt; nsIdentifiers.length; nsIndex++) {
+                currentNs = nsIdentifiers[nsIndex];
+
+                &#x2F;&#x2F; The current namespace  is not registered (if evals true)
+                if (!parentNs[currentNs]) {
+                    parentNs[currentNs] = {};
+
+                    &#x2F;&#x2F; Any namespace will hold an &quot;isNamespace&quot; property
+                    &#x2F;&#x2F; in order to correctly identify if an object within
+                    &#x2F;&#x2F; the namespaces is a namespace or a class!
+                    Object.defineProperty(
+                        parentNs[currentNs], &quot;isNamespace&quot;, {
+                            value: true,
+                            configurable: false,
+                            enumerable: true
+                        });
+                }
+
+                parentNs = parentNs[currentNs];
+            }
+
+            &#x2F;&#x2F; If the second parameter holds something if should be a 
+            &#x2F;&#x2F; parameterless function, and this is creating a namespace scope.
+            if (typeof scopedFunc == &quot;function&quot;) {
+                $namespace.using(path, scopedFunc, true);
+            }
+        },
+
+        &#x2F;** 
+        Aliases an existing namespace.
+        @method alias
+        @param namespace {Object} The namespace to alias
+        @param alias {String} The alias
+        @example
+            $namespace.register(&quot;joopl.samples&quot;);
+            $namespace.alias($global.joopl.samples, &quot;samples&quot;);
+        *&#x2F;
+        alias: function (namespace, alias) {
+            $global[alias] = namespace;
+        },
+
+        &#x2F;**
+        Imports the members of given namespace path.
+
+        The &#x60;$namespace.using&#x60; method will not register a namespace if a given namespace path is not previously registered with &#x60;$namespace.register&#x60;.
+
+
+        ####1. Importing all members from some given namespaces into a variable
+        If the &#x60;$namespace.using&#x60; method is called only giving the first input parameter &#x60;paths&#x60; (*an arrary of strings where each index is a namespace path*).
+
+        That is, if a namespace has been previously registered this way in some JavaScript file:
+            
+            $namespace.register(&quot;joopl.samples&quot;);
+            $namespace.register(&quot;jooopl.samples.ui&quot;);
+
+        ...&#x60;$namespace.using&#x60; would be used like this:
+
+            var importedMembers = $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;]);
+
+        The &#x60;importedMembers&#x60;variable will hold *all* imported classes, interfaces or anything within the &#x60;samples&#x60; and &#x60;ui&#x60; namespaces.
+
+        ####2. Importing all members in a scoped function
+        The second use case is importing the members from some given namespaces into a scoped function:
+
+            $namespace.register(&quot;joopl.samples&quot;, function() {
+                this.ClassA = $def({
+                    $members: {
+                        someMethod: function() {
+                        }
+                    }
+                })
+            });
+
+
+
+            &#x2F;&#x2F; Somewhere in the same or other file...
+            $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function() {
+                &#x2F;&#x2F; The &quot;this&quot; keyword contains an object with all imported members from the both namespaces
+                var instance = new this.ClassA();
+            });
+
+        In addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument
+        and the &#x60;this&#x60; keyword will hold the &#x60;$global&#x60; object:
+
+            $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function(scope) {
+                &#x2F;&#x2F; The scope input argument will hold the imported members
+                var instance = new scope.ClassA();
+            });
+
+
+
+        @method using
+        @param paths {Array} An array of strings of the namespaces to import
+        @param scopedFunc {Function} A function to create a namespace scope (optional)
+        @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
+        *&#x2F;
+        using: function (paths, scopedFunc, scopeIsNs) {
+            if (paths === undefined) {
+                debugger;
+                throw new $global.joopl.ArgumentException({ argName: &quot;namespace path&quot;, reason: &quot;No namespace path has been provided&quot; });
+            }
+
+            if (typeof paths == &quot;string&quot;) {
+                if (paths.length == 0) {
+                    debugger;
+                    throw new $global.joopl.ArgumentException({ argName: &quot;namespace path&quot;, reason: &quot;No namespace path has been provided&quot; });
+                }
+
+                paths = [paths];
+            }
+
+            if (paths.length == 0) {
+                debugger;
+                throw new $global.joopl.ArgumentException({ argName: &quot;namespace path&quot;, reason: &quot;No namespace path has been provided&quot; });
+            }
+
+            var nsIdentifiers = null;
+            var currentNs = $global;
+            var nsIndex = 0;
+            var namespaces = [];
+
+            for (var pathIndex in paths) {
+                nsIdentifiers = paths[pathIndex].split(&quot;.&quot;);
+
+                for (nsIndex = 0; nsIndex &lt; nsIdentifiers.length; nsIndex++) {
+                    currentNs = currentNs[nsIdentifiers[nsIndex]];
+
+                    if (!currentNs) {
+                        debugger;
+                        throw new $global.joopl.ArgumentException({
+                            argName: &quot;namespace path&quot;,
+                            reason: &quot;The namespace path &#x27;&quot; + paths[pathIndex] + &quot;&#x27; is not valid because the namespace &#x27;&quot; + nsIdentifiers[nsIndex] + &quot;&#x27; is not declared&quot;
+                        });
+                    }
+                }
+
+                namespaces.push(currentNs);
+                currentNs = $global;
+            }
+
+            var nsScope = {};
+            var tempMember = null;
+
+            for (nsIndex in namespaces) {
+                for (var typeName in namespaces[nsIndex]) {
+                    if (!nsScope[typeName]) {
+                        tempMember = namespaces[nsIndex][typeName];
+
+                        if ((tempMember.prototype !== undefined &amp;&amp; !tempMember.prototype.joopl !== undefined) || tempMember.joopl !== undefined) {
+                            nsScope[typeName] = tempMember;
+                        }
+                    }
+                    else {
+                        throw Error(&quot;A type called &#x27;&quot; + typeName + &quot;&#x27; in current context from another namespace already exists. Create an alias or use a full namespace paths&quot;);
+                    }
+                }
+            }
+
+            Object.preventExtensions(nsScope);
+
+            if (scopedFunc !== undefined &amp;&amp; typeof scopedFunc == &quot;function&quot;) {
+                if (scopeIsNs) {
+                    scopedFunc.bind(namespaces[nsIndex])();
+                } else if (scopedFunc.length == 0) {
+                    scopedFunc.bind(nsScope)();
+                } else {
+                    scopedFunc.bind($global)(nsScope);
+                }
+
+                return null;
+            } else {
+                return nsScope;
+            }
+        }
+    };
+
+    Object.freeze($namespace);
+
+    $implements = function (clazz, someInterface) {
+        for (var interfaceMember in someInterface.prototype) {
+            if (
+                    TypeUtil.isFunction(someInterface.prototype[interfaceMember])
+                    &amp;&amp;
+                    (
+                        !TypeUtil.isFunction(clazz.prototype[interfaceMember])
+                        || clazz.prototype[interfaceMember] === undefined
+                        || clazz.prototype[interfaceMember].length !== someInterface.prototype[interfaceMember].length
+                    )
+            ) {
+                return { success: false, memberName: interfaceMember };
+            }
+        }
+
+        return { success: true, memberName: null };
+    };
+
+    Object.freeze($implements);
+
+    $interfacedef = function (args) {
+        var interfaceDef = function () {
+        };
+
+        interfaceDef.prototype.joopl = version;
+
+        Object.defineProperty(interfaceDef.prototype, &quot;typeKind&quot;, { value: MemberKind.Interface, enumerable: true });
+
+        if (typeof args.$extends != &quot;Array&quot;) {
+            TypeUtil.buildInheritance(interfaceDef, args.$extends);
+        }
+        else {
+            for (var interfaceIndex = 0; interfaceIndex &lt; args.$extends.length; interfaceIndex++) {
+                TypeUtil.buildInheritance(interfaceDef, args.$extends[interfaceIndex]);
+            }
+        }
+
+        if (args.$members) {
+            for (var memberName in args.$members) {
+                interfaceDef.prototype[memberName] = args.$members[memberName];
+            }
+        }
+
+        return interfaceDef;
+    };
+
+    Object.freeze($interfacedef);
+
+    &#x2F;**
+    ## &lt;a id=&quot;index&quot;&gt;&lt;&#x2F;a&gt; Index
+
+    * 1.0\. [Defining a class](#class-define)
+        * 1.1\. [Fields](#class-fields)
+        * 1.2\. [Constructors](#class-constructors)
+        * 1.3\. [Properties](#class-properties)
+        * 1.4\. [Methods&#x2F;Functions](#class-methods)
+        * 1.5\. [Events](#class-events)
+    * 2.0\. [Creating instances of classes - the &#x60;new&#x60; operator](#class-instances)
+    * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
+        * 3.1\. [Class inheritance](#class-inheritance)
+        * 3.2\. [Inheritance with polymorphism](#class-polymorphism)
+            * 3.2.1\. [The &#x60;this.$base&#x60; keyword](#class-base)
+            * 3.2.2\. [The derived class constructor calls the parent&#x27;s class constructor](#class-baseconstructor)
+            * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
+
+    ### &lt;a id=&quot;class-define&quot;&gt;&lt;&#x2F;a&gt; 1. Defining a class ([Back to index](#index))
+    The &#x60;$def&#x60; operator is required in order to define classes. In fact, &#x60;$def&#x60; is a function and it accepts an object of arguments as
+    input parameter. The essential parameters are:
+
+    - **$constructor** *(optional)*. The constructor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.
+    - **$members** *(optional)*. An object containing the methods and properties for the whole class.
+
+    A basic class may look like the next code listing:
+
+        var A = $def({
+            &#x2F;&#x2F; Constructor 
+            $constructor: function() {
+                this.$_.name = null;
+            },
+            $members: {
+                get name() {
+                    return this.$_.name;
+                }
+
+                set name(value) {
+                    this.$_.name = value;
+                }
+
+                sayYourName: function() {
+                    alert(&quot;Hey, &quot; + this.name)
+                }
+            }
+        });
+
+    
+    #### &lt;a id=&quot;class-fields&quot;&gt;&lt;&#x2F;a&gt; 1.1 Class fields ([Back to index](#index))
+    A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).
+
+    Any class constructor, property or method has a reserved variable called &#x60;$_&#x60; accessible through &#x60;this.$_&#x60; on which class fields can be declared and
+    manipulated. For example, &#x60;this.$_.myName = &quot;Matias&quot;;&#x60; will declare a class field called &#x60;myName&#x60; with a default value &#x60;Matías&#x60;.
+
+        var A = $def({
+            $constructor: function() {
+                &#x2F;&#x2F; This is a class field:
+                this.$_.value = &quot;A string for the class field&quot;;
+            }
+        });
+
+    #### &lt;a id=&quot;class-constructors&quot;&gt;&lt;&#x2F;a&gt; 1.2 Constructors ([Back to index](#index))
+    In classes, the constructor is a method&#x2F;function called once an instance of some class is created. That is, this is a good moment for initializing 
+    the whole class.
+
+    For example, class constructors are the place to define class fields:
+
+        var A = $def({
+            &#x2F;&#x2F; Constructor 
+            $constructor: function() {
+                this.$_.myName = &quot;Matias&quot;;
+            }
+        });
+
+    In instance, the class constructor has access to the already declared methods and properties:
+
+        var A = $def({
+            &#x2F;&#x2F; Constructor 
+            $constructor: function() {
+                this.$_.myName = &quot;Matias&quot;;
+
+                &#x2F;&#x2F; The &quot;someMethod()&quot; method can be called from the constructor!
+                this.initialize();
+            }
+
+            $members :{
+                initialize: function() {
+                    alert(&quot;hello world called from the constructor!&quot;)
+                }
+            }
+        });
+
+    ##### See also
+
+    - [Call parent class constructor](#class-baseconstructor)
+
+    #### &lt;a id=&quot;class-properties&quot;&gt;&lt;&#x2F;a&gt; 1.3 Properties ([Back to index](#index))
+
+    Any class can declare properties. Apparently, a property looks like a variable in its usage, but it differs from variables on
+    how they are declared.
+
+    Properties are the best way to encapsulate the access to private resources held by the class like class fields or calculated values. 
+
+    A property is composed by two possible parts (it can have both or only one of them)
+    
+    - **Getter**. It is a block like a function defining how a value is obtained.
+    - **Setter**. It is a block like a function defining how to set a value.
+
+    For example, without properties, an object would look like the next code listing:
+
+        var myObject = {
+            name: &quot;Matias&quot;,
+            age: 28
+        };
+
+    And once the &#x60;myObject&#x60; variable holds the new object, both &#x60;name&#x60; and &#x60;age&#x60; can be altered:
+
+        myObject.name = &quot;John&quot;;
+        myObject.age = 33;
+
+    But what happens if there is a need to constraint the &#x60;name&#x60; and &#x60;age&#x60; variables? A primitive solution would be:
+
+        var possibleName = &quot;John&quot;;
+        var possibleAge = 33;
+
+        if(possibleName != &quot;John&quot;) {
+            myObject.name = possibleName;
+        } else {
+            throw Error(&quot;Sorry, John, I do not like you!&quot;)
+        }
+
+        if(possibleAge &gt; 30) {
+            myObject.age = possibleAge;
+        } else {
+            throw Error(&quot;You are too young! Please try again in some years...&quot;);
+        }
+
+    This is how the above code would be implemented using properties:
+
+        var myObject = {
+            &#x2F;&#x2F; Some regular variables
+            _name: null,
+            _age: null,
+
+            &#x2F;&#x2F; A getter for the _name variable:
+            get name() { 
+                return this._name; 
+            },
+            &#x2F;&#x2F; A setter for the _name variable. The setter defines the validation logic!
+            set name(value) { 
+                if(value != &quot;John&quot;) {
+                    this._name = value; 
+                } else {
+                    throw Error(&quot;Sorry, John, I do not like you!&quot;)
+                }
+            },
+
+            &#x2F;&#x2F; A getter for the _name variable:
+            get age() { 
+                return this._age;
+            },
+            &#x2F;&#x2F; A setter for the _name variable. The setter also defines the validation logic here!
+            set age(value) {
+                if(value &gt; 30) {
+                    myObject.age = value;
+                } else {
+                    throw Error(&quot;You are too young! Please try again in some years...&quot;);
+                }
+            }
+        }
+
+    Now, if some code tries to assign &quot;John&quot; or an age lesser than 30, the properties setters will throw the error, but this time
+    the validation logic is encapsulated:
+
+        myObject.name = &quot;John&quot; &#x2F;&#x2F; ERROR
+        myObject.name = &quot;Matias&quot; &#x2F;&#x2F; OK
+
+        myObject.age = 28 &#x2F;&#x2F; ERROR
+        myObject.age = 33 &#x2F;&#x2F; OK
+
+    jOOPL fully supports JavaScript 1.8.x properties like the described before:
+
+        var A = $def({
+            $constructor: {
+                &#x2F;&#x2F; Define a class field for later provide access to it through a property getter and setter
+                this.$_.name = null;
+            },
+            $members: {
+                &#x2F;&#x2F; Gets the value held by the this.$_.name class field:
+                get name() {
+                    return this.$_.name;
+                },
+
+                &#x2F;&#x2F; Sets a new value to the this.$_.name class field:
+                set name(value) {
+                    this.$_.name = value;
+                }
+            }
+        });
+
+        var instance = new A();
+
+        &#x2F;&#x2F; Set the &#x27;name&#x27; property value
+        a.name = &quot;Matias&quot;;
+
+        &#x2F;&#x2F; Gets the name property value
+        alert(a.name); &#x2F;&#x2F; Alerts &quot;Matias&quot;
+
+
+    #### &lt;a id=&quot;class-methods&quot;&gt;&lt;&#x2F;a&gt; 1.4  Methods&#x2F;Functions ([Back to index](#index))
+    Methods (*also known as functions*) are the behavior of classes. They are the actions that can be performed by the class. Examples
+    of methods can be:
+
+    - do
+    - create
+    - notify
+    - write
+    - build
+    - ...
+
+    Class methods are defined as regular JavaScript functions and as part of the &#x60;$members&#x60; in a class definition:
+
+        var A = $def({
+            $members: {
+                do: function() {
+                    return &quot;do what?&quot;;
+                }
+            }
+        });
+
+    ##### See also
+
+    - [Polymorphism](#class-polymorphism)
+
+    #### &lt;a id=&quot;class-events&quot;&gt;&lt;&#x2F;a&gt; 1.5  Events ([Back to index](#index))
+
+    ##### Events glossary
+
+    - **Event**. It is an observable action. Classes defining them or others can subscribe to events and react to them.
+    - **Event handler**. It is a function assigned to the event which is called when the event happens.
+
+    Events are the new jOOPL&#x27;s out-of-the-box feature that enables any class to create observable objects.
+
+    An observable object is a one emitting notifications when something happens within it. For example, an event may be:
+
+    + When some button is clicked.
+    + An asynchronous operation completed.
+    + An item was added to a list.
+
+    Events are class members like properties and methods, but they are special in terms of how they are declared. For example, 
+    if a class needs to implement an event to notify to others that it said &quot;hello world&quot;, an event &quot;saying&quot; would be declared this way:
+
+        var A = $def({
+            $members: {
+                $events: [&quot;saying&quot;]
+            }
+        });
+
+    The above code declares an event &quot;saying&quot;. Events are declared as an array of identifiers (names) as value of the &#x60;$events&#x60; special member. Once
+    an event is declared, the next step is triggering&#x2F;raising&#x2F;firing it somewhere in the whole class:
+        
+        var A = $def({
+            $members: {
+                $events: [&quot;saying&quot;],
+
+                helloWorld: function() {
+                    &#x2F;&#x2F; This is triggering the event. jOOPL has created an special function called
+                    &#x2F;&#x2F; &#x27;saying&#x27; which can receive an object of arguments so the object suscribed to
+                    &#x2F;&#x2F; the class event will receive the whole argument &#x27;text&#x27;
+                    this.saying({ text: &quot;yes, the object is about to say &#x27;hello world&#x27;!&quot;});
+
+                    &#x2F;&#x2F; The event &#x27;saying&#x27; notified that the class A was about saying something
+                    &#x2F;&#x2F; and, finally, now it says &quot;hello world!&quot; using an alert.
+                    alert(&quot;hello world!&quot;)
+                }
+            }
+        });
+
+    Finally, the last step is listening for the &#x60;saying&#x60; event. For that matter, an instance of A is created and the code will set an event handler in order
+    to do an action when the &#x60;A&#x60; class instance says something:
+
+        var instance = new A();
+
+        instance.saying = function(args) {
+            &#x2F;&#x2F; The &#x60;args&#x60; input argument will hold the text set when the event was triggered
+            alert(&quot;The instance said: &quot; + args.text);
+        };
+
+    Once an event handler added to an event, it is possible to *unsuscribe* from it: it is as easy as trying to set the same handler to the event.
+
+    For example:
+
+        var instance = new A();
+
+        var handler = function(args) {
+        }
+
+        &#x2F;&#x2F; This adds an event handler to the event
+        instance.saying = handler;
+
+        &#x2F;&#x2F; Setting the same handler again removes it from the event.
+        instance.saying = handler;
+
+    
+    ### &lt;a id=&quot;class-instances&quot;&gt;&lt;&#x2F;a&gt; 2. Creating instances of classes ([Back to index](#index))
+
+    Once a class is defined using the &#x60;$def&#x60; keyword, an instance of the class must be created in order to use it. 
+
+    In jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard
+    &#x60;new&#x60; operator:
+
+        var A = $def({
+            $members: {
+                someMethod: function() {
+                    alert(&quot;hello world&quot;);
+                }
+            }
+        });
+
+        &#x2F;&#x2F; Creating an instance of A:
+        var instance = new A();
+
+        &#x2F;&#x2F; Now the instance variable - a reference to an object of type A - 
+        &#x2F;&#x2F; has its instance methods available to be called:
+        instance.someMethod();
+
+    ### &lt;a id=&quot;class-oop&quot;&gt;&lt;&#x2F;a&gt; 3. Object-oriented programming on JavaScript using jOOPL ([Back to index](#index))
+    
+    Defining classes and creating instances of it using the &#x60;$def&#x60; and &#x60;new&#x60; operator respectively are just the most basic features of jOOPL.
+
+    jOOPL introduces an state-of-the-art and powerful class inheritance and polymoprhism mechanism that elevates the JavaScript language to 
+    what makes something true object-oriented programming:
+
+    - **Inheritance**. Classes can inherit from others in order to share their behaviors, properties and events.
+    - **Polymorphism**. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.
+    - **Encapsulation**. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.
+    
+    #### &lt;a id=&quot;class-inheritance&quot;&gt;&lt;&#x2F;a&gt; 3.1 Class inheritance ([Back to index](#index))
+
+    Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.
+
+    The &#x60;$def&#x60; keyword supports an additional and optional parameter called &#x60;$extends&#x60; which specifies that the declaring class extends another class.
+
+    A class &#x60;A&#x60; may implement some methods and properties and a class &#x60;B&#x60; can inherit &#x60;A&#x60; and it will not need to implement them as all members from &#x60;A&#x60;
+    are already available as members of &#x60;B&#x60;:
+
+        &#x2F;&#x2F; Defining a class A having a method &quot;do()&quot;
+        var A = $def({
+            $members: {
+                do: function() {
+                    &#x2F;&#x2F; Do some stuff
+                }
+            }
+        });
+
+        &#x2F;&#x2F; Class B extends A
+        var B = $def({
+            $extends: A
+        });
+
+        var instance = new B();
+
+        &#x2F;&#x2F; The B instance can invoke the do() function 
+        &#x2F;&#x2F; inherited from A
+        instance.do();
+
+    jOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (*no multi-inheritance*), but any
+    class can inherit other. There is no limitation of how many levels of inheritance can implement an hierarchy. 
+
+    An important detail is that, if a class does not directly inherit a class (there is no &#x60;$extend&#x60; input parameter for &#x60;$def&#x60; keyword), it will 
+    implicitly inherit the top-most class &#x60;Object&#x60; implemented as a plain JavaScript prototype, which provides basic methods and properties that any class 
+    will contain. At the end of the day, **any class inherits Object**.
+
+    #### &lt;a id=&quot;class-polymorphism&quot;&gt;&lt;&#x2F;a&gt; 3.2 Inheritance with polymorphism ([Back to index](#index))
+    Polymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base
+    implementation found in the parent class. 
+
+    For example, there is a class called &#x60;Salutation&#x60; which implements a method&#x2F;function &#x60;sayHello&#x60; and it returns **&quot;hello world&quot;**, and there is a derived class
+    &#x60;SpecializedSalutation&#x60; that inherits &#x60;Salutation&#x60; class, the whole derived class can override the &#x60;sayHello&#x60; method and make it say **&quot;Hello, world!&quot;**:
+
+        var Salutator = $def({
+            $members: {
+                sayHello: function() {
+                    return &quot;hello world&quot;
+                }
+            }
+        });
+
+        var SpecializedSalutator = $def({
+            $extends: Salutator,
+            $members: {
+                &#x2F;&#x2F; Overrides the parent class sayHello implementation
+                sayHello: function() {
+                    return &quot;Hello, world!&quot;;
+                }
+            }
+        });
+
+        var instance = new SpecializedSalutator();
+        var text = instance.sayHello();
+
+        &#x2F;&#x2F; This will alert &quot;Hello, world!&quot; as the class has overriden the default implementation
+        &#x2F;&#x2F; which was returning &quot;hello world&quot;
+        alert(text); 
+
+    ##### &lt;a id=&quot;class-base&quot;&gt;&lt;&#x2F;a&gt; 3.2.1 The &#x60;this.$base&#x60; keyword ([Back to index](#index))
+
+    Any method&#x2F;function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
+    overriden member.
+
+    The overriden members may or may not call the parent class member implementation using the &#x60;this.$base&#x60; keyword. 
+
+    For example, there is a class &#x60;Calculator&#x60; having a method &#x60;add&#x60;, and a specialized calculator called &#x60;UnsignedCalculator&#x60; which makes any addition an absolute result,
+    the code would look like this:
+
+        var Calculator = $def({
+            $members: {
+                add: function(num1, num2) {
+                    &#x2F;&#x2F; It simply adds num2 to num1
+                    return num1 + num2;
+                }
+            }
+        });
+
+        var UnsignedCalculator = $def({
+            $members: {
+                add: function(num1, num2) {
+                    &#x2F;&#x2F; This is calling the &quot;add&quot;&#x27;s parent class implementation
+                    var result = this.$base.add(num1, num2);
+
+                    &#x2F;&#x2F; Now the result from calling the base implementation of this method
+                    &#x2F;&#x2F; is converted to an unsigned number
+                    return Math.abs(result);
+                }
+            }
+        });
+
+    ##### &lt;a id=&quot;class-baseconstructor&quot;&gt;&lt;&#x2F;a&gt; 3.2.2 The derived class constructor calls the parent&#x27;s class constructor ([Back to index](#index))
+    Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
+    hierarchy requires some construction-time initialization:
+
+        &#x2F;&#x2F; The top-most parent class Person defines basic data
+        &#x2F;&#x2F; and provides getter and setter properties in order to
+        &#x2F;&#x2F; get or set the whole contained data.
+        &#x2F;&#x2F;
+        &#x2F;&#x2F; The constructor receives as arguments the default data.
+        var Person = $def({
+            $constructor: function(args) {
+                this.$_.name = args.name;
+                this.$_.secondName = args.secondName;
+                this.$_.age = args.age;
+            },
+            $members: {
+                get name() {
+                    return this.$_.name;
+                },
+                set name(value) {
+                    this.$_.name = value;
+                },
+
+                get secondName() {
+                    return this.$_.secondName;
+                },
+                set secondName(value) {
+                    this.$_.secondName = value;
+                }
+
+                get age(){
+                    return this.$_.age;
+                },
+                set age(value) {
+                    this.$_.age = value;
+                }
+            }
+        });
+
+        &#x2F;&#x2F; The Employee class inherits Person and adds
+        &#x2F;&#x2F; more data. The Employee constructor both defines
+        &#x2F;&#x2F; new class fields and calls the Person&#x27;s constructor
+        &#x2F;&#x2F; by invoking this.$base.$ctor(args), thus the base constructor
+        &#x2F;&#x2F; will receive the expected arguments.
+        var Employee = $def({
+           $extends: Person,
+           $constructor: function(args) {
+                this.$base.$ctor(args);
+
+                this.$_.companyName = args.companyName;
+                this.$_.salary = args.salary;
+           } 
+        });
+
+        &#x2F;&#x2F; Now this is creating an instance of Employee. As the Employee constructor
+        &#x2F;&#x2F; calls its base Person class&#x27; constructor, it will be correctly initialized 
+        &#x2F;&#x2F; with the data passed as constructor arguments:
+        var instance = new Employee({
+            name: &quot;Matias&quot;,
+            secondName: &quot;Fidemraizer&quot;,
+            age: 28,
+            companyName: &quot;ACME&quot;,
+            salary: 99999
+        });
+
+        alert(instance.name); &#x2F;&#x2F; Popups &quot;Matias&quot;
+        alert(instance.secondName); &#x2F;&#x2F; Popups &quot;Fidemraizer&quot;
+        alert(instance.age); &#x2F;&#x2F; Popups &quot;28&quot;
+        alert(instance.companyName); &#x2F;&#x2F; Popups &quot;ACME&quot;
+        alert(instance.salary); &#x2F;&#x2F; Popups &quot;99999&quot;
+
+    ##### &lt;a id=&quot;class-basecallsderived&quot;&gt;&lt;&#x2F;a&gt; 3.2.3 A base class member calls the most specialized implementation ([Back to index](#index))
+    Sometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.
+
+    For example, a parent class &#x60;Polygon&#x60; overrides the default JavaScript &#x60;toString()&#x60; method in order to calculate the polygon area and
+    return it as a string. That is, &#x60;Polygon&#x60; implements a &#x60;calcArea&#x60; method. Now &#x60;Square&#x60; inherits &#x60;Polygon&#x60; and overrides the &#x60;calcArea&#x60;
+    method and performs the whole area calculation. The &#x60;Square&#x60; class will now need to override the base &#x60;toString()&#x60; &#x60;Polygon&#x60;&#x27;s method in order to
+    show the area.
+
+    In jOOPL, the most derived or specialized member is accessed through the special class field &#x60;this.$_.$derived&#x60;. 
+
+    Here is a sample of the above explanation:
+
+        var Polygon = $def({
+            $members: {
+                calcArea: function() {
+                    &#x2F;&#x2F; A generic polygon will not know how to calculate the area. The
+                    &#x2F;&#x2F; derived classes will do it!
+                },
+
+                toString: function() {
+                    &#x2F;&#x2F; See how calcArea() from the most derived class is accessed:
+                    return &quot;The area of this polygon is: &#x27;&quot; + this.$_.$derived.calcArea(); + &quot;&#x27;&quot;;
+                }
+            }
+        });
+
+        var Square = $def({
+            $constructor: function(args) {
+                this.$_.x = args.x;
+                this.$_.y = args.y;
+            },
+            $extends: Polygon,
+            $members: {
+                get x() {
+                    return this.$_.x;
+                },
+                get y() {
+                    return this.$_.y;
+                },
+
+                calcArea: function() {
+                    return this.x * this.y;
+                }
+            }
+        });
+
+        var instance = new Square(20, 30);
+        
+        &#x2F;&#x2F; This will alert &quot;The area of this polygon is: &#x27;600&#x27;&quot;&quot;
+        alert(instance.toString());
+
+    @class $def
+    @static
+    *&#x2F;
+    $def = function (args) {
+        var classDef = null;
+
+        if (args.$inmutable === true &amp;&amp; Object.freeze) {
+            classDef = function (args, callConstructor) {
+                TypeUtil.buildObject(this, args, callConstructor === undefined);
+
+                Object.freeze(this);
+            };
+
+        } else if (args.$dynamic === false &amp;&amp; Object.preventExtensions) {
+            classDef = function (args, callConstructor) {
+                TypeUtil.buildObject(this, args, callConstructor === undefined);
+
+                Object.preventExtensions(this);
+            };
+
+        } else {
+            classDef = function (args, callConstructor) {
+                TypeUtil.buildObject(this, args, callConstructor === undefined);
+            };
+        }
+
+        if (args.$extends) {
+            TypeUtil.buildInheritance(classDef, args.$extends);
+            classDef.prototype.$base = args.$extends;
+        } else {
+            classDef.prototype = new $global.joopl.Object();
+        }
+
+        if (args.$constructor) {
+            classDef.prototype.$ctor = args.$constructor;
+        } else {
+            classDef.prototype.$ctor = function () { };
+        }
+
+        if (args.$members) {
+            var propertyDescriptor = null;
+
+            for (var memberName in args.$members) {
+                propertyDescriptor = Object.getOwnPropertyDescriptor(args.$members, memberName);
+
+                if (typeof propertyDescriptor.value == &quot;function&quot;) {
+                    classDef.prototype[memberName] = args.$members[memberName];
+                } else if (memberName == &quot;$events&quot; &amp;&amp; typeof propertyDescriptor.value == &quot;object&quot;) {
+                    for (var eventIndex in propertyDescriptor.value) {
+                        TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
+                    }
+
+                } else if (!propertyDescriptor.value) {
+                    TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
+                }
+            }
+        }
+
+        if (args.$implements) {
+            var result = null;
+
+            if (typeof args.$implements != &quot;Array&quot;) {
+                result = $interface.implementz(classDef, args.$implements);
+
+                if (!interfaceResultTuple.success) {
+                    throw new $global.joopl.NotImplementedException({ memberName: result.memberName });
+                }
+            }
+            else {
+                for (var someInterface in args.$implements) {
+                    result = $interface.implementz(classDef, args.$implements[someInterface]);
+
+                    if (!result.success) {
+                        throw new $global.joopl.NotImplementedException({ memberName: result.memberName });
+                    }
+                }
+            }
+        }
+
+        return classDef;
+    };
+
+    Object.freeze($def);
+
+    $namespace.register(&quot;joopl&quot;, function () {
+        var scope = this;
+
+        this.Object = function () {
+        };
+
+        this.Object.prototype = {
+            get joopl() { return version; },
+            get typeKind() { return &quot;class&quot;; },
+
+            isTypeOf: function (type) {
+                var allBases = [];
+                var lastBase = this;
+                var isMember = false;
+
+                if (this instanceof type) {
+                    isMember = true;
+                } else {
+                    while (!isMember &amp;&amp; lastBase.$base) {
+                        if (!(isMember = lastBase.$base instanceof type)) {
+                            lastBase = lastBase.$base;
+                        }
+                    }
+                }
+
+                return isMember;
+            }
+        };
+
+        this.EventManager = $def({
+            $constructor: function (args) {
+                this.$_.source = args.source;
+            },
+            $members: {
+                get source() {
+                    return this.$_.source;
+                },
+
+                raiseHandlers: function (source, delegates, args, context) {
+                    var current = null;
+                    var currentType = null;
+
+                    for (var delegateIndex in delegates) {
+                        current = delegates[delegateIndex];
+                        currentType = typeof current;
+
+                        switch (currentType) {
+                            case &quot;function&quot;:
+                                current.bind(context ? context : source)(args ? args : null);
+                                break;
+
+                            case &quot;object&quot;:
+                                var func = current.handler;
+                                func.bind(current.context ? current.context : (context ? context : source))(args ? args.args : null);
+                                break;
+                        }
+                    }
+                },
+
+                register: function (eventName) {
+                    var delegates = [];
+                    var that = this;
+                    var source = this.source;
+
+                    Object.defineProperty(
+                        this,
+                        eventName, {
+                            get: function () {
+                                return function (args, context) {
+                                    return that.raiseHandlers(this, delegates, args, context);
+                                }
+                            },
+                            set: function (delegateFunc) {
+                                var index = delegates.indexOf(delegateFunc);
+
+                                if (index == -1) {
+                                    delegates.push(delegateFunc);
+                                } else {
+                                    delegates.splice(index, 1);
+                                }
+                            },
+                            configurable: false,
+                            enumerable: false
+                        }
+                    );
+                }
+            },
+        });
+
+        this.Exception = $def({
+            $constructor: function (args) {
+                this.$_.message = args.message;
+                this.$_.innerException = args.innerException;
+            },
+
+            $members:
+            {
+                get message() {
+                    return this.$_.message;
+                },
+
+                get innerException() {
+                    return this.$_.innerException;
+                },
+
+                toString: function () {
+                    return this.message;
+                }
+            }
+        });
+
+        this.ArgumentException = $def({
+            $extends: this.Exception,
+            $constructor: function (args) {
+                this.$_.argName = args.argName;
+
+                var message = &quot;The given argument &#x27;&quot; + args.argName + &quot;&#x27; is not valid&quot;;
+
+                if (args.reason) {
+                    message += &quot; (Reason: &quot; + args.reason + &quot;)&quot;;
+                }
+
+                this.$base.$ctor({
+                    message: message
+                });
+            },
+            $members: {
+                get argName() {
+                    return this.$_.argName;
+                }
+            }
+        });
+
+        this.NotImplementedException = $def({
+            $extends: this.Exception,
+            $constructor: function (args) {
+                this.$base.$ctor(
+                    {
+                        message: !TypeUtil.hasValue(args) || !TypeUtil.hasValue(args.memberName) ?
+                                        &quot;A method or property is not implemented&quot;
+                                        :
+                                        &quot;Method or property &#x27;&quot; + args.memberName + &quot;&#x27; is not implemented&quot;
+                    }
+                );
+
+                this.$_.memberName = args.memberName;
+            },
+            $members: {
+                get memberName() {
+                    return this.$_.memberName;
+                }
+            }
+        });
+    });
+})(undefined);
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
