@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>{ joopl };</title>
-    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.9.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
-    <link rel="stylesheet" href=".&#x2F;assets/vendor/prettify/prettify-min.css">
-    <link rel="stylesheet" href=".&#x2F;assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href=".&#x2F;assets/favicon.png">
-    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.9.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="./assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="./assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -17,7 +17,7 @@
 		    <div id="hd" class="yui3-g header">
 		        <div class="yui3-u-3-4">
 		            
-		                <h1><img src="https:&#x2F;&#x2F;download-codeplex.sec.s-msft.com&#x2F;Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+		                <h1><img src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
 		            
 		        </div>
 		        <div class="yui3-u-1-4 version">
@@ -30,17 +30,17 @@
         
     <h3>Quick links</h3>
     <ul id="quick-links">
-        <li><a href=".&#x2F;index.html">Back to main page</a></li>
-        <li><a href=".&#x2F;classes/$namespace.html#method_register">Creating namespaces</a></li>
-        <li><a href=".&#x2F;classes/$namespace.html#method_using">Importing namespaces</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-define">Defining a class</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-constructors">Class constructors</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-properties">Class properties</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-events">Class events, custom events</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-inheritance">Inheritance how-to</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
-        <li><a href=".&#x2F;classes/$def.html#class-base">Calling base class members how-to</a></li>
+        <li><a href="./">Back to main page</a></li>
+        <li><a href="./classes/$namespace.html#method_register">Creating namespaces</a></li>
+        <li><a href="./classes/$namespace.html#method_using">Importing namespaces</a></li>
+        <li><a href="./classes/$def.html">Working with classes index</a></li>
+        <!--<li><a href="./classes/$def.html#class-constructors">Class constructors</a></li>
+        <li><a href="./classes/$def.html#class-properties">Class properties</a></li>
+        <li><a href="./classes/$def.html#class-events">Class events, custom events</a></li>
+        <li><a href="./classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
+        <li><a href="./classes/$def.html#class-inheritance">Inheritance how-to</a></li>
+        <li><a href="./classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
+        <li><a href="./classes/$def.html#class-base">Calling base class members how-to</a></li>-->
     </ul>
 
     <div id="api-tabview" class="tabview">
@@ -56,9 +56,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href=".&#x2F;classes/$def.html">$def</a></li>
+                <li><a href="./classes/$def.html">$def</a></li>
             
-                <li><a href=".&#x2F;classes/$namespace.html">$namespace</a></li>
+                <li><a href="./classes/$namespace.html">$namespace</a></li>
             
             </ul>
 
@@ -77,12 +77,25 @@
                 <div id="docs-main">
                     <div class="content">
                             <div class="apidocs">
-        <div id="docs-main" class="content">
+        <div id="docs-main" class="content">            
+            <hr />
+            <strong style"color: red">Important note: This documentation site work is still in progress. For any doubt, suggestion or any kind of feedback, please create a new issue or discussion in the <a href="http://joopl.codeplex.com">jOOPL's CodePlex site</a></strong>
+            <hr />
+
             <h2>Welcome to the official jOOPL documentation site!</h2>
             <p>jOOPL stands for <strong>J</strong>avaScript <strong>O</strong>bject-<strong>O</strong>riented <strong>P</strong>rogramming <strong>L</strong>ibrary.</p>
             <p>JavaScript has a limited but yet useful type definition system. In comparison to other modern programming languages like C#, Java, Ruby, Python and many others, JavaScript is not class-oriented but prototype-oriented.</p>
-            <p>Maybe prototypes are enough for simple developments, but when things get harder, out-of-the-box JavaScript type definition syntax gets bloated and harder to maintain.</p>
-            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it conserves 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
+            <p>Maybe prototypes are enough for simple developments, but when things get harder, out-of-the-box JavaScript type definition syntax gets bloated and harder to maintain and understand.</p>
+            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it retaains 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
+
+            <h3>How to get started?</h3>
+            <p>First of all, take a look at the <a href="classes/$def.html">documentation talking about how to work with classes</a> and <a href="classes/$namespace.html">namespaces</a>!</p>
+            <p>About samples, now jOOPL has a test suite developed using the great <a href="http://qunitjs.com/" target="_blank">QUnit testing framework made by the jQuery team</a>:</p>
+            <ol>
+                <li><a href="test/namespace.test.html">Namespace tests</a></li>
+                <li><a href="test/class.test.html">Class tests</a></li>
+            </ol>
+            <p>A good idea is taking a look at source code of the whole test pages: the jOOPL-based JavaScript code is developed in the body of the documents. That way, anyone can explore all jOOPL features, as the tests are also documentation!</p>
 
             <h3>Ok, wait. Why jOOPL? Why object-oriented programming?</h3>
             <p>It is all about taking the client-side Web and server development to the next level: <strong>let's create true reusable and maintainable JavaScript 
@@ -117,6 +130,12 @@ $namespace.register("samples", function() {
     instanceOfClassA.helloWorld();
 });
             </pre>
+
+            <h3>Who is behind this project?</h3>
+            <p>This project is actively developed by Matias Fidemraizer (<a href="http://linkedin.com/in/mfidemraizer/en" target="_blank">LinkedIn profile here</a>)</p>
+
+            <h3>I want to contribute, give feedback...</h3>
+            <p><i>It would be a great idea! Send me a message <a href="http://linkedin.com/in/mfidemraizer/en" target="_blank">to my LinkedIn profile</a> and we can start talking there. Or just <a href="http://joopl.codeplex.com" target="_blank">open a discussion/issue on the official jOOPL CodePlex site</a>!</p>
         </div>
     </div>
 
@@ -128,13 +147,13 @@ $namespace.register("samples", function() {
         </div>
     </div>
 </div>
-<script src=".&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script src="./assets/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>
-<script src=".&#x2F;assets/js/yui-prettify.js"></script>
-<script src=".&#x2F;assets/../api.js"></script>
-<script src=".&#x2F;assets/js/api-filter.js"></script>
-<script src=".&#x2F;assets/js/api-list.js"></script>
-<script src=".&#x2F;assets/js/api-search.js"></script>
-<script src=".&#x2F;assets/js/apidocs.js"></script>
+<script src="./assets/js/yui-prettify.js"></script>
+<script src="./assets/../api.js"></script>
+<script src="./assets/js/api-filter.js"></script>
+<script src="./assets/js/api-list.js"></script>
+<script src="./assets/js/api-search.js"></script>
+<script src="./assets/js/apidocs.js"></script>
 </body>
 </html>

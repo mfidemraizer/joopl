@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>joopl.js - { joopl };</title>
-    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.9.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
-    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.9.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -17,7 +17,7 @@
 		    <div id="hd" class="yui3-g header">
 		        <div class="yui3-u-3-4">
 		            
-		                <h1><img src="https:&#x2F;&#x2F;download-codeplex.sec.s-msft.com&#x2F;Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+		                <h1><img src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
 		            
 		        </div>
 		        <div class="yui3-u-1-4 version">
@@ -30,17 +30,17 @@
         
     <h3>Quick links</h3>
     <ul id="quick-links">
-        <li><a href="..&#x2F;index.html">Back to main page</a></li>
-        <li><a href="..&#x2F;classes/$namespace.html#method_register">Creating namespaces</a></li>
-        <li><a href="..&#x2F;classes/$namespace.html#method_using">Importing namespaces</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-define">Defining a class</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-constructors">Class constructors</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-properties">Class properties</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-events">Class events, custom events</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-inheritance">Inheritance how-to</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
-        <li><a href="..&#x2F;classes/$def.html#class-base">Calling base class members how-to</a></li>
+        <li><a href="../">Back to main page</a></li>
+        <li><a href="../classes/$namespace.html#method_register">Creating namespaces</a></li>
+        <li><a href="../classes/$namespace.html#method_using">Importing namespaces</a></li>
+        <li><a href="../classes/$def.html">Working with classes index</a></li>
+        <!--<li><a href="../classes/$def.html#class-constructors">Class constructors</a></li>
+        <li><a href="../classes/$def.html#class-properties">Class properties</a></li>
+        <li><a href="../classes/$def.html#class-events">Class events, custom events</a></li>
+        <li><a href="../classes/$def.html#class-instances">How to instantiate classes (creating objects)</a></li>
+        <li><a href="../classes/$def.html#class-inheritance">Inheritance how-to</a></li>
+        <li><a href="../classes/$def.html#class-polymorphism">Polymorphism how-to</a></li>
+        <li><a href="../classes/$def.html#class-base">Calling base class members how-to</a></li>-->
     </ul>
 
     <div id="api-tabview" class="tabview">
@@ -56,9 +56,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/$def.html">$def</a></li>
+                <li><a href="../classes/$def.html">$def</a></li>
             
-                <li><a href="..&#x2F;classes/$namespace.html">$namespace</a></li>
+                <li><a href="../classes/$namespace.html">$namespace</a></li>
             
             </ul>
 
@@ -80,38 +80,38 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-﻿&#x2F;&#x2F; (c) joopl
-&#x2F;&#x2F; By Matías Fidemraizer (http:&#x2F;&#x2F;www.matiasfidemraizer.com) (http:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;mfidemraizer&#x2F;en)
-&#x2F;&#x2F; -------------------------------------------------
-&#x2F;&#x2F; http:&#x2F;&#x2F;joopl.codeplex.com
-&#x2F;&#x2F;
-&#x2F;&#x2F; Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-&#x2F;&#x2F; you may not use this file except in compliance with the License.
-&#x2F;&#x2F; You may obtain a copy of the License at
-&#x2F;&#x2F;
-&#x2F;&#x2F;     http:&#x2F;&#x2F;www.apache.org&#x2F;licenses&#x2F;LICENSE-2.0
-&#x2F;&#x2F;
-&#x2F;&#x2F; Unless required by applicable law or agreed to in writing, software
-&#x2F;&#x2F; distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-&#x2F;&#x2F; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-&#x2F;&#x2F; See the License for the specific language governing permissions and
-&#x2F;&#x2F; limitations under the License.
+﻿// (c) joopl
+// By Matías Fidemraizer (http://www.matiasfidemraizer.com) (http://www.linkedin.com/in/mfidemraizer/en)
+// -------------------------------------------------
+// http://joopl.codeplex.com
+//
+// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-&#x2F;&#x2F; Keywords
-var $namespace = null; &#x2F;&#x2F; Holds an object to manage namespaces
-var $def = null; &#x2F;&#x2F; Declares a class
-var $interfacedef = null; &#x2F;&#x2F; A shortcut to $interface.declare(...)
-var $implements = null; &#x2F;&#x2F; Holds a function to check if an object implements an interface
-var $global = {}; &#x2F;&#x2F; Represents the global scope.
+// Keywords
+var $namespace = null; // Holds an object to manage namespaces
+var $def = null; // Declares a class
+var $interfacedef = null; // A shortcut to $interface.declare(...)
+var $implements = null; // Holds a function to check if an object implements an interface
+var $global = {}; // Represents the global scope.
 
 (function (undefined) {
     &quot;use strict&quot;;
 
     var version = &quot;2.2.0&quot;;
 
-    &#x2F;&#x2F; An object containing a set of core features used by jOOPL
+    // An object containing a set of core features used by jOOPL
     var TypeUtil = {
-        &#x2F;&#x2F; Determines if some identifier is a jOOPL keyword.
+        // Determines if some identifier is a jOOPL keyword.
         isSystemReservedName: function (name) {
             var reserved = false
 
@@ -135,11 +135,11 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             }
         },
 
-        &#x2F;&#x2F;  Creates a property on the given class definition based on a provided property descriptor.
-        &#x2F;&#x2F; @classDef: The class definition (it must be the constructor function!
-        &#x2F;&#x2F; @name: The property name
-        &#x2F;&#x2F; @descriptor: An object representing the property descriptor
-        &#x2F;&#x2F; @context: An optional context object that will work as the &quot;this&quot; keyword binder for the getter and&#x2F;or setter when defining the property.
+        //  Creates a property on the given class definition based on a provided property descriptor.
+        // @classDef: The class definition (it must be the constructor function!
+        // @name: The property name
+        // @descriptor: An object representing the property descriptor
+        // @context: An optional context object that will work as the &quot;this&quot; keyword binder for the getter and/or setter when defining the property.
         createPropertyFromDescriptor: function (classDef, name, descriptor, context) {
             if (context) {
                 if (descriptor.get) {
@@ -158,19 +158,19 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             );
         },
 
-        &#x2F;&#x2F; Creates a property.
-        &#x2F;&#x2F; @classDef: A class definition (it must be the class constructor function).
-        &#x2F;&#x2F; @name: The property name.
-        &#x2F;&#x2F; @getter: The getter parameterless function.
-        &#x2F;&#x2F; @setter: The setter function with a parameter representing the value to set.
-        &#x2F;&#x2F; @inmutable: A boolean flag specifying if the created property is configurable or not.
+        // Creates a property.
+        // @classDef: A class definition (it must be the class constructor function).
+        // @name: The property name.
+        // @getter: The getter parameterless function.
+        // @setter: The setter function with a parameter representing the value to set.
+        // @inmutable: A boolean flag specifying if the created property is configurable or not.
         createProperty: function (classDef, name, getter, setter, inmutable) {
             if (inmutable == undefined) {
                 inmutable = false;
             }
 
             if (!classDef.prototype.hasOwnProperty(name)) {
-                &#x2F;&#x2F; This case is for a read-write property
+                // This case is for a read-write property
                 if (getter &amp;&amp; setter) {
 
                     Object.defineProperty(
@@ -182,7 +182,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
                             enumerable: true
                         }
                     );
-                } else if (getter) { &#x2F;&#x2F; This case is for a read-only property
+                } else if (getter) { // This case is for a read-only property
                     Object.defineProperty(
                         classDef.prototype,
                         name, {
@@ -191,7 +191,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
                             enumerable: true
                         }
                     );
-                } else if (setter) { &#x2F;&#x2F; This case is for a write-only property
+                } else if (setter) { // This case is for a write-only property
                     Object.defineProperty(
                         classDef.prototype,
                         name, {
@@ -228,9 +228,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             eventManager.register(name);
         },
 
-        &#x2F;&#x2F; Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the constructor of the whole class instance.
-        &#x2F;&#x2F; @instance: The class instance
-        &#x2F;&#x2F; @args: The constructor arguments.
+        // Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the constructor of the whole class instance.
+        // @instance: The class instance
+        // @args: The constructor arguments.
         buildObject: function (instance, args, callConstructor) {
             if (typeof instance.$base == &quot;function&quot;) {
                 instance.$base = new instance.$base(args, false);
@@ -252,12 +252,12 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             return instance;
         },
 
-        &#x2F;&#x2F; Builds a given class inheritance with the given parent class.
-        &#x2F;&#x2F; @derived: The child class.
-        &#x2F;&#x2F; @parent: The parent class.
+        // Builds a given class inheritance with the given parent class.
+        // @derived: The child class.
+        // @parent: The parent class.
         buildInheritance: function (derived, parent) {
             if (parent != null) {
-                &#x2F;&#x2F; Adding all class fields to the derived class...
+                // Adding all class fields to the derived class...
                 for (var fieldName in parent.prototype.$_) {
                     if (!derived.prototype.$_[fieldName]) {
                         derived.prototype.$_[fieldName] = parent.prototype.$_[fieldName];
@@ -266,19 +266,19 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
                 var propertyDescriptor = null;
 
-                &#x2F;&#x2F; Adding both methods and properties to the derived class...
+                // Adding both methods and properties to the derived class...
                 for (var memberName in parent.prototype) {
                     propertyDescriptor = Object.getOwnPropertyDescriptor(parent.prototype, memberName);
 
-                    &#x2F;&#x2F; If it has a property descriptor...
+                    // If it has a property descriptor...
                     if (propertyDescriptor) {
-                        &#x2F;&#x2F; and the value of the descriptor is a function it means that it&#x27;s inheriting a method.
+                        // and the value of the descriptor is a function it means that it&#x27;s inheriting a method.
                         if (typeof propertyDescriptor.value == &quot;function&quot;) {
                             derived.prototype[memberName] = parent.prototype[memberName];
-                        } else { &#x2F;&#x2F; If not, it is a property accessor.
+                        } else { // If not, it is a property accessor.
                             this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
                         }
-                    } else if (typeof parent.prototype[memberName] == &quot;function&quot;) { &#x2F;&#x2F; It can also happen that it&#x27;s a function defined in the $global.joopl.Object prototype...
+                    } else if (typeof parent.prototype[memberName] == &quot;function&quot;) { // It can also happen that it&#x27;s a function defined in the $global.joopl.Object prototype...
                         derived.prototype[memberName] = parent.prototype[memberName];
                     }
                 }
@@ -287,14 +287,14 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             return parent ? parent.prototype : null;
         },
 
-        &#x2F;&#x2F; Whether determines if some object reference has an associated value (object) and returns true&#x2F;false.
-        &#x2F;&#x2F; @someRef: The object reference.
+        // Whether determines if some object reference has an associated value (object) and returns true/false.
+        // @someRef: The object reference.
         hasValue: function (someRef) {
             return someRef !== undefined &amp;&amp; someRef != null;
         },
 
-        &#x2F;&#x2F; Whether determines if some object reference holds a function and returns true&#x2F;false.
-        &#x2F;&#x2F; @someRef: The object reference.
+        // Whether determines if some object reference holds a function and returns true/false.
+        // @someRef: The object reference.
         isFunction: function (someRef) {
             return typeof someRef === &quot;function&quot;;
         }
@@ -303,13 +303,13 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     Object.freeze(TypeUtil);
 
 
-    &#x2F;**
-    The &#x60;$namespace&#x60; keyword represents an static object holding methods&#x2F;functions to manage namespaces.
+    /**
+    The &#x60;$namespace&#x60; keyword represents an static object holding methods/functions to manage namespaces.
 
     @class $namespace
-    *&#x2F;
+    */
     $namespace = {
-        &#x2F;**
+        /**
         Registers a namespace. The whole method supports two scenarios:
 
         - Register a namespace and later add members by accessing it with its full path (i.e. $global.your.namespace).
@@ -337,9 +337,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         executed,  the &#x60;this&#x60; keyword in the scope of the function (i.e. *the function body*) will be the childest registered namespace. For example:
 
             $namespace.register(&quot;joopl.samples&quot;, function() {
-                &#x2F;&#x2F; The this keyword now is the &#x27;samples&#x27; namespace! 
-                &#x2F;&#x2F; That&#x27;s great because there is no need to access to the full namespace path
-                &#x2F;&#x2F; to work on adding members to it!
+                // The this keyword now is the &#x27;samples&#x27; namespace! 
+                // That&#x27;s great because there is no need to access to the full namespace path
+                // to work on adding members to it!
                 this.ClassA = $def({
                     $members: {
                         someMethod: function() {
@@ -352,24 +352,24 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
        @method register
        @param path {String} A namespace path. For example, &quot;joopl.sample&quot; will register &quot;joopl&quot; and its child &quot;sample&quot;. 
        @param copedFunc {Function} A parameterless function representing the scope where the &#x60;this&#x60; keyword is the childest registered namespace (for example, registering &quot;joopl.sample&#x27;, the &#x60;this&#x60; keyword will be the *sample* namespace).
-        *&#x2F;
+        */
         register: function (path, scopedFunc) {
             var nsIdentifiers = typeof path == &quot;string&quot; ? path.split(&quot;.&quot;) : null;
 
-            &#x2F;&#x2F; The parent namespace of everything is the reserved $global object!
+            // The parent namespace of everything is the reserved $global object!
             var parentNs = $global;
             var currentNs = null;
 
             for (var nsIndex = 0; nsIndex &lt; nsIdentifiers.length; nsIndex++) {
                 currentNs = nsIdentifiers[nsIndex];
 
-                &#x2F;&#x2F; The current namespace  is not registered (if evals true)
+                // The current namespace  is not registered (if evals true)
                 if (!parentNs[currentNs]) {
                     parentNs[currentNs] = {};
 
-                    &#x2F;&#x2F; Any namespace will hold an &quot;isNamespace&quot; property
-                    &#x2F;&#x2F; in order to correctly identify if an object within
-                    &#x2F;&#x2F; the namespaces is a namespace or a class!
+                    // Any namespace will hold an &quot;isNamespace&quot; property
+                    // in order to correctly identify if an object within
+                    // the namespaces is a namespace or a class!
                     Object.defineProperty(
                         parentNs[currentNs], &quot;isNamespace&quot;, {
                             value: true,
@@ -381,14 +381,14 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
                 parentNs = parentNs[currentNs];
             }
 
-            &#x2F;&#x2F; If the second parameter holds something if should be a 
-            &#x2F;&#x2F; parameterless function, and this is creating a namespace scope.
+            // If the second parameter holds something if should be a 
+            // parameterless function, and this is creating a namespace scope.
             if (typeof scopedFunc == &quot;function&quot;) {
                 $namespace.using(path, scopedFunc, true);
             }
         },
 
-        &#x2F;** 
+        /** 
         Aliases an existing namespace.
         @method alias
         @param namespace {Object} The namespace to alias
@@ -396,12 +396,12 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         @example
             $namespace.register(&quot;joopl.samples&quot;);
             $namespace.alias($global.joopl.samples, &quot;samples&quot;);
-        *&#x2F;
+        */
         alias: function (namespace, alias) {
             $global[alias] = namespace;
         },
 
-        &#x2F;**
+        /**
         Imports the members of given namespace path.
 
         The &#x60;$namespace.using&#x60; method will not register a namespace if a given namespace path is not previously registered with &#x60;$namespace.register&#x60;.
@@ -435,9 +435,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
 
 
-            &#x2F;&#x2F; Somewhere in the same or other file...
+            // Somewhere in the same or other file...
             $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function() {
-                &#x2F;&#x2F; The &quot;this&quot; keyword contains an object with all imported members from the both namespaces
+                // The &quot;this&quot; keyword contains an object with all imported members from the both namespaces
                 var instance = new this.ClassA();
             });
 
@@ -445,7 +445,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         and the &#x60;this&#x60; keyword will hold the &#x60;$global&#x60; object:
 
             $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function(scope) {
-                &#x2F;&#x2F; The scope input argument will hold the imported members
+                // The scope input argument will hold the imported members
                 var instance = new scope.ClassA();
             });
 
@@ -455,7 +455,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         @param paths {Array} An array of strings of the namespaces to import
         @param scopedFunc {Function} A function to create a namespace scope (optional)
         @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
-        *&#x2F;
+        */
         using: function (paths, scopedFunc, scopeIsNs) {
             if (paths === undefined) {
                 debugger;
@@ -586,14 +586,14 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
     Object.freeze($interfacedef);
 
-    &#x2F;**
-    ## &lt;a id=&quot;index&quot;&gt;&lt;&#x2F;a&gt; Index
+    /**
+    ## &lt;a id=&quot;index&quot;&gt;&lt;/a&gt; Index
 
     * 1.0\. [Defining a class](#class-define)
         * 1.1\. [Fields](#class-fields)
         * 1.2\. [Constructors](#class-constructors)
         * 1.3\. [Properties](#class-properties)
-        * 1.4\. [Methods&#x2F;Functions](#class-methods)
+        * 1.4\. [Methods/Functions](#class-methods)
         * 1.5\. [Events](#class-events)
     * 2.0\. [Creating instances of classes - the &#x60;new&#x60; operator](#class-instances)
     * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
@@ -603,7 +603,8 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             * 3.2.2\. [The derived class constructor calls the parent&#x27;s class constructor](#class-baseconstructor)
             * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
 
-    ### &lt;a id=&quot;class-define&quot;&gt;&lt;&#x2F;a&gt; 1. Defining a class ([Back to index](#index))
+    &lt;h3 id=&quot;class-define&quot;&gt;1. Defining a class&lt;/h3&gt; 
+    ([Back to index](#index))
     The &#x60;$def&#x60; operator is required in order to define classes. In fact, &#x60;$def&#x60; is a function and it accepts an object of arguments as
     input parameter. The essential parameters are:
 
@@ -613,7 +614,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     A basic class may look like the next code listing:
 
         var A = $def({
-            &#x2F;&#x2F; Constructor 
+            // Constructor 
             $constructor: function() {
                 this.$_.name = null;
             },
@@ -633,7 +634,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         });
 
     
-    #### &lt;a id=&quot;class-fields&quot;&gt;&lt;&#x2F;a&gt; 1.1 Class fields ([Back to index](#index))
+    &lt;h4 id=&quot;class-fields&quot;&gt;1.1 Class fields&lt;/h4&gt; 
+    ([Back to index](#index))
+
     A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).
 
     Any class constructor, property or method has a reserved variable called &#x60;$_&#x60; accessible through &#x60;this.$_&#x60; on which class fields can be declared and
@@ -641,19 +644,21 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
         var A = $def({
             $constructor: function() {
-                &#x2F;&#x2F; This is a class field:
+                // This is a class field:
                 this.$_.value = &quot;A string for the class field&quot;;
             }
         });
 
-    #### &lt;a id=&quot;class-constructors&quot;&gt;&lt;&#x2F;a&gt; 1.2 Constructors ([Back to index](#index))
-    In classes, the constructor is a method&#x2F;function called once an instance of some class is created. That is, this is a good moment for initializing 
+    &lt;h4 id=&quot;class-constructors&quot;&gt;1.2 Constructors&lt;/h4&gt;
+    ([Back to index](#index))
+
+    In classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing 
     the whole class.
 
     For example, class constructors are the place to define class fields:
 
         var A = $def({
-            &#x2F;&#x2F; Constructor 
+            // Constructor 
             $constructor: function() {
                 this.$_.myName = &quot;Matias&quot;;
             }
@@ -662,11 +667,11 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     In instance, the class constructor has access to the already declared methods and properties:
 
         var A = $def({
-            &#x2F;&#x2F; Constructor 
+            // Constructor 
             $constructor: function() {
                 this.$_.myName = &quot;Matias&quot;;
 
-                &#x2F;&#x2F; The &quot;someMethod()&quot; method can be called from the constructor!
+                // The &quot;someMethod()&quot; method can be called from the constructor!
                 this.initialize();
             }
 
@@ -681,7 +686,8 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
     - [Call parent class constructor](#class-baseconstructor)
 
-    #### &lt;a id=&quot;class-properties&quot;&gt;&lt;&#x2F;a&gt; 1.3 Properties ([Back to index](#index))
+    &lt;h4 id=&quot;class-properties&quot;&gt;1.3 Properties&lt;/h4&gt;
+    ([Back to index](#index))
 
     Any class can declare properties. Apparently, a property looks like a variable in its usage, but it differs from variables on
     how they are declared.
@@ -725,15 +731,15 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     This is how the above code would be implemented using properties:
 
         var myObject = {
-            &#x2F;&#x2F; Some regular variables
+            // Some regular variables
             _name: null,
             _age: null,
 
-            &#x2F;&#x2F; A getter for the _name variable:
+            // A getter for the _name variable:
             get name() { 
                 return this._name; 
             },
-            &#x2F;&#x2F; A setter for the _name variable. The setter defines the validation logic!
+            // A setter for the _name variable. The setter defines the validation logic!
             set name(value) { 
                 if(value != &quot;John&quot;) {
                     this._name = value; 
@@ -742,11 +748,11 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
                 }
             },
 
-            &#x2F;&#x2F; A getter for the _name variable:
+            // A getter for the _name variable:
             get age() { 
                 return this._age;
             },
-            &#x2F;&#x2F; A setter for the _name variable. The setter also defines the validation logic here!
+            // A setter for the _name variable. The setter also defines the validation logic here!
             set age(value) {
                 if(value &gt; 30) {
                     myObject.age = value;
@@ -759,26 +765,26 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     Now, if some code tries to assign &quot;John&quot; or an age lesser than 30, the properties setters will throw the error, but this time
     the validation logic is encapsulated:
 
-        myObject.name = &quot;John&quot; &#x2F;&#x2F; ERROR
-        myObject.name = &quot;Matias&quot; &#x2F;&#x2F; OK
+        myObject.name = &quot;John&quot; // ERROR
+        myObject.name = &quot;Matias&quot; // OK
 
-        myObject.age = 28 &#x2F;&#x2F; ERROR
-        myObject.age = 33 &#x2F;&#x2F; OK
+        myObject.age = 28 // ERROR
+        myObject.age = 33 // OK
 
     jOOPL fully supports JavaScript 1.8.x properties like the described before:
 
         var A = $def({
             $constructor: {
-                &#x2F;&#x2F; Define a class field for later provide access to it through a property getter and setter
+                // Define a class field for later provide access to it through a property getter and setter
                 this.$_.name = null;
             },
             $members: {
-                &#x2F;&#x2F; Gets the value held by the this.$_.name class field:
+                // Gets the value held by the this.$_.name class field:
                 get name() {
                     return this.$_.name;
                 },
 
-                &#x2F;&#x2F; Sets a new value to the this.$_.name class field:
+                // Sets a new value to the this.$_.name class field:
                 set name(value) {
                     this.$_.name = value;
                 }
@@ -787,14 +793,16 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
         var instance = new A();
 
-        &#x2F;&#x2F; Set the &#x27;name&#x27; property value
+        // Set the &#x27;name&#x27; property value
         a.name = &quot;Matias&quot;;
 
-        &#x2F;&#x2F; Gets the name property value
-        alert(a.name); &#x2F;&#x2F; Alerts &quot;Matias&quot;
+        // Gets the name property value
+        alert(a.name); // Alerts &quot;Matias&quot;
 
 
-    #### &lt;a id=&quot;class-methods&quot;&gt;&lt;&#x2F;a&gt; 1.4  Methods&#x2F;Functions ([Back to index](#index))
+    &lt;h4 id=&quot;class-methods&quot;&gt;1.4  Methods/Functions&lt;/h4&gt;
+    ([Back to index](#index))
+
     Methods (*also known as functions*) are the behavior of classes. They are the actions that can be performed by the class. Examples
     of methods can be:
 
@@ -819,7 +827,8 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
     - [Polymorphism](#class-polymorphism)
 
-    #### &lt;a id=&quot;class-events&quot;&gt;&lt;&#x2F;a&gt; 1.5  Events ([Back to index](#index))
+    &lt;h4 id=&quot;class-events&quot;&gt;1.5 Events&lt;/h4&gt; 
+    ([Back to index](#index))
 
     ##### Events glossary
 
@@ -844,20 +853,20 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         });
 
     The above code declares an event &quot;saying&quot;. Events are declared as an array of identifiers (names) as value of the &#x60;$events&#x60; special member. Once
-    an event is declared, the next step is triggering&#x2F;raising&#x2F;firing it somewhere in the whole class:
+    an event is declared, the next step is triggering/raising/firing it somewhere in the whole class:
         
         var A = $def({
             $members: {
                 $events: [&quot;saying&quot;],
 
                 helloWorld: function() {
-                    &#x2F;&#x2F; This is triggering the event. jOOPL has created an special function called
-                    &#x2F;&#x2F; &#x27;saying&#x27; which can receive an object of arguments so the object suscribed to
-                    &#x2F;&#x2F; the class event will receive the whole argument &#x27;text&#x27;
+                    // This is triggering the event. jOOPL has created an special function called
+                    // &#x27;saying&#x27; which can receive an object of arguments so the object suscribed to
+                    // the class event will receive the whole argument &#x27;text&#x27;
                     this.saying({ text: &quot;yes, the object is about to say &#x27;hello world&#x27;!&quot;});
 
-                    &#x2F;&#x2F; The event &#x27;saying&#x27; notified that the class A was about saying something
-                    &#x2F;&#x2F; and, finally, now it says &quot;hello world!&quot; using an alert.
+                    // The event &#x27;saying&#x27; notified that the class A was about saying something
+                    // and, finally, now it says &quot;hello world!&quot; using an alert.
                     alert(&quot;hello world!&quot;)
                 }
             }
@@ -869,7 +878,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var instance = new A();
 
         instance.saying = function(args) {
-            &#x2F;&#x2F; The &#x60;args&#x60; input argument will hold the text set when the event was triggered
+            // The &#x60;args&#x60; input argument will hold the text set when the event was triggered
             alert(&quot;The instance said: &quot; + args.text);
         };
 
@@ -882,14 +891,15 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var handler = function(args) {
         }
 
-        &#x2F;&#x2F; This adds an event handler to the event
+        // This adds an event handler to the event
         instance.saying = handler;
 
-        &#x2F;&#x2F; Setting the same handler again removes it from the event.
+        // Setting the same handler again removes it from the event.
         instance.saying = handler;
 
     
-    ### &lt;a id=&quot;class-instances&quot;&gt;&lt;&#x2F;a&gt; 2. Creating instances of classes ([Back to index](#index))
+    &lt;h3 id=&quot;class-instances&quot;&gt;2. Creating instances of classes&lt;/h3&gt;
+    ([Back to index](#index))
 
     Once a class is defined using the &#x60;$def&#x60; keyword, an instance of the class must be created in order to use it. 
 
@@ -904,14 +914,15 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             }
         });
 
-        &#x2F;&#x2F; Creating an instance of A:
+        // Creating an instance of A:
         var instance = new A();
 
-        &#x2F;&#x2F; Now the instance variable - a reference to an object of type A - 
-        &#x2F;&#x2F; has its instance methods available to be called:
+        // Now the instance variable - a reference to an object of type A - 
+        // has its instance methods available to be called:
         instance.someMethod();
 
-    ### &lt;a id=&quot;class-oop&quot;&gt;&lt;&#x2F;a&gt; 3. Object-oriented programming on JavaScript using jOOPL ([Back to index](#index))
+    &lt;h3 id=&quot;class-oop&quot;&gt;3. Object-oriented programming on JavaScript using jOOPL&lt;/h3&gt; 
+    ([Back to index](#index))
     
     Defining classes and creating instances of it using the &#x60;$def&#x60; and &#x60;new&#x60; operator respectively are just the most basic features of jOOPL.
 
@@ -922,8 +933,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     - **Polymorphism**. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.
     - **Encapsulation**. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.
     
-    #### &lt;a id=&quot;class-inheritance&quot;&gt;&lt;&#x2F;a&gt; 3.1 Class inheritance ([Back to index](#index))
-
+    &lt;h4 id=&quot;class-inheritance&quot;&gt;3.1 Class inheritance&lt;/h4&gt;
+    ([Back to index](#index))
+    
     Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.
 
     The &#x60;$def&#x60; keyword supports an additional and optional parameter called &#x60;$extends&#x60; which specifies that the declaring class extends another class.
@@ -931,24 +943,24 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     A class &#x60;A&#x60; may implement some methods and properties and a class &#x60;B&#x60; can inherit &#x60;A&#x60; and it will not need to implement them as all members from &#x60;A&#x60;
     are already available as members of &#x60;B&#x60;:
 
-        &#x2F;&#x2F; Defining a class A having a method &quot;do()&quot;
+        // Defining a class A having a method &quot;do()&quot;
         var A = $def({
             $members: {
                 do: function() {
-                    &#x2F;&#x2F; Do some stuff
+                    // Do some stuff
                 }
             }
         });
 
-        &#x2F;&#x2F; Class B extends A
+        // Class B extends A
         var B = $def({
             $extends: A
         });
 
         var instance = new B();
 
-        &#x2F;&#x2F; The B instance can invoke the do() function 
-        &#x2F;&#x2F; inherited from A
+        // The B instance can invoke the do() function 
+        // inherited from A
         instance.do();
 
     jOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (*no multi-inheritance*), but any
@@ -958,11 +970,13 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
     implicitly inherit the top-most class &#x60;Object&#x60; implemented as a plain JavaScript prototype, which provides basic methods and properties that any class 
     will contain. At the end of the day, **any class inherits Object**.
 
-    #### &lt;a id=&quot;class-polymorphism&quot;&gt;&lt;&#x2F;a&gt; 3.2 Inheritance with polymorphism ([Back to index](#index))
+    &lt;h4 id=&quot;class-polymorphism&quot;&gt;3.2 Inheritance with polymorphism &lt;/h4&gt;
+    ([Back to index](#index))
+
     Polymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base
     implementation found in the parent class. 
 
-    For example, there is a class called &#x60;Salutation&#x60; which implements a method&#x2F;function &#x60;sayHello&#x60; and it returns **&quot;hello world&quot;**, and there is a derived class
+    For example, there is a class called &#x60;Salutation&#x60; which implements a method/function &#x60;sayHello&#x60; and it returns **&quot;hello world&quot;**, and there is a derived class
     &#x60;SpecializedSalutation&#x60; that inherits &#x60;Salutation&#x60; class, the whole derived class can override the &#x60;sayHello&#x60; method and make it say **&quot;Hello, world!&quot;**:
 
         var Salutator = $def({
@@ -976,7 +990,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var SpecializedSalutator = $def({
             $extends: Salutator,
             $members: {
-                &#x2F;&#x2F; Overrides the parent class sayHello implementation
+                // Overrides the parent class sayHello implementation
                 sayHello: function() {
                     return &quot;Hello, world!&quot;;
                 }
@@ -986,13 +1000,14 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var instance = new SpecializedSalutator();
         var text = instance.sayHello();
 
-        &#x2F;&#x2F; This will alert &quot;Hello, world!&quot; as the class has overriden the default implementation
-        &#x2F;&#x2F; which was returning &quot;hello world&quot;
+        // This will alert &quot;Hello, world!&quot; as the class has overriden the default implementation
+        // which was returning &quot;hello world&quot;
         alert(text); 
 
-    ##### &lt;a id=&quot;class-base&quot;&gt;&lt;&#x2F;a&gt; 3.2.1 The &#x60;this.$base&#x60; keyword ([Back to index](#index))
+    &lt;h4 id=&quot;class-base&quot;&gt;3.2.1 The &#x60;this.$base&#x60; keyword&lt;/h4&gt;
+    ([Back to index](#index))
 
-    Any method&#x2F;function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
+    Any method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
     overriden member.
 
     The overriden members may or may not call the parent class member implementation using the &#x60;this.$base&#x60; keyword. 
@@ -1003,7 +1018,7 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var Calculator = $def({
             $members: {
                 add: function(num1, num2) {
-                    &#x2F;&#x2F; It simply adds num2 to num1
+                    // It simply adds num2 to num1
                     return num1 + num2;
                 }
             }
@@ -1012,25 +1027,27 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var UnsignedCalculator = $def({
             $members: {
                 add: function(num1, num2) {
-                    &#x2F;&#x2F; This is calling the &quot;add&quot;&#x27;s parent class implementation
+                    // This is calling the &quot;add&quot;&#x27;s parent class implementation
                     var result = this.$base.add(num1, num2);
 
-                    &#x2F;&#x2F; Now the result from calling the base implementation of this method
-                    &#x2F;&#x2F; is converted to an unsigned number
+                    // Now the result from calling the base implementation of this method
+                    // is converted to an unsigned number
                     return Math.abs(result);
                 }
             }
         });
 
-    ##### &lt;a id=&quot;class-baseconstructor&quot;&gt;&lt;&#x2F;a&gt; 3.2.2 The derived class constructor calls the parent&#x27;s class constructor ([Back to index](#index))
+    &lt;h4 id=&quot;class-baseconstructor&quot;&gt;3.2.2 The derived class constructor calls the parent&#x27;s class constructor&lt;/h4&gt; 
+    ([Back to index](#index))
+
     Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
     hierarchy requires some construction-time initialization:
 
-        &#x2F;&#x2F; The top-most parent class Person defines basic data
-        &#x2F;&#x2F; and provides getter and setter properties in order to
-        &#x2F;&#x2F; get or set the whole contained data.
-        &#x2F;&#x2F;
-        &#x2F;&#x2F; The constructor receives as arguments the default data.
+        // The top-most parent class Person defines basic data
+        // and provides getter and setter properties in order to
+        // get or set the whole contained data.
+        //
+        // The constructor receives as arguments the default data.
         var Person = $def({
             $constructor: function(args) {
                 this.$_.name = args.name;
@@ -1061,11 +1078,11 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             }
         });
 
-        &#x2F;&#x2F; The Employee class inherits Person and adds
-        &#x2F;&#x2F; more data. The Employee constructor both defines
-        &#x2F;&#x2F; new class fields and calls the Person&#x27;s constructor
-        &#x2F;&#x2F; by invoking this.$base.$ctor(args), thus the base constructor
-        &#x2F;&#x2F; will receive the expected arguments.
+        // The Employee class inherits Person and adds
+        // more data. The Employee constructor both defines
+        // new class fields and calls the Person&#x27;s constructor
+        // by invoking this.$base.$ctor(args), thus the base constructor
+        // will receive the expected arguments.
         var Employee = $def({
            $extends: Person,
            $constructor: function(args) {
@@ -1076,9 +1093,9 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
            } 
         });
 
-        &#x2F;&#x2F; Now this is creating an instance of Employee. As the Employee constructor
-        &#x2F;&#x2F; calls its base Person class&#x27; constructor, it will be correctly initialized 
-        &#x2F;&#x2F; with the data passed as constructor arguments:
+        // Now this is creating an instance of Employee. As the Employee constructor
+        // calls its base Person class&#x27; constructor, it will be correctly initialized 
+        // with the data passed as constructor arguments:
         var instance = new Employee({
             name: &quot;Matias&quot;,
             secondName: &quot;Fidemraizer&quot;,
@@ -1087,13 +1104,15 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
             salary: 99999
         });
 
-        alert(instance.name); &#x2F;&#x2F; Popups &quot;Matias&quot;
-        alert(instance.secondName); &#x2F;&#x2F; Popups &quot;Fidemraizer&quot;
-        alert(instance.age); &#x2F;&#x2F; Popups &quot;28&quot;
-        alert(instance.companyName); &#x2F;&#x2F; Popups &quot;ACME&quot;
-        alert(instance.salary); &#x2F;&#x2F; Popups &quot;99999&quot;
+        alert(instance.name); // Popups &quot;Matias&quot;
+        alert(instance.secondName); // Popups &quot;Fidemraizer&quot;
+        alert(instance.age); // Popups &quot;28&quot;
+        alert(instance.companyName); // Popups &quot;ACME&quot;
+        alert(instance.salary); // Popups &quot;99999&quot;
 
-    ##### &lt;a id=&quot;class-basecallsderived&quot;&gt;&lt;&#x2F;a&gt; 3.2.3 A base class member calls the most specialized implementation ([Back to index](#index))
+    &lt;h4 id=&quot;class-basecallsderived&quot;&gt;3.2.3 A base class member calls the most specialized implementation&lt;/h4&gt; 
+    ([Back to index](#index))
+
     Sometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.
 
     For example, a parent class &#x60;Polygon&#x60; overrides the default JavaScript &#x60;toString()&#x60; method in order to calculate the polygon area and
@@ -1108,12 +1127,12 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         var Polygon = $def({
             $members: {
                 calcArea: function() {
-                    &#x2F;&#x2F; A generic polygon will not know how to calculate the area. The
-                    &#x2F;&#x2F; derived classes will do it!
+                    // A generic polygon will not know how to calculate the area. The
+                    // derived classes will do it!
                 },
 
                 toString: function() {
-                    &#x2F;&#x2F; See how calcArea() from the most derived class is accessed:
+                    // See how calcArea() from the most derived class is accessed:
                     return &quot;The area of this polygon is: &#x27;&quot; + this.$_.$derived.calcArea(); + &quot;&#x27;&quot;;
                 }
             }
@@ -1141,12 +1160,12 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
 
         var instance = new Square(20, 30);
         
-        &#x2F;&#x2F; This will alert &quot;The area of this polygon is: &#x27;600&#x27;&quot;&quot;
+        // This will alert &quot;The area of this polygon is: &#x27;600&#x27;&quot;&quot;
         alert(instance.toString());
 
     @class $def
     @static
-    *&#x2F;
+    */
     $def = function (args) {
         var classDef = null;
 
@@ -1392,13 +1411,13 @@ var $global = {}; &#x2F;&#x2F; Represents the global scope.
         </div>
     </div>
 </div>
-<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>
-<script src="..&#x2F;assets/js/yui-prettify.js"></script>
-<script src="..&#x2F;assets/../api.js"></script>
-<script src="..&#x2F;assets/js/api-filter.js"></script>
-<script src="..&#x2F;assets/js/api-list.js"></script>
-<script src="..&#x2F;assets/js/api-search.js"></script>
-<script src="..&#x2F;assets/js/apidocs.js"></script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
 </body>
 </html>
