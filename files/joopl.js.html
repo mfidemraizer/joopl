@@ -595,9 +595,11 @@ var $global = {}; // Represents the global scope.
             * 3.2.1\. [The &#x60;this.$base&#x60; keyword](#class-base)
             * 3.2.2\. [The derived class constructor calls the parent&#x27;s class constructor](#class-baseconstructor)
             * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
+        * 3.3\. [The isTypeOf operator](#class-istypeof)
 
     &lt;h3 id=&quot;class-define&quot;&gt;1. Defining a class&lt;/h3&gt; 
     ([Back to index](#index))
+
     The &#x60;$def&#x60; operator is required in order to define classes. In fact, &#x60;$def&#x60; is a function and it accepts an object of arguments as
     input parameter. The essential parameters are:
 
@@ -928,7 +930,7 @@ var $global = {}; // Represents the global scope.
     
     &lt;h4 id=&quot;class-inheritance&quot;&gt;3.1 Class inheritance&lt;/h4&gt;
     ([Back to index](#index))
-    
+
     Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.
 
     The &#x60;$def&#x60; keyword supports an additional and optional parameter called &#x60;$extends&#x60; which specifies that the declaring class extends another class.
@@ -1155,6 +1157,27 @@ var $global = {}; // Represents the global scope.
         
         // This will alert &quot;The area of this polygon is: &#x27;600&#x27;&quot;&quot;
         alert(instance.toString());
+
+    &lt;h3 id=&quot;class-istypeof&quot;&gt;3.3 The isTypeOf operator&lt;/h3&gt; 
+    The &#x60;isTypeOf&#x60; operator is a function/method present in any instance of a class defined by jOOPL. 
+
+    It evaluates if an instance is of type of some given class. An interesting point is &#x60;isTypeOf&#x60; evaluates
+    either if the instance is of type of the most derived class or it can check if an instance is of type of
+    a given base class (polymorphism).
+
+    For example, if there is a class &#x60;A&#x60;, &#x60;B&#x60; and &#x60;C&#x60;, and &#x60;C&#x60; inherits &#x60;B&#x60; and &#x60;B&#x60; inherits &#x60;A&#x60;:
+
+        var instanceOfC = new C();
+
+        var isType = instanceOfC.isTypeOf(A); // Evals true!
+        isType = instanceOfC.isTypeOf(B); // Evals true!
+        isType = instanceOfC.isTypeOf(C); // Evals true!
+
+        var instanceOfA = new A();
+
+        isType = instanceOfA.isTypeOf(C); // Evals false - A is not C!
+        isType = instanceOfA.isTypeOf(B); // Evals false - A is not B!
+        isType = instanceOfA.isTypeOf(A); // Evals true!
 
     @class $def
     @static

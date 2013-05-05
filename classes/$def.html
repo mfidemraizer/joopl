@@ -87,13 +87,15 @@
 <li>3.2. <a href="#class-polymorphism">Inheritance with polymorphism</a>
 <ul><li>3.2.1. <a href="#class-base">The <code>this.$base</code> keyword</a></li>
 <li>3.2.2. <a href="#class-baseconstructor">The derived class constructor calls the parent's class constructor</a></li>
-<li>3.2.3. <a href="#class-basecallsderived">A base class member calls the most specialized implementation</a></li></ul></li></ul></li>
+<li>3.2.3. <a href="#class-basecallsderived">A base class member calls the most specialized implementation</a></li></ul></li>
+<li>3.3. <a href="#class-istypeof">The isTypeOf operator</a></li></ul></li>
 </ul>
 
 <h3 id="class-define">1. Defining a class</h3> 
 
-<p>(<a href="#index">Back to index</a>)
-The <code>$def</code> operator is required in order to define classes. In fact, <code>$def</code> is a function and it accepts an object of arguments as
+<p>(<a href="#index">Back to index</a>)</p>
+
+<p>The <code>$def</code> operator is required in order to define classes. In fact, <code>$def</code> is a function and it accepts an object of arguments as
 input parameter. The essential parameters are:</p>
 
 <ul>
@@ -695,6 +697,29 @@ var instance = new Square(20, 30);
 
 // This will alert "The area of this polygon is: '600'""
 alert(instance.toString());
+</code></pre>
+
+<h3 id="class-istypeof">3.3 The isTypeOf operator</h3> 
+
+<p>The <code>isTypeOf</code> operator is a function/method present in any instance of a class defined by jOOPL. </p>
+
+<p>It evaluates if an instance is of type of some given class. An interesting point is <code>isTypeOf</code> evaluates
+either if the instance is of type of the most derived class or it can check if an instance is of type of
+a given base class (polymorphism).</p>
+
+<p>For example, if there is a class <code>A</code>, <code>B</code> and <code>C</code>, and <code>C</code> inherits <code>B</code> and <code>B</code> inherits <code>A</code>:</p>
+
+<pre class="code prettyprint"><code>var instanceOfC = new C();
+
+var isType = instanceOfC.isTypeOf(A); // Evals true!
+isType = instanceOfC.isTypeOf(B); // Evals true!
+isType = instanceOfC.isTypeOf(C); // Evals true!
+
+var instanceOfA = new A();
+
+isType = instanceOfA.isTypeOf(C); // Evals false - A is not C!
+isType = instanceOfA.isTypeOf(B); // Evals false - A is not B!
+isType = instanceOfA.isTypeOf(A); // Evals true!
 </code></pre>
 </div>
 
