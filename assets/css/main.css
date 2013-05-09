@@ -18,48 +18,59 @@ Here's a quick lookup table:
 20px - 153.846%
 */
 
-#quick-links {
-    border-left: 2px solid #DDDDDD;
-    padding-left: 10px;
-
+ol#keyword-list {
+    margin-left: 1em;
+    padding-left: 0;
 }
 
-#quick-links li {    
-    font-size: 0.9em;
+ol#keyword-list li {
+    font-size: 1.1em;
     font-weight: bold;
     list-style-type: none;
 }
 
-#quick-links li a {
+ol#keyword-list li a {
     color: #333;
 }
 
-.method.description {
-    background-color: #F5F5F5;
-    border: 1px dotted #AAAAAA;
-    padding: 1em;
+#sidebar-container {
+    background-color: white;
+    box-shadow: 0 10px 10px #DDDDDD;
+    padding: 10px;
+    width: 20%;
 }
 
-ol li {
-    list-style-type: square;
+ol#quick-links {
+    margin-left: 1em;
+    padding-left: 0;
+}
+
+ol#quick-links li {
+    list-style-type: none;
 }
 
 html {
     background: #fff;
     color: #333;
     overflow-y: scroll;
+    height: 100%;
 }
 
 body {
-    /*font: 13px/1.4 'Lucida Grande', 'Lucida Sans Unicode', 'DejaVu Sans', 'Bitstream Vera Sans', 'Helvetica', 'Arial', sans-serif;*/
-    font: 13px/1.4 'Helvetica', 'Arial', sans-serif;
+    border-left: 2px dotted #AAAAAA;
+    border-right: 2px dotted #AAAAAA;
+    border-top: 5px solid #AAAAAA;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 14px;
     margin: 0;
-    padding: 0;
+    padding: 10px;
+    height: 100%;
 }
 
 /* -- Links ----------------------------------------------------------------- */
 a {
-    color: #356de4;
+    color: #075278;
+    font-weight: normal;
     text-decoration: none;
 }
 
@@ -88,15 +99,13 @@ dd p:first-child, td p:first-child { margin-top: 0; }
 /* -- Headings -------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 {
     color: #D98527;/*was #f80*/
-    font-family: 'Trebuchet MS', sans-serif;
-    font-weight: bold;
     line-height: 1.1;
     margin: 1.1em 0 0.5em;
 }
 
 h1 {
     font-size: 184.6%;
-    color: #30418C;
+    color: #188196;
     margin: 0.75em 0 0.5em;
 }
 
@@ -371,6 +380,11 @@ ul li p {
 }
 
 #hd {
+    background: whiteSmoke;
+    background: -moz-linear-gradient(top,#DCDBD9 0,#F6F5F3 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#DCDBD9),color-stop(100%,#F6F5F3));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dcdbd9',endColorstr='#F6F5F3',GradientType=0);
+    border-bottom: 1px solid #DFDFDF;
     padding: 0 15px 1px 20px;
     margin-bottom: 15px;
 }
@@ -378,11 +392,6 @@ ul li p {
 #hd img {
     margin-right: 10px;
     vertical-align: middle;
-}
-
-.yui3-u-1-4 .version {
-    font-weight: lighter;
-    font-size: 1.2em;
 }
 
 
@@ -415,7 +424,7 @@ specific tabview, see the other sections below.
 /* Headings */
 h2, h3, h4, h5, h6 {
     border: none;
-    color: #30418C;
+    color: #188196;
     font-weight: bold;
     text-decoration: none;
 }
@@ -472,8 +481,8 @@ h2, h3, h4, h5, h6 {
 
 /* Module/Class intro description. */
 .apidocs .intro {
-    background: #f0f1f8;
-    border-color: #d4d8eb;
+    border-color: #D4D8EB;
+    box-shadow: 0 0 10px #EEEEEE inset;
 }
 
 /* Loading spinners. */
@@ -594,7 +603,7 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 .apidocs .flag.chainable { background: #46ca3b; }
 .apidocs .flag.protected { background: #9b86fc; }
 .apidocs .flag.private { background: #fd6b1b; }
-.apidocs .flag.async { background: #356de4; }
+.apidocs .flag.async { background: #4FA6B8; }
 .apidocs .flag.required { background: #e60923; }
 
 .apidocs .item {
@@ -746,10 +755,9 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 
 /* -- API options ----------------------------------------------------------- */
 #api-options {
+    float: right;
     font-size: 11px;
-    margin-top: 2.2em;
-    position: absolute;
-    right: 1.5em;
+    margin-right: 2em;
 }
 
 /*#api-options label { margin-right: 0.6em; }*/
@@ -757,12 +765,7 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 /* -- API list -------------------------------------------------------------- */
 #api-list {
     margin-top: 1.5em;
-    *zoom: 1;    
-    padding-left: 2em;
-}
-
-#api-list h3 {
-    font-weight: lighter;
+    *zoom: 1;
 }
 
 .apis {
