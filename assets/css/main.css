@@ -18,6 +18,39 @@ Here's a quick lookup table:
 20px - 153.846%
 */
 
+ol#main-links {
+    clear: both;
+    display: block;
+    margin: 3em auto;
+    overflow: hidden;
+    padding-left: 0;
+    width: 40em;
+}
+
+ol#main-links li a {
+    border: 1px solid #DDDDDD;
+    box-shadow: 0 0 10px 10px white inset;
+    color: white;
+    display: block;
+    font-weight: bold;
+    max-width: 16em;
+    padding: 20px;
+}
+
+ol#main-links li#joopl-minified a {
+    background-color: #0B487D;
+}
+
+ol#main-links li#joopl-sourcecode a {
+    background-color: #4A1126;
+}
+
+ol#main-links li {
+    float: left;
+    list-style-type: none;
+    margin-right: 2em;
+}
+
 ol#keyword-list {
     margin-left: 1em;
     padding-left: 0;
