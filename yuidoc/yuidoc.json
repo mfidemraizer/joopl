@@ -1,0 +1,11 @@
+{
+  "name": "{ joopl };",
+  "description": "Object-oriented programming for JavaScript on the Web and anywhere!",
+  "version": "2.2.0",
+  "url": "http://joopl.codeplex.com",
+  "logo": "https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&DownloadId=652315&Build=20425",
+  "options": {
+  	"theme": "simple",
+    "outdir": "doc"
+  }
+}

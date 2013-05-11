@@ -1,0 +1,69 @@
+    <div class="apidocs">
+        <div id="docs-main" class="content">
+            <hr />
+            <strong style"color: red">Important note: This documentation site work is still in progress. For any doubt, suggestion or any kind of feedback, please create a new issue or discussion in the <a href="http://joopl.codeplex.com">jOOPL's CodePlex site</a></strong>
+            <hr />    
+
+            <ol id="main-links">
+                <li id="joopl-minified"><a href="https://joopl.codeplex.com/downloads/get/674883" target="_self">Download minified jOOPL 2.2.0</a></li>
+                <li id="joopl-sourcecode"><a href="http://joopl.codeplex.com/SourceControl/BrowseLatest" target="_self">Browse latest source code</a></li>
+            </ol>
+
+            <h2>Welcome to the official jOOPL documentation site!</h2>
+            <p>jOOPL stands for <strong>J</strong>avaScript <strong>O</strong>bject-<strong>O</strong>riented <strong>P</strong>rogramming <strong>L</strong>ibrary.</p>
+            <p>JavaScript has a limited but yet useful type definition system. In comparison to other modern programming languages like C#, Java, Ruby, Python and many others, JavaScript is not class-oriented but prototype-oriented.</p>
+            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it retaains 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
+
+            <h3>Licensing</h3>
+            <p>jOOPL is a completely open sourced, free-of-charge JavaScript library distributed under the Apache License 2.0.</p>
+
+            <h3>How to get started?</h3>
+            <p>First of all, take a look at the <a href="classes/$def.html">documentation talking about how to work with classes</a> and <a href="classes/$namespace.html">namespaces</a>!</p>
+            <p>About samples, now jOOPL has a test suite developed using the great <a href="http://qunitjs.com/" target="_blank">QUnit testing framework made by the jQuery team</a>:</p>
+            <ol>
+                <li><a href="test/namespace.test.html">Namespace tests</a></li>
+                <li><a href="test/class.test.html">Class tests</a></li>
+            </ol>
+            <p>A good idea is taking a look at source code of the whole test pages: the jOOPL-based JavaScript code is developed in the body of the documents. That way, anyone can explore all jOOPL features, as the tests are also documentation!</p>
+
+            <h3>Ok, wait. Why jOOPL? Why object-oriented programming?</h3>
+            <p>It is all about taking the client-side Web and server development to the next level: <strong>let's create true reusable and maintainable JavaScript 
+            software pieces based on good practices and on top of a incredibly simple type definition syntax!</strong></p>
+            <p>jOOPL is just class-based object-oriented programming and it fully supports:</p>
+            
+            <ol>
+                <li>Namespaces</li>
+                <li>Inheritance</li>
+                <li>Polymorphism</li>
+                <li>Encapsulation</li>
+                <li>ECMA-Script 5.x and 6 properties</li>
+                <li>Exclusive, easy-to-use and powerful custom events!</li>
+            </ol>
+
+            <p>And it is a tiny JavaScript library when minimized (<i>~8KB</i>)!!</p>
+
+            <h3>I see, I see (blah, blah...). And what about a hello world sample? ;-)</h3>
+            <p>The next code listing creates a namespace called <i>samples</i>. A class <i>ClassA</i> in the namespace (the <i>this</i> keyword
+            represents the registered namespace) implements a method to say "hello world!" and, finally, an instance of the whole class is created in order to call the method to say <i>hello world!</i>:</p>
+            <pre>
+$namespace.register("samples", function() {
+    this.ClassA = $def({
+        $members: {
+            helloWorld: function() {
+                alert("hello world!");
+            }
+        }
+    });
+
+    var instanceOfClassA = new this.ClassA();
+    instanceOfClassA.helloWorld();
+});
+            </pre>
+
+            <h3>Who is behind this project?</h3>
+            <p>This project is actively developed by Matias Fidemraizer (<a href="http://linkedin.com/in/mfidemraizer/en" target="_blank">LinkedIn profile here</a>)</p>
+
+            <h3>I want to contribute, give feedback...</h3>
+            <p><i>It would be a great idea! Send me a message <a href="http://linkedin.com/in/mfidemraizer/en" target="_blank">to my LinkedIn profile</a> and we can start talking there. Or just <a href="http://joopl.codeplex.com" target="_blank">open a discussion/issue on the official jOOPL CodePlex site</a>!</p>
+        </div>
+    </div>
