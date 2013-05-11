@@ -64,9 +64,11 @@ ol#keyword-list li {
 
 #sidebar-container {
     background-color: white;
-    box-shadow: 0 10px 10px #DDDDDD;
-    padding: 10px;
-    width: 20%;
+    border: 2px solid white;
+    border-radius: 50px 50px 50px 50px;
+    box-shadow: 0 0 20px #AAAAAA inset;
+    padding: 10px 30px;
+    width: 260px;
 }
 
 ol#oop-hints,
@@ -88,12 +90,12 @@ html {
 }
 
 body {
-    border-top: 5px solid #AAAAAA;
+    border-top: 3px ridge #AAAAAA;
+    box-shadow: 100px -50px 200px 10px #CCCCCC inset;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     margin: 0;
     padding: 10px;
-    height: 100%;
 }
 
 /* -- Links ----------------------------------------------------------------- */

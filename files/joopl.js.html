@@ -41,6 +41,7 @@
                 <div id="api-list">
     <h2 class="off-left">> Keywords</h2>
     <ol id="keyword-list"> 
+        <li><a href="../classes/$namespace.html#namespace-global" target="_self"><strong>$global</strong></a></li>
     
         <li><a href="../classes/$def.html"><strong>$def</strong></a></li>
     
@@ -334,6 +335,36 @@ var $global = {}; // Represents the global scope.
 
     /**
     The &#x60;$namespace&#x60; keyword represents an static object holding methods/functions to manage namespaces.
+
+    ### What is a namespace?
+    &lt;p&gt;A namespace is an identifier holding zero or more members like classes. &lt;/p&gt;
+
+    &lt;p&gt;In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
+    into the same code library, but since each one belongs to a different namespace, this can happen with no issues:&lt;/p&gt;
+
+        MyNamespace.Class1
+        MyNamespace.MyOtherNamespace.Class1
+        MyNamespace.AnotherNamespace.Class1
+        YetAnotherNamespace.Class1
+
+    &lt;p&gt;Namespaces &lt;strong&gt;must be defined using the &lt;a href=&quot;#method_register&quot;&gt;$namespace.register&lt;/a&gt;&lt;/strong&gt; method.&lt;/p&gt;
+
+    &lt;p&gt;Once some code requires to use these classes, it can access the right class by using the full namespace path:&lt;/p&gt;
+
+        var instance = new $global.MyNamespace.Class1();
+        var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
+        var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
+        var instance4 = new $global.YetAnotherNamespace.Class1();
+
+    &lt;p&gt;This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
+    isolate each one.&lt;/p&gt;
+
+    &lt;h3 id=&quot;namespace-global&quot;&gt;The $global namespace&lt;/h3&gt;
+    &lt;p&gt;jOOPL has a top-most namespace called &#x60;$global&#x60;. Any namespace registered using the whole &#x60;$namespace.register(...)&#x60; method will be nested into the
+    &#x60;$global&#x60; namespace.&lt;/p&gt;
+    &lt;p&gt;As JavaScript top-most object is the &#x60;Window&#x60; object and any variable or function defined in the global scope belongs to &#x60;Window&#x60;, this can lead to
+    bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
+    defined by itself in the &#x60;$global&#x60; namespace in order to prevent issues with other libraries.&lt;/p&gt;
 
     @class $namespace
     */

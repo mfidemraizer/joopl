@@ -41,6 +41,7 @@
                 <div id="api-list">
     <h2 class="off-left">> Keywords</h2>
     <ol id="keyword-list"> 
+        <li><a href="../classes/$namespace.html#namespace-global" target="_self"><strong>$global</strong></a></li>
     
         <li><a href="../classes/$def.html"><strong>$def</strong></a></li>
     
@@ -126,6 +127,41 @@
 
 <div class="box intro">
     <p>The <code>$namespace</code> keyword represents an static object holding methods/functions to manage namespaces.</p>
+
+<h3>What is a namespace?</h3>
+
+<p>A namespace is an identifier holding zero or more members like classes. </p>
+
+<p>In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
+into the same code library, but since each one belongs to a different namespace, this can happen with no issues:</p>
+
+<pre class="code prettyprint"><code>MyNamespace.Class1
+MyNamespace.MyOtherNamespace.Class1
+MyNamespace.AnotherNamespace.Class1
+YetAnotherNamespace.Class1
+</code></pre>
+
+<p>Namespaces <strong>must be defined using the <a href="#method_register">$namespace.register</a></strong> method.</p>
+
+<p>Once some code requires to use these classes, it can access the right class by using the full namespace path:</p>
+
+<pre class="code prettyprint"><code>var instance = new $global.MyNamespace.Class1();
+var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
+var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
+var instance4 = new $global.YetAnotherNamespace.Class1();
+</code></pre>
+
+<p>This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
+isolate each one.</p>
+
+<h3 id="namespace-global">The $global namespace</h3>
+
+<p>jOOPL has a top-most namespace called <code>$global</code>. Any namespace registered using the whole <code>$namespace.register(...)</code> method will be nested into the
+<code>$global</code> namespace.</p>
+
+<p>As JavaScript top-most object is the <code>Window</code> object and any variable or function defined in the global scope belongs to <code>Window</code>, this can lead to
+bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
+defined by itself in the <code>$global</code> namespace in order to prevent issues with other libraries.</p>
 </div>
 
 
@@ -190,7 +226,7 @@
             
         
         
-        <a href="../files/joopl.js.html#l309"><code>joopl.js:309</code></a>
+        <a href="../files/joopl.js.html#l339"><code>joopl.js:339</code></a>
         
         </p>
 
@@ -308,7 +344,7 @@ $namespace.alias($global.joopl.samples, "samples");
             
         
         
-        <a href="../files/joopl.js.html#l230"><code>joopl.js:230</code></a>
+        <a href="../files/joopl.js.html#l260"><code>joopl.js:260</code></a>
         
         </p>
 
@@ -465,7 +501,7 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
             
         
         
-        <a href="../files/joopl.js.html#l322"><code>joopl.js:322</code></a>
+        <a href="../files/joopl.js.html#l352"><code>joopl.js:352</code></a>
         
         </p>
 
