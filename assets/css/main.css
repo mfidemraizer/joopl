@@ -29,10 +29,6 @@ ol#keyword-list li {
     list-style-type: none;
 }
 
-ol#keyword-list li a {
-    color: #333;
-}
-
 #sidebar-container {
     background-color: white;
     box-shadow: 0 10px 10px #DDDDDD;
@@ -40,11 +36,13 @@ ol#keyword-list li a {
     width: 20%;
 }
 
+ol#oop-hints,
 ol#quick-links {
     margin-left: 1em;
     padding-left: 0;
 }
 
+ol#oop-hints li,
 ol#quick-links li {
     list-style-type: none;
 }
@@ -57,8 +55,6 @@ html {
 }
 
 body {
-    border-left: 2px dotted #AAAAAA;
-    border-right: 2px dotted #AAAAAA;
     border-top: 5px solid #AAAAAA;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
@@ -223,7 +219,7 @@ th {
     min-width: 1024px;
 }
 
-.content { padding: 0 20px 0 25px; }
+.content { padding: 0 20px 0 0; }
 
 .sidebar {
     padding: 0 15px 0 10px;
@@ -698,6 +694,10 @@ kbd .cmd { font-family: Monaco, Helvetica; }
     border: none;
     overflow: visible;
     padding: 0;
+}
+
+#docs-main {
+    margin-left: 4em;
 }
 
 .apidocs .L0,
