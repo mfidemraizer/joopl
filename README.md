@@ -22,6 +22,6 @@ Open an issue and it'll be solved as soon as possible!
 I'm Matias Fidemraizer, project leader and lead developer. If you want to contact me directly, no problem. Find me
 on LinkedIn (you can add me to your contacts):
 
-http://mfidemraizer.github.io/joopl/
+http://www.linkedin.com/in/mfidemraizer/en
 
 Then we can discuss further collaborations, project integrations or any other topic!
