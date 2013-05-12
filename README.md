@@ -11,9 +11,17 @@ Contribution is open. If you feel that something can be better, you've a new fea
 you want to fix it, you can do two things:
 
 * **Feedback approach**. Open a new issue here in the GitHub repository and comment out what's missing! Your issue/feature request will be review and you'll receive a quick answer.
-* **Pull request approach**. This can be a great choice. If you feel that you can contribute with code in order to fix and improve jOOPL, you can always clone the code repository, make your changes and do a *pull request* and we'll have a debate about merging your changes into the main branch!
+* **Pull request approach**. This can be a great choice. If you feel that you can contribute with code in order to fix and improve jOOPL, you can always clone the code repository, make your changes and do a *pull request*. Please explain your changes with some text in the *pull request* description! We'll have a debate about merging your changes into the main branch!
 
-Your effort will be greatly appreciated!
+Your effort will be greatly appreciated! Thank you in advance.
 
 ## Errors, issues...
 Open an issue and it'll be solved as soon as possible!
+
+## Who's behind this project...
+I'm Matias Fidemraizer, project leader and lead developer. If you want to contact me directly, no problem. Find me
+on LinkedIn (you can add me to your contacts):
+
+http://mfidemraizer.github.io/joopl/
+
+Then we can discuss further collaborations, project integrations or any other topic!
