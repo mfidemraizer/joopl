@@ -37,24 +37,6 @@
 
             });
 
-            test("Define a new class with attributes. Adding instances that are not Attribute must fail", function () {
-                var TestAttr = $def({
-                    $constructor: function (args) {
-                        this.$base.$ctor(args);
-                    },
-                    $members: {
-                        get testData() { return "hello world"; }
-                    }
-                });
-
-                throws(function () {
-                    var A = $def({
-                        $attributes: [new TestAttr()]
-                    });
-                });
-
-            });
-
             test("Define a new class, instantiate it and test if its methods and properties are working", function () {
                 var A = $def({
                     $constructor: function () {
