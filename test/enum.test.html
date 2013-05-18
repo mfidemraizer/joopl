@@ -35,7 +35,18 @@
 
                 var openAndClosed = State.open.enum.or(State.closed);
 
-                ok(openAndClosed.enum.hasFlag(0));
+                ok(openAndClosed.enum.hasFlag(State.open), "The flag must be correctly evaluated");
+            });
+
+            test("Define an enumeration. Parse a name into a value of the defined enumeration.", function () {
+                var State = $enumdef({
+                    open: 0,
+                    closed: 1
+                });
+
+                var value = $global.joopl.Enum.parseName(State, "closed");
+
+                ok(value == State.closed, "Parsed value is one of the defined enumeration");
             });
         })(undefined);
     </script>

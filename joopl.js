@@ -1314,7 +1314,7 @@ var $enumdef = null;
             }
         });
 
-        var Enum = $def({
+        var EnumValue = $def({
             $constructor: function(args) {
                 this.$_.value = args.value;
             },
@@ -1344,27 +1344,131 @@ var $enumdef = null;
                 },
 
                 hasFlag: function(enumValue) {
-                    return (this.value & enumValue) === enumValue;
+                    return (this.value & enumValue) === Number(enumValue);
                 }
             }
         });
 
+        /**
+        Represents an utility class to work with enumerations.
+
+        @class Enum
+        @static
+        @since 2.3.0
+        */
         this.Enum = new ($def({
             $members: {
-                parse: function(enumType, name) {
-                    if(enumType.hasOwnProperty(name)) {
-                        return enumType[name];
+                /** 
+                @method parseName
+                @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                @param valueName {String} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
+                @example Enum.Parse(State, "open")
+                */
+                parseName: function(enumType, valueName) {
+                    if(enumType.valueNames.indexOf(valueName) > -1) {
+                        return enumType[valueName];
                     } else {
-                        debugger;
                         throw new scope.ArgumentException({
-                            argName: "name",
-                            reason: "Given name does not match an enumeration value"
+                            argName: "valueName",
+                            reason: "Given value name could not be found as value of the given enumeration type"
                         });
                     }
                 }
             }
         }));
 
+        /**
+        Represents the operator to define enumerations.
+
+        <h2 id="index">Index</h2>
+
+        * 1.0\. [What is an enumeration?](#enum-definition)
+        * 2.0\. [What is the goal of enumerations](#enum-goal)
+        * 3.0\. [Enumerations how-to](#enum-howto)
+            * 3.1\. [When and how to use enumerations](#enum-usage)
+
+        <h3 id="enum-definition">1.0 What is an enumeration?</h3>
+        <a href="#index">Back to index</a>
+
+        An enumeration is an *special class* of constants. 
+
+        <h3 id="enum-goal">2.0 What is the goal of enumerations?</h3>
+        <a href="#index">Back to index</a>
+
+        In regular JavaScript, when some code needs to identify states uses integers (`Number`):
+            
+            // "1" would mean that something is open (for example, an HTTP connection)
+            if(someVar == 1) {
+                // Do stuff
+            }
+
+        jOOPL introduces true enumerations and the above code could be turned into:
+
+            var HttpState = $enumdef({
+                closed: 0,
+                open: 1
+            });
+
+            if(someVar == HttpState.open) {
+                // Do stuff
+            }
+        
+        The above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may
+        increase code readibility, since developers will not need to check documentation in order to know what `0` or `1` states
+        mean.
+
+        <h3 id="enum-howto">3. Enumerations how-to</h3>
+        <a href="#index">Back to index</a>
+
+        Enumerations are created using the `$enumdef` operator. The `$enumdef` operator is a constructor accepting an object
+        defining one or more constants:
+
+            $namespace.register("mynamespace", function() {
+                this.MyEnum = $enumdef({
+                    open: 0,
+                    closed: 1,
+                    disconnected: 2,
+                    working: 3
+                });
+            });
+
+        The given constants **must be always numeric** and the enumeration must contain only numeric properties.
+
+        <h4 id="enum-usage">3.1 When and how to use enumerations</h4>
+        Enumerations are required when some code can define a closed set of values that may not change overtime.
+        
+        For example, some code may have a class with a method accepting a limited number of HTTP verbs:
+
+            $namespace.register("mynamspace", function() {
+                this.HttpVerb = $enumdef({
+                    get: 0,
+                    post: 1,
+                    put : 2
+                });
+
+                var scope = this;
+
+                this.MyClass = $def({
+                    $members: {
+                        // The @verb argument will only support verbs of the HttpVerb enumeration
+                        doRequest: function(verb, url, args) {
+                            switch(verb) {
+                                case scope.HttpVerb.get: 
+                                    // Perform the HTTP GET request
+                                    break;
+
+                                case scope.HttpVerb.post:
+                                    // Perform the HTTP POST request
+                                    break;
+                            }
+
+                        }
+                    }
+                });
+            });
+        
+        @class $enumdef
+        */
         $enumdef = function(enumDef) {
             if(typeof enumDef != "object") {
                 throw new scope.ArgumentException({
@@ -1389,7 +1493,7 @@ var $enumdef = null;
                 }
 
                 var enumValue = new Number(enumDef[propertyName]);
-                enumValue.enum = new Enum({ value: enumValue });
+                enumValue.enum = new EnumValue({ value: enumValue });
 
 
                 Object.defineProperty(
