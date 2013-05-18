@@ -14,5 +14,5 @@ $Minifier = “C:\Program Files (x86)\Microsoft\Microsoft Ajax Minifier\AjaxMin.ex
 yuidoc -n . --themedir ./yuidoc/themes/default
 
 new-item -ItemType directory -Path .\doc\test -Force
-copy-item .\joopl.js .\test\joopl.min.js -recurse
+copy-item .\joopl.min.js .\test\joopl.min.js -recurse
 copy-item .\test\*.* .\doc\test -recurse

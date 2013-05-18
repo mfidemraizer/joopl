@@ -21,6 +21,7 @@ var $def = null; // Declares a class
 var $interfacedef = null; // A shortcut to $interface.declare(...)
 var $implements = null; // Holds a function to check if an object implements an interface
 var $global = {}; // Represents the global scope.
+var $enumdef = null;
 
 (function (undefined) {
     "use strict";
@@ -1187,7 +1188,7 @@ var $global = {}; // Represents the global scope.
                         TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
                     }
 
-                } else if (!propertyDescriptor.value) {
+                } else if (propertyDescriptor.hasOwnProperty("value") || propertyDescriptor.hasOwnProperty("get") || propertyDescriptor.hasOwnProperty("set")) {
                     TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
                 }
             }
@@ -1273,6 +1274,7 @@ var $global = {}; // Represents the global scope.
             }
         };
 
+
         this.Type = $def({
             $constructor: function (args) {
                 this.$_.attributes = args.attributes;
@@ -1311,6 +1313,114 @@ var $global = {}; // Represents the global scope.
             $members: {
             }
         });
+
+        var Enum = $def({
+            $constructor: function(args) {
+                this.$_.value = args.value;
+            },
+            $members: {
+                get value() { return this.$_.value; },
+
+                or: function(enumValue) {
+                    var value = this.value | enumValue;
+
+                    var result = new Number(value);
+                    result.enum = new Enum({ value: value});
+
+                    Object.freeze(result);
+
+                    return result;
+                },
+
+                and: function(enumValue) {
+                    var value = this.value & enumValue;
+
+                    var result = new Number(value);
+                    result.enum = new Enum({ value: value});
+
+                    Object.freeze(result);
+
+                    return result;
+                },
+
+                hasFlag: function(enumValue) {
+                    return (this.value & enumValue) === enumValue;
+                }
+            }
+        });
+
+        this.Enum = new ($def({
+            $members: {
+                parse: function(enumType, name) {
+                    if(enumType.hasOwnProperty(name)) {
+                        return enumType[name];
+                    } else {
+                        debugger;
+                        throw new scope.ArgumentException({
+                            argName: "name",
+                            reason: "Given name does not match an enumeration value"
+                        });
+                    }
+                }
+            }
+        }));
+
+        $enumdef = function(enumDef) {
+            if(typeof enumDef != "object") {
+                throw new scope.ArgumentException({
+                    argName: "enumDef",
+                    reason: "No definition for the enumeration given"
+                });
+            }
+
+            var enumerationType = function() {
+            };
+
+            enumerationType.prototype = new scope.Object();
+
+            var enumNames = [];
+
+            for(var propertyName in enumDef) {
+                if(typeof enumDef[propertyName] != "number") {
+                    throw new scope.ArgumentException({
+                        argName: "enumDef",
+                        reason: "An enumeration definition must contain numeric properties only"
+                    });
+                }
+
+                var enumValue = new Number(enumDef[propertyName]);
+                enumValue.enum = new Enum({ value: enumValue });
+
+
+                Object.defineProperty(
+                    enumerationType,
+                    propertyName,
+                    {
+                        value: enumValue,
+                        configurable: false,
+                        enumerable: true
+                    }
+                );
+
+                enumNames.push(propertyName);
+            }
+
+            Object.defineProperty(
+                enumerationType,
+                "valueNames",
+                {
+                    value: enumNames,
+                    configurable: false,
+                    enumerable: false
+                }
+            );
+
+            Object.freeze(enumerationType);
+
+            return enumerationType;
+        };
+
+    Object.freeze($enumdef);
 
         this.EventManager = $def({
             $constructor: function (args) {
