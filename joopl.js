@@ -726,7 +726,7 @@ var $enumdef = null;
     jOOPL fully supports JavaScript 1.8.x properties like the described before:
 
         var A = $def({
-            $constructor: {
+            $constructor: function() {
                 // Define a class field for later provide access to it through a property getter and setter
                 this.$_.name = null;
             },
@@ -1274,16 +1274,35 @@ var $enumdef = null;
             }
         };
 
+        /**
+        Represents type information and provides access to types' metadata.
 
+        @class $global.joopl.Type
+        @since 2.3.0
+        */
         this.Type = $def({
             $constructor: function (args) {
                 this.$_.attributes = args.attributes;
             },
             $members: {
+                /**
+                Gets all type's attributes.
+
+                @property attributes
+                @type Attribute
+                */
                 get attributes() {
                     return this.$_.attributes;
                 },
 
+                /**
+                Gets an attribute instance by giving its type, if the type has the whole attribute
+
+                @method getAttribute
+                @return {Attribute} The attribute instance or `null` if the type does not have the given attribute type
+                @example 
+                    MyClass.type.getAttribute(MyAttribute);
+                */
                 getAttribute: function (attributeType) {
                     var found = false;
                     var index = 0;
@@ -1308,7 +1327,12 @@ var $enumdef = null;
                 }
             }
         });
+        
+        /**
+        Represents the base class for any attribute.
 
+
+        */
         this.Attribute = $def({
             $members: {
             }
@@ -1319,7 +1343,7 @@ var $enumdef = null;
 
         See {{#crossLink "$enumdef"}}{{/crossLink}} to learn more about enumerations.
 
-        @class EnumValue
+        @class $global.joopl.EnumValue
         @since 2.3.0
         */
         var EnumValue = $def({
@@ -1394,7 +1418,7 @@ var $enumdef = null;
         /**
         Represents an utility class to work with enumerations.
 
-        @class Enum
+        @class $global.joopl.Enum
         @static
         @since 2.3.0
         */
