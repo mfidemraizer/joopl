@@ -43,7 +43,7 @@ ol#main-links {
     background-color: white;
     border: 2px solid white;
     border-radius: 10px 10px 10px 10px;
-    box-shadow: 0 0 10px #CCCCCC inset;
+    box-shadow: 0 0 5px 5px #25A3D9;
     padding-bottom: 2em;
     padding-top: 2em;
 }
@@ -85,9 +85,7 @@ ol#keyword-list li {
 
 #sidebar-container {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: 0 -10px 40px 5px #25A3D9 inset;
+    box-shadow: 0 0 5px 5px #25A3D9;
     padding: 10px 30px;
     width: 260px;
 }
@@ -116,7 +114,7 @@ html {
 
 body {
     border-top: 3px ridge #AAAAAA;
-    box-shadow: 100px -50px 200px 10px #A0D1FA inset;
+    box-shadow: 0 0 190px 5px #25A3D9 inset;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     margin: 0;
@@ -154,27 +152,24 @@ dd p:first-child, td p:first-child { margin-top: 0; }
 
 /* -- Headings -------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 {
-    color: #D98527;/*was #f80*/
+    color: #075278;
     line-height: 1.1;
     margin: 1.1em 0 0.5em;
 }
 
 h1 {
     font-size: 184.6%;
-    color: #188196;
     margin: 0.75em 0 0.5em;
 }
 
 h2 {
     font-size: 153.846%;
-    color: #E48A2B;
 }
 
 h3 { font-size: 138.462%; }
 
 h4 {
     border-bottom: 1px solid #DBDFEA;
-    color: #E48A2B;
     font-size: 115.385%;
     font-weight: normal;
     padding-bottom: 2px;
@@ -480,7 +475,7 @@ specific tabview, see the other sections below.
 /* Headings */
 h2, h3, h4, h5, h6 {
     border: none;
-    color: #188196;
+    color: #075278;
     font-weight: bold;
     text-decoration: none;
 }

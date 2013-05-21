@@ -1,13 +1,4 @@
 <div id="api-list">
-    <h2 class="off-left">> API reference</h2>
-    <ol id="keyword-list"> 
-        <li><a href="{{projectRoot}}classes/$namespace.html#namespace-global" target="_self"><strong>$global</strong></a></li>
-    {{#classes}}
-        <li><a href="{{../projectRoot}}classes/{{name}}.html"><strong>{{displayName}}</strong></a></li>
-    {{/classes}}
-        <li><a href="{{projectRoot}}classes/$def.html#class-istypeof" target="_self">Object.<strong>isTypeOf</strong></a></li>
-    </ol>
-
     <h2 class="off-left">> Object-oriented programming</h2>
     <ol id="oop-hints">
         <li><a href="{{projectRoot}}classes/$namespace.html#method_register" target="_self">Registering namespaces how-to</a></li>
@@ -20,14 +11,32 @@
         <li><a href="{{projectRoot}}classes/$def.html#class-instances" target="_self">Creating class instances how-to</li>
         <li><a href="{{projectRoot}}classes/$def.html#class-inheritance" target="_self">Class inheritance how-to</a></li>
         <li><a href="{{projectRoot}}classes/$def.html#class-polymorphism" target="_self">Class polymorphism how-to</a></li>
-        <li><a href="{{projectRoot}}classes/$enumdef.html#index" target="_selft">Enumerations</a></li>
+        <li><a href="{{projectRoot}}classes/$enumdef.html#index" target="_self">Enumerations</a></li>
+        <li><a href="{{projectRoot}}classes/Attribute.html#index" target="_self">Custom metadata: attributes</a></li>
+    </ol>
+
+    <h2 class="off-left">> Keywords</h2>
+    <ol id="keyword-list"> 
+        <li><a href="{{projectRoot}}classes/$namespace.html#namespace-global" target="_self"><strong>$global</strong></a></li>
+        <li><a href="{{projectRoot}}classes/$def.html" target="_self"><strong>$def</strong></a></li>
+        <li><a href="{{projectRoot}}classes/$enumdef.html" target="_self"><strong>$enumdef</strong></a></li>
+        <li><a href="{{projectRoot}}classes/$def.html#class-istypeof" target="_self">Object.<strong>isTypeOf</strong></a></li>
+    </ol>
+
+
+    <h2 class="off-left">> API reference</h2>
+    <ol id="class-list"> 
+        <li><a href="{{projectRoot}}classes/attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
+        <li><a href="{{projectRoot}}classes/enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
+        <li><a href="{{projectRoot}}classes/enumvalue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
+        <li><a href="{{projectRoot}}classes/type.html" target="_self"><strong>joopl.Type</strong></a></li>
     </ol>
 
     <h2 class="off-left">> Quick links</h2>
     <ol id="quick-links">
         <li><a href="https://groups.google.com/forum/#!forum/joopl" target="_blank">jOOPL Google Group</a></li>
         <li><a href="https://github.com/mfidemraizer/joopl" target="_blank">jOOPL on GitHub</a></li>
-        <li><a href="http://cdnjs.cloudflare.com/ajax/libs/joopl/2.2.0/joopl.min.js" target="_blank"><strong>Download minified jOOPL 2.2.0 (CDN)</strong></a></li>
+        <li><a href="http://cdnjs.cloudflare.com/ajax/libs/joopl/2.3.0/joopl.min.js" target="_blank"><strong>Download minified jOOPL 2.3.0 (CDN)</strong></a></li>
         <li><a href="https://github.com/mfidemraizer/joopl/issues" target="_blank">Issue tracker</a></li>
     </ol>
 

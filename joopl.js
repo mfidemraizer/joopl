@@ -554,6 +554,8 @@ var $enumdef = null;
             * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
         * 3.3\. [The isTypeOf operator](#class-istypeof)
 
+    {{#crossLink "Attribute"}}**See also class attributes for declarative and metadata class programming**{{/crossLink}}
+
     <h3 id="class-define">1. Defining a class</h3> 
     ([Back to index](#index))
 
@@ -1277,7 +1279,7 @@ var $enumdef = null;
         /**
         Represents type information and provides access to types' metadata.
 
-        @class $global.joopl.Type
+        @class Type
         @since 2.3.0
         */
         this.Type = $def({
@@ -1331,7 +1333,127 @@ var $enumdef = null;
         /**
         Represents the base class for any attribute.
 
+        <h2 id="index">Index</h2>
 
+        * 1.0\. [What is an attribute?](#attribute-definition)
+        * 2.0\. [How to implement and consume an attribute](#attribute-howto)
+            * 2.1\. [Attributes with parameters](#attribute-params)
+
+        <h2 id="attribute-definition">1.0 What is an attribute?</h2>
+        
+        Usually class definitions contain a class constructor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
+
+        In some cases, classes require some descriptive information that may be useful by the consumers. 
+
+        For example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. 
+
+        How can an arbitrary class tell the environment "*I will not work if the authenticated user is not an administrator*"? **The answer is *attributes**.*
+
+        An attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.
+
+        Finally, a class supports as many attributes as the code requires. The `$attributes` parameters for the `$def` operator is an array of attributes.
+
+        <h2 id="attribute-howto">2.0 How to implement and consume an attribute</h2>
+        
+        The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:
+
+            $namespace.register("myNamespace", function() {
+                this.RequiresAuthenticationAttribute = $def({
+                    $extends: $global.joopl.Attribute
+                });
+            });
+
+        Later on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:
+
+            $namespace.register("myNamespace", function() {
+                this.MyClass = $def({
+                    $attributes: [new RequiresAuthenticationAttribute()]
+                });
+            });
+
+        Finally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:
+
+            $namespace.register("myNamespace", function() {
+                if(this.MyClass.type.hasAttribute(RequiresAuthenticationAttribute)) {
+                    // Do some stuff if MyClass has the whole attribute
+                } else {
+                    throw Error("Sorry, this code will not execute classes if they do not require authentication...");
+                }
+            });
+
+        <h3 id="attribute-params">2.1 Attributes with parameters</h3>
+        Sometimes using an attribute *as is* is not enough, because the attribute itself should contain data. 
+
+        For example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?
+
+            $namespace.register("myNamespace", function() {
+                this.DefaultPropertyAttribute = $def({
+                    $extends: $global.joopl.Attribute,
+                    $constructor: function(args) {
+                        this.$_.defaultPropertyName = args.defaultPropertyName;
+                    },
+                    $members: {
+                        get defaultPropertyName() { return this.$_.defaultPropertyName; }
+                    }
+                });
+
+                this.Person = $def({
+                    $attributes: [new DefaultPropertyAttribute("nickname")],
+                    $constructor: function() {
+                        this.$_.firstName = null;
+                        this.$_.surname = null;
+                        this.$_.nickname = null;
+                    }
+                    $members: {
+                        get firstName() { return this.$_.firstName; },
+                        set firstName(value) { this.$_.firstName = value; },
+
+                        get surname() { return this.$_.surname; },
+                        set surname(value) { this.$_.surname = value; },
+
+                        get nickname() { return this.$_.nickname; },
+                        set nickname(value) { this.$_.nickname = value; }
+                    }
+                });
+            });
+
+        
+        Now, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:
+
+            $namespace.register("myNamespace", function() {
+                
+                // The first step is creating a regular instance of Person
+                var person = new Person();
+                person.firstName = "Matias";
+                person.surname = "Fidemraizer";
+                person.nickname = "mfidemraizer";
+
+                // Secondly, this is checking if the Person class has the whole attribute
+                if(Person.type.hasAttribute(DefaultPropertyAttribute)) {
+                    // Yes, it has the attribute!
+                    //
+                    // Then, the attribute instance is retrieved from the type information
+                    var defaultProperty = Person.type.getAttribute(DefaultPropertyAttribute);
+
+                    // Once the attribute is retrieved, the code can access the "defaultPropertyName" instance property
+                    // of the DefaultPropertyAttribute
+                    var defaultPropertyName = defaultProperty.defaultPropertyName;
+                    
+                    // Since any object is also an associative array (this is plain JavaScript!), 
+                    // the default property can be retrieved by using the "defaultPropertyName" variable
+                    // as key of the array
+                    var defaultPropertyValue = person[defaultPropertyName];
+
+                    // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, 
+                    // it will be "mfidemraizer", because the Person class has the DefaultPropertyAttribute set to "nickname"!
+                    var p = document.createElement("p");
+                    p.appendChild(document.createTextNode(defaultPropertyValue));
+                    document.body.appendChild(p);
+                }
+            });
+        
+        @class Attribute
+        @since 2.3.0
         */
         this.Attribute = $def({
             $members: {
@@ -1343,7 +1465,7 @@ var $enumdef = null;
 
         See {{#crossLink "$enumdef"}}{{/crossLink}} to learn more about enumerations.
 
-        @class $global.joopl.EnumValue
+        @class EnumValue
         @since 2.3.0
         */
         var EnumValue = $def({
@@ -1371,7 +1493,7 @@ var $enumdef = null;
                     var value = this.value | enumValue;
 
                     var result = new Number(value);
-                    result.enum = new Enum({ value: value});
+                    result.enum = new EnumValue({ value: value});
 
                     Object.freeze(result);
 
@@ -1390,7 +1512,7 @@ var $enumdef = null;
                     var value = this.value & enumValue;
 
                     var result = new Number(value);
-                    result.enum = new Enum({ value: value});
+                    result.enum = new EnumValue({ value: value});
 
                     Object.freeze(result);
 
@@ -1405,8 +1527,7 @@ var $enumdef = null;
                 @return {Boolean} A boolean specifying if the given enumeration value was found in the flag.
                 @example 
                     var flag = State.open.enum.or(State.closed);
-                    var hasOpen = flag.enum.
-                    hasFlag(State.open);
+                    var hasOpen = flag.enum.hasFlag(State.open);
 
                 */
                 hasFlag: function(enumValue) {
@@ -1418,7 +1539,7 @@ var $enumdef = null;
         /**
         Represents an utility class to work with enumerations.
 
-        @class $global.joopl.Enum
+        @class Enum
         @static
         @since 2.3.0
         */
@@ -1428,7 +1549,15 @@ var $enumdef = null;
                 @method parseName
                 @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
                 @param valueName {String} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
-                @example Enum.Parse(State, "open")
+                @example
+                    $namespace.using("joopl", function() {
+                        var State = $enumdef({
+                            open: 0,
+                            closed: 1
+                        });
+
+                        this.Enum.Parse(State, "open")
+                    });
                 */
                 parseName: function(enumType, valueName) {
                     if(enumType.valueNames.indexOf(valueName) > -1) {
