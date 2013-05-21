@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jOOPL | Class test</title>
+    <link rel="stylesheet" href="/resources/qunit.css">
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <link rel="stylesheet" type="text/css" href="qunit.css" />
+    <script src="qunit.js" type="text/javascript"></script>
+    <script src="joopl.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        (function (undefined) {
+            "use strict";
+
+            test("Define a new class with attributes. Check that the given attributes are present", function () {
+                var TestAttr = $def({
+                    $extends: $global.joopl.Attribute,
+                    $constructor: function (args) {
+                        this.$base.$ctor(args);
+                    },
+                    $members: {
+                        get testData() { return "hello world"; }
+                    }
+                });
+
+                var A = $def({
+                    $attributes: [new TestAttr()]
+                });
+
+                ok(A.type.hasAttribute(TestAttr), "The test class must contain the attribute");
+                ok(A.type.getAttribute(TestAttr).testData == "hello world");
+
+            });
+
+            test("Define a new class with attributes. Adding instances that are not Attribute must fail", function () {
+                var TestAttr = $def({
+                    $constructor: function (args) {
+                        this.$base.$ctor(args);
+                    },
+                    $members: {
+                        get testData() { return "hello world"; }
+                    }
+                });
+
+                throws(function () {
+                    var A = $def({
+                        $attributes: [new TestAttr()]
+                    });
+                });
+
+            });
+
+            test("Define a new class, instantiate it and test if its methods and properties are working", function () {
+                var A = $def({
+                    $constructor: function () {
+                        this.$_.value = null;
+                    },
+
+                    $members: {
+                        get value() {
+                            return this.$_.value;
+                        },
+
+                        set value(value) {
+                            this.$_.value = value;
+                        },
+
+                        get fixedValue() {
+                            return 28;
+                        },
+
+                        someMethod: function () {
+                            return 11;
+                        }
+                    }
+                });
+
+                var instance = new A();
+                instance.value = "hello world";
+
+                ok(instance.value == "hello world", "Some read-write property accessor holds the expected value!");
+                ok(instance.fixedValue == 28, "Some read-only property accessor holds the expected value!");
+                ok(instance.someMethod(), "A defined method returns the expected value!");
+            });
+
+            test("Define a new class, instantiate it and test if each instance do not share the class field reference", function () {
+                var A = $def({
+                    $constructor: function () {
+                        this.$_.value = [];
+                    },
+
+                    $members: {
+                        get value() {
+                            return this.$_.value;
+                        }
+                    }
+                });
+
+                var instance = new A();
+                var instance2 = new A();
+
+                instance.value.push("hello world");
+
+                ok(instance2.value.length == 0, "The second instance has an array property with zero indexes");
+            });
+
+            test("Create an inheritance and check that all members are present in the inherited class and they are also working as expected", function () {
+                $namespace.register("joopltest", function () {
+
+                    this.A = $def({
+                        $constructor: function () {
+                            this.$_.value = null;
+                            this.$_.value2 = "read-only value";
+                        },
+
+                        $members: {
+                            get value() {
+                                return this.$_.value;
+                            },
+
+                            set value(value) {
+                                this.$_.value = value;
+                            },
+
+                            get readOnlyValue() {
+                                return this.$_.value2;
+                            },
+
+                            someMethod: function () {
+                                return 11;
+                            }
+                        }
+                    });
+
+                    this.B = $def({
+                        $extends: this.A,
+                        $constructor: function () {
+                            var b = null;
+                            this.$base.$ctor();
+                        },
+                        $members: {
+                            someMethod2: function () {
+                                return 22;
+                            }
+                        }
+                    });
+
+                    this.C = $def({
+                        $constructor: function () {
+                            this.$base.$ctor();
+                        },
+                        $extends: this.B
+                    });
+
+                    var instanceOfC = new this.C();
+                    instanceOfC.value = "hello world";
+
+                    ok(instanceOfC.value == "hello world", "Read-write property from the super class is still accessible");
+                    ok(instanceOfC.readOnlyValue == "read-only value", "Read-only property from the super class is still accessible");
+                    ok(instanceOfC.someMethod() == 11, "Inherited method is accessible");
+                    ok(instanceOfC.someMethod2() == 22, "Inherited method is accessible");
+                });
+
+                test("Create an inheritance  (B inherits A, C inherits B) and check that the most specialized class in the hierarchy is still of type of its base ones", function () {
+                    $namespace.register("joopltest", function () {
+                        this.A = $def({});
+
+                        this.B = $def({
+                            $extends: this.A
+                        });
+
+                        this.C = $def({
+                            $extends: this.B
+                        });
+
+                        var instanceOfC = new this.C();
+
+                        ok(instanceOfC.isTypeOf(this.C), "The instance of derived class is correctly detected as of type of its class (it is instance of C)");
+                        ok(instanceOfC.isTypeOf(this.B), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of B)");
+                        ok(instanceOfC.isTypeOf(this.A), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of A)");
+                    });
+                });
+
+                test("Create an inheritance with polymorphism and check that the polymorphic method and property are worked as expected", function () {
+                    this.A = $def({
+                        $constructor: function () {
+                            this.$_.value = "hello world";
+                        },
+                        $members: {
+                            get value() {
+                                return this.$_.value;
+                            },
+
+                            someMethod: function () {
+                                return this.$_.value;
+                            }
+                        }
+                    });
+
+                    this.B = $def({
+                        $extends: this.A,
+                        $constructor: function () {
+                            this.$base.$ctor();
+                        },
+                        $members: {
+                            get value() {
+                                return this.$base.value + "!";
+                            },
+
+                            someMethod: function () {
+                                return this.$base.value + "!";
+                            }
+                        }
+                    });
+
+                    this.C = $def({
+                        $extends: this.B,
+                        $constructor: function () {
+                            this.$base.$ctor();
+                        },
+                        $members: {
+                            get value() {
+                                return this.$base.value + "!";
+                            },
+
+                            someMethod: function () {
+                                return this.$base.value + "!";
+                            }
+                        }
+                    });
+
+                    var instanceOfC = new this.C();
+
+                    ok(instanceOfC.value == "hello world!!", "The polymorphic property has the expected value when it is accessed");
+                    ok(instanceOfC.someMethod() == "hello world!!", "The polymorphic method has the expected value when it is accessed");
+                });
+
+                test("A base class has a polymorphic method. The base class will be inherited by others and the polymorphic method will be called in the base class like an abstract method", function () {
+                    this.A = $def({
+                        $constructor: function () {
+                        },
+                        $members: {
+                            someMethod: function () {
+                                return this.$_.$derived.abstractMethod();
+                            },
+
+                            abstractMethod: function () {
+                            }
+                        }
+                    });
+
+                    this.B = $def({
+                        $extends: this.A,
+                        $constructor: function () {
+                            this.$base.$ctor();
+                        },
+                        $members: {
+                        }
+                    });
+
+                    this.C = $def({
+                        $extends: this.B,
+                        $constructor: function () {
+                            this.$base.$ctor();
+                        },
+                        $members: {
+                            abstractMethod: function () {
+                                return "hello world";
+                            }
+                        }
+                    });
+
+                    var instanceOfC = new this.C();
+
+                    ok(instanceOfC.someMethod() == "hello world", "The abstract method returns the expected value called from the base class");
+                });
+
+                test("Create an inmutable object", function () {
+                    var A = $def({
+                        $constructor: function () {
+                            this.$_.classField = "hello world";
+                        },
+                        $members: {
+                            get value() { return "hello world"; },
+                            set classField(value) { this.$_.classField = value }
+                        },
+                        $inmutable: true
+                    });
+
+                    throws(function () {
+                        var instance = new A();
+
+                        instance.some = "new property";
+                    }, "The inmutable class instance cannot add properties once instantiated");
+
+                    throws(function () {
+                        var instance = new A();
+
+                        Object.defineProperty(instance, "value", { configurable: true });
+
+                    }, "The inmutable class instance cannot redefine properties");
+
+
+                    throws(function () {
+                        "use strict";
+
+                        var instance = new A();
+
+                        delete instance.value;
+
+                        if (instance.value == "hello world") {
+                            throw Error("Cannot delete properties from an inmutable object!");
+                        }
+
+                    }, "The inmutable class instance cannot drop members");
+                    throws(function () {
+                        var instance = new A();
+
+                        instance.someMethod = function () { };
+                    }, "The inmutable class cannot add methods once instantiated");
+
+                    throws(function () {
+                        var instance = new A();
+
+                        instance.some = "new property";
+                    }, "The inmutable class instance cannot add properties once instantiated");
+                });
+
+                test("Create an non-dynamic object", function () {
+                    var A = $def({
+                        $constructor: function () {
+                        },
+                        $members: {
+                            get value() { return "hello world"; },
+                            set classField(value) { this.$_.classField = value }
+                        },
+                        $dynamic: false
+                    });
+
+                    throws(function () {
+                        var instance = new A();
+
+                        instance.some = "new property";
+                    }, "The non-dynamic class instance cannot add properties once instantiated");
+
+                    throws(function () {
+                        var instance = new A();
+
+                        Object.defineProperty(instance, "value", { configurable: true });
+
+                    }, "The non-dynamic class instance cannot redefine properties");
+
+
+                    throws(function () {
+                        "use strict";
+
+                        var instance = new A();
+
+                        delete instance.value;
+
+                        if (instance.value == "hello world") {
+                            throw Error("Cannot delete properties from an inmutable object!");
+                        }
+
+                    }, "The non-dynamic class instance cannot drop members");
+
+                    throws(function () {
+                        var instance = new A();
+
+                        instance.someMethod = function () { };
+                    }, "The non-dynamic class instance cannot add methods once instantiated");
+                });
+
+                test("Try to create an event and trigger it", function () {
+                    $namespace.using(["joopl"], function (scope) {
+                        var A = $def({
+                            $members: {
+                                $events: ["click"]
+                            }
+                        });
+
+                        var instance = new A();
+                        var context = {};
+
+                        // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
+                        instance.click = function (args) {
+                            ok(this == context, "The context object is correctly bound to the 'this' keyword");
+                            ok(args.text == "hello world", "The test event is triggered successfully");
+                        }
+
+                        // triggers the event!
+                        instance.click({ text: "hello world" }, context);
+                    });
+                });
+
+                test("Try to create an event, bind a handler, unbind it and trigger the event. No event handler should be bound.", function () {
+                    $namespace.using(["joopl"], function (scope) {
+                        var A = $def({
+                            $members: {
+                                $events: ["click"]
+                            }
+                        });
+
+                        var instance = new A();
+                        var context = {};
+
+                        var handled = false;
+
+                        var handler = function (args) {
+                            handled = true;
+                        };
+
+                        // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
+                        instance.click = handler;
+                        instance.click = handler;
+
+                        // triggers the event!
+                        instance.click({ args: { text: "hello world" }, context: context });
+
+                        ok(!handled, "The event handler was not triggered");
+                    });
+                });
+
+                test("Try to create an event, create the handler in some method and trigger it", function () {
+                    $namespace.using(["joopl"], function (scope) {
+                        var A = $def({
+                            $constructor: function () {
+                                this.bindEvents();
+                            },
+
+                            $members: {
+                                bindEvents: function () {
+                                    this.saidHello = function (args) {
+                                        ok(args.text == "hello world!", "The event args are the expected ones");
+                                    }
+                                },
+                                sayHello: function () {
+                                    this.saidHello({ text: "hello world!" });
+                                },
+                                $events: ["saidHello"]
+                            }
+                        });
+
+                        var instance = new A();
+                        var context = {};
+
+                        instance.sayHello();
+                    });
+                });
+
+                test("Try to create an event and trigger it with inheritance", function () {
+                    $namespace.using(["joopl"], function (scope) {
+                        var A = $def({
+                            $members: {
+                                $events: ["click"]
+                            }
+                        });
+
+                        var B = $def({
+                            $extends: A
+                        });
+
+                        var instance = new B();
+                        var context = {};
+
+                        // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
+                        instance.click = {
+                            handler: function (args) {
+                                ok(this == context, "The context object is correctly bound to the 'this' keyword");
+                                ok(args.text == "hello world", "The test event is triggered successfully");
+                            },
+                            context: context
+                        };
+
+                        // triggers the event!
+                        instance.click({ args: { text: "hello world" }, context: context });
+                    });
+                });
+            });
+        })(undefined);
+    </script>
+</body>
+</html>
