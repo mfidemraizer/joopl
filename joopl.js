@@ -26,7 +26,7 @@ var $enumdef = null;
 (function (undefined) {
     "use strict";
 
-    var version = "2.2.0";
+    var version = "2.3.0";
 
     // An object containing a set of core features used by jOOPL
     var TypeUtil = {
