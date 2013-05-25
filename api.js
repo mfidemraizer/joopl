@@ -2,7 +2,12 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
         "$def",
-        "$namespace"
+        "$enumdef",
+        "$namespace",
+        "Attribute",
+        "Enum",
+        "EnumValue",
+        "Type"
     ],
     "modules": [],
     "allModules": []

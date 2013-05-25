@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: $namespace - { joopl };</title>
+    <title>jOOPL: EnumValue - { joopl };</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -120,7 +120,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: $namespace</h1>
+                        <h1>Now on: EnumValue</h1>
 <div class="box meta">
     
 
@@ -129,51 +129,35 @@
     
 
     
+        <p>Available since 2.3.0</p>
+    
 </div>
 
 
 
 <div class="box intro">
-    <p>The <code>$namespace</code> keyword represents an static object holding methods/functions to manage namespaces.</p>
+    <p>Represents an enumeration value and provides access to common operations for the whole enumeration value.</p>
 
-<h3>What is a namespace?</h3>
-
-<p>A namespace is an identifier holding zero or more members like classes. </p>
-
-<p>In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
-into the same code library, but since each one belongs to a different namespace, this can happen with no issues:</p>
-
-<pre class="code prettyprint"><code>MyNamespace.Class1
-MyNamespace.MyOtherNamespace.Class1
-MyNamespace.AnotherNamespace.Class1
-YetAnotherNamespace.Class1
-</code></pre>
-
-<p>Namespaces <strong>must be defined using the <a href="#method_register">$namespace.register</a></strong> method.</p>
-
-<p>Once some code requires to use these classes, it can access the right class by using the full namespace path:</p>
-
-<pre class="code prettyprint"><code>var instance = new $global.MyNamespace.Class1();
-var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
-var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
-var instance4 = new $global.YetAnotherNamespace.Class1();
-</code></pre>
-
-<p>This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
-isolate each one.</p>
-
-<h3 id="namespace-global">The $global namespace</h3>
-
-<p>jOOPL has a top-most namespace called <code>$global</code>. Any namespace registered using the whole <code>$namespace.register(...)</code> method will be nested into the
-<code>$global</code> namespace.</p>
-
-<p>As JavaScript top-most object is the <code>Window</code> object and any variable or function defined in the global scope belongs to <code>Window</code>, this can lead to
-bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
-defined by itself in the <code>$global</code> namespace in order to prevent issues with other libraries.</p>
+<p>See <a href="..\classes\$enumdef.html" class="crosslink">$enumdef</a> to learn more about enumerations.</p>
 </div>
 
 
 
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_value">value</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
 
             
@@ -186,8 +170,8 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_alias" class="method item">
-    <h3 class="name"><code>alias</code></h3>
+                    <div id="method_and" class="method item">
+    <h3 class="name"><code>and</code></h3>
 
     
         <div class="args">
@@ -195,13 +179,7 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
             
                 <li class="arg">
                     
-                        <code>namespace</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>alias</code>
+                        <code>enumValue</code>
                     
                 </li>
             
@@ -209,6 +187,10 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
         </div>
     
 
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
     
 
     
@@ -234,7 +216,7 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
             
         
         
-        <a href="../files/joopl.js.html#l341"><code>joopl.js:341</code></a>
+        <a href="../files/joopl.js.html#l1503"><code>joopl.js:1503</code></a>
         
         </p>
 
@@ -245,7 +227,7 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
     </div>
 
     <div class="description">
-        <p>Aliases an existing namespace.</p>
+        <p>Performs a bitwise AND with the given enumeration value</p>
     </div>
 
     
@@ -256,29 +238,14 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
             
                 <li class="param">
                     
-                        <code class="param-name">namespace</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">enumValue</code>
+                        <span class="type">Number</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The namespace to alias</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">alias</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The alias</p>
+                        <p>An enumeration value</p>
                     </div>
 
                     
@@ -288,6 +255,19 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
         </div>
     
 
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    The flag of two or more enumeration values
+                
+            </div>
+        </div>
     
 
     
@@ -295,17 +275,15 @@ defined by itself in the <code>$global</code> namespace in order to prevent issu
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>$namespace.register("joopl.samples");
-$namespace.alias($global.joopl.samples, "samples");
-</code></pre>
+                <p>var flag = State.open.enum.and(State.closed); // This is State.open &amp; State.closed</p>
             </div>
         </div>
     
 </div>
 
                 
-                    <div id="method_register" class="method item">
-    <h3 class="name"><code>register</code></h3>
+                    <div id="method_hasFlag" class="method item">
+    <h3 class="name"><code>hasFlag</code></h3>
 
     
         <div class="args">
@@ -313,13 +291,7 @@ $namespace.alias($global.joopl.samples, "samples");
             
                 <li class="arg">
                     
-                        <code>path</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>copedFunc</code>
+                        <code>enumValue</code>
                     
                 </li>
             
@@ -327,6 +299,10 @@ $namespace.alias($global.joopl.samples, "samples");
         </div>
     
 
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
     
 
     
@@ -352,7 +328,7 @@ $namespace.alias($global.joopl.samples, "samples");
             
         
         
-        <a href="../files/joopl.js.html#l262"><code>joopl.js:262</code></a>
+        <a href="../files/joopl.js.html#l1522"><code>joopl.js:1522</code></a>
         
         </p>
 
@@ -363,50 +339,7 @@ $namespace.alias($global.joopl.samples, "samples");
     </div>
 
     <div class="description">
-        <p>Registers a namespace. The whole method supports two scenarios:</p>
-
-<ul>
-<li>Register a namespace and later add members by accessing it with its full path (i.e. $global.your.namespace).</li>
-<li>Register a namespace and create a scoped function where the <code>this</code> keyword holds the registered namespace.</li>
-</ul>
-
-<p>In both scenarios, jOOPL will check if the whole namespace path is already registered. If it is not the case, it will register the
-namespace path, and if it was already registered, it just skips the namespace path registration.</p>
-
-<h4>1. Simple register a namespace</h4>
-
-<p>The first use case of the <code>$namespace.register</code> method is just about registering a namespace and later access it with its full path:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.samples");
-
-$global.joopl.samples.SomeClass = $def({ 
-    $members: {
-        someMethod: function() {}
-    }
-});
-</code></pre>
-
-<h4>2. Register a namespace and add classes or other members inside a scoped function</h4>
-
-<p>The second use case of the <code>$namespace.register</code> is the most powerful one: both register the whole namespace and add members to the
-it in the same operation and with a shorter syntax. </p>
-
-<p><code>$namespace.register</code> supports a second parameter in addition to the namespace path called <code>scopedFunc</code>. It is a parameterless function that, when
-executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>the function body</em>) will be the childest registered namespace. For example:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.samples", function() {
-    // The this keyword now is the 'samples' namespace! 
-    // That's great because there is no need to access to the full namespace path
-    // to work on adding members to it!
-    this.ClassA = $def({
-        $members: {
-            someMethod: function() {
-                return "hello world";
-            }
-        }
-    })
-});
-</code></pre>
+        <p>Determines if some enumeration value contains other enumeration value.</p>
     </div>
 
     
@@ -417,29 +350,14 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
             
                 <li class="param">
                     
-                        <code class="param-name">path</code>
-                        <span class="type">String</span>
+                        <code class="param-name">enumValue</code>
+                        <span class="type">Number</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A namespace path. For example, "joopl.sample" will register "joopl" and its child "sample".</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">copedFunc</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>A parameterless function representing the scope where the <code>this</code> keyword is the childest registered namespace (for example, registering "joopl.sample', the <code>this</code> keyword will be the <em>sample</em> namespace).</p>
+                        <p>An enumeration value</p>
                     </div>
 
                     
@@ -450,13 +368,36 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
 
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    A boolean specifying if the given enumeration value was found in the flag.
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var flag = State.open.enum.or(State.closed);
+var hasOpen = flag.enum.hasFlag(State.open);
+</code></pre>
+            </div>
+        </div>
     
 </div>
 
                 
-                    <div id="method_using" class="method item">
-    <h3 class="name"><code>using</code></h3>
+                    <div id="method_or" class="method item">
+    <h3 class="name"><code>or</code></h3>
 
     
         <div class="args">
@@ -464,19 +405,7 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
             
                 <li class="arg">
                     
-                        <code>paths</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>scopedFunc</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>scopeIsNs</code>
+                        <code>enumValue</code>
                     
                 </li>
             
@@ -484,6 +413,10 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
         </div>
     
 
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
     
 
     
@@ -509,7 +442,7 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
             
         
         
-        <a href="../files/joopl.js.html#l354"><code>joopl.js:354</code></a>
+        <a href="../files/joopl.js.html#l1484"><code>joopl.js:1484</code></a>
         
         </p>
 
@@ -520,57 +453,7 @@ executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>
     </div>
 
     <div class="description">
-        <p>Imports the members of given namespace path.</p>
-
-<p>The <code>$namespace.using</code> method will not register a namespace if a given namespace path is not previously registered with <code>$namespace.register</code>.</p>
-
-<h4>1. Importing all members from some given namespaces into a variable</h4>
-
-<p>If the <code>$namespace.using</code> method is called only giving the first input parameter <code>paths</code> (<em>an arrary of strings where each index is a namespace path</em>).</p>
-
-<p>That is, if a namespace has been previously registered this way in some JavaScript file:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.samples");
-$namespace.register("jooopl.samples.ui");
-</code></pre>
-
-<p>...<code>$namespace.using</code> would be used like this:</p>
-
-<pre class="code prettyprint"><code>var importedMembers = $namespace.using(["joopl.samples", "joopl.samples.ui"]);
-</code></pre>
-
-<p>The <code>importedMembers</code>variable will hold <em>all</em> imported classes, interfaces or anything within the <code>samples</code> and <code>ui</code> namespaces.</p>
-
-<h4>2. Importing all members in a scoped function</h4>
-
-<p>The second use case is importing the members from some given namespaces into a scoped function:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.samples", function() {
-    this.ClassA = $def({
-        $members: {
-            someMethod: function() {
-            }
-        }
-    })
-});
-
-
-
-// Somewhere in the same or other file...
-$namespace.using(["joopl.samples", "joopl.samples.ui"], function() {
-    // The "this" keyword contains an object with all imported members from the both namespaces
-    var instance = new this.ClassA();
-});
-</code></pre>
-
-<p>In addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument
-and the <code>this</code> keyword will hold the <code>$global</code> object:</p>
-
-<pre class="code prettyprint"><code>$namespace.using(["joopl.samples", "joopl.samples.ui"], function(scope) {
-    // The scope input argument will hold the imported members
-    var instance = new scope.ClassA();
-});
-</code></pre>
+        <p>Performs a bitwise OR with the given enumeration value</p>
     </div>
 
     
@@ -581,44 +464,14 @@ and the <code>this</code> keyword will hold the <code>$global</code> object:</p>
             
                 <li class="param">
                     
-                        <code class="param-name">paths</code>
-                        <span class="type">Array</span>
+                        <code class="param-name">enumValue</code>
+                        <span class="type">Number</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>An array of strings of the namespaces to import</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">scopedFunc</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>A function to create a namespace scope (optional)</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">scopeIsNs</code>
-                        <span class="type">Boolean</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)</p>
+                        <p>An enumeration value</p>
                     </div>
 
                     
@@ -629,7 +482,28 @@ and the <code>this</code> keyword will hold the <code>$global</code> object:</p>
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
 
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    The flag of two or more enumeration values
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>var flag = State.open.enum.or(State.closed); // This is State.open | State.closed</p>
+            </div>
+        </div>
     
 </div>
 
@@ -637,6 +511,56 @@ and the <code>this</code> keyword will hold the <code>$global</code> object:</p>
             </div>
         
 
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_value" class="property item">
+    <h3 class="name"><code>value</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/joopl.js.html#l1476"><code>joopl.js:1476</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Gets the enumeration value.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         
@@ -650,6 +574,8 @@ and the <code>this</code> keyword will hold the <code>$global</code> object:</p>
         
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         

@@ -17,6 +17,44 @@
         (function (undefined) {
             "use strict";
 
+            test("Define a new class with attributes. Check that the given attributes are present", function () {
+                var TestAttr = $def({
+                    $extends: $global.joopl.Attribute,
+                    $constructor: function (args) {
+                        this.$base.$ctor(args);
+                    },
+                    $members: {
+                        get testData() { return "hello world"; }
+                    }
+                });
+
+                var A = $def({
+                    $attributes: [new TestAttr()]
+                });
+
+                ok(A.type.hasAttribute(TestAttr), "The test class must contain the attribute");
+                ok(A.type.getAttribute(TestAttr).testData == "hello world");
+
+            });
+
+            test("Define a new class with attributes. Adding instances that are not Attribute must fail", function () {
+                var TestAttr = $def({
+                    $constructor: function (args) {
+                        this.$base.$ctor(args);
+                    },
+                    $members: {
+                        get testData() { return "hello world"; }
+                    }
+                });
+
+                throws(function () {
+                    var A = $def({
+                        $attributes: [new TestAttr()]
+                    });
+                });
+
+            });
+
             test("Define a new class, instantiate it and test if its methods and properties are working", function () {
                 var A = $def({
                     $constructor: function () {
@@ -391,17 +429,17 @@
                 test("Try to create an event, create the handler in some method and trigger it", function () {
                     $namespace.using(["joopl"], function (scope) {
                         var A = $def({
-                            $constructor: function() {
+                            $constructor: function () {
                                 this.bindEvents();
                             },
 
                             $members: {
-                                bindEvents: function() {
+                                bindEvents: function () {
                                     this.saidHello = function (args) {
                                         ok(args.text == "hello world!", "The event args are the expected ones");
                                     }
                                 },
-                                sayHello: function() {
+                                sayHello: function () {
                                     this.saidHello({ text: "hello world!" });
                                 },
                                 $events: ["saidHello"]

@@ -18,13 +18,34 @@ Here's a quick lookup table:
 20px - 153.846%
 */
 
+#page-footer {
+    margin: 0 auto;
+    width: 36em;
+}
+
+.off-left {
+    border-bottom: 1px dotted #284963;
+    color: #284963;
+    font-size: 1.1em;
+    padding-bottom: 10px;
+}
+
 ol#main-links {
     clear: both;
     display: block;
     margin: 3em auto;
     overflow: hidden;
     padding-left: 0;
-    width: 40em;
+    width: 30em;
+}
+
+.yui3-u-3-4 {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 0 5px 5px #25A3D9;
+    padding-bottom: 2em;
+    padding-top: 2em;
 }
 
 ol#main-links li a {
@@ -62,13 +83,26 @@ ol#keyword-list li {
     list-style-type: none;
 }
 
+ol#class-list {
+    margin-left: 1em;
+    padding-left: 0;
+}
+
+ol#class-list li {
+    font-size: 1.1em;
+    font-weight: bold;
+    list-style-type: none;
+}
+
 #sidebar-container {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 50px 50px 50px 50px;
-    box-shadow: 0 0 20px #AAAAAA inset;
+    box-shadow: 0 0 5px 5px #25A3D9;
     padding: 10px 30px;
     width: 260px;
+}
+
+#sidebar-container #project-logo {
+    cursor: pointer;
 }
 
 ol#oop-hints,
@@ -91,7 +125,7 @@ html {
 
 body {
     border-top: 3px ridge #AAAAAA;
-    box-shadow: 100px -50px 200px 10px #CCCCCC inset;
+    box-shadow: 0 0 190px 5px #25A3D9 inset;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     margin: 0;
@@ -129,27 +163,24 @@ dd p:first-child, td p:first-child { margin-top: 0; }
 
 /* -- Headings -------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 {
-    color: #D98527;/*was #f80*/
+    color: #075278;
     line-height: 1.1;
     margin: 1.1em 0 0.5em;
 }
 
 h1 {
     font-size: 184.6%;
-    color: #188196;
     margin: 0.75em 0 0.5em;
 }
 
 h2 {
     font-size: 153.846%;
-    color: #E48A2B;
 }
 
 h3 { font-size: 138.462%; }
 
 h4 {
     border-bottom: 1px solid #DBDFEA;
-    color: #E48A2B;
     font-size: 115.385%;
     font-weight: normal;
     padding-bottom: 2px;
@@ -260,7 +291,7 @@ th {
     padding: 0 15px 0 10px;
 }
 #bd {
-    padding: 7px 0 130px;
+    padding: 7px 0 10px;
     position: relative;
     width: 99%;
 }
@@ -455,7 +486,7 @@ specific tabview, see the other sections below.
 /* Headings */
 h2, h3, h4, h5, h6 {
     border: none;
-    color: #188196;
+    color: #075278;
     font-weight: bold;
     text-decoration: none;
 }
