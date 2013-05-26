@@ -130,6 +130,7 @@ body {
     font-size: 14px;
     margin: 0;
     padding: 10px;
+    min-width: 1300px;
 }
 
 /* -- Links ----------------------------------------------------------------- */
@@ -294,6 +295,7 @@ th {
     padding: 7px 0 10px;
     position: relative;
     width: 99%;
+    min-width: 1300px;
 }
 
 /* -- Table of Contents ----------------------------------------------------- */
