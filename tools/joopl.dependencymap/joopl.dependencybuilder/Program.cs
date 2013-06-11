@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace joopl.dependencybuilder
 {
@@ -11,7 +13,15 @@ namespace joopl.dependencybuilder
 
             DependencyBuilder builder = new DependencyBuilder();
 
-            File.WriteAllText(Path.Combine(baseDirectory, "DependencyMap.json"), builder.BuildDependencyMapAsJson(baseDirectory));
+            List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory);
+
+            builder.BuildDependencyUsageMapAsJson(dependencyMap, baseDirectory);
+
+            File.WriteAllText
+            (
+                Path.Combine(baseDirectory, "DependencyMap.json"),
+                JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+            );
         }
     }
 }
