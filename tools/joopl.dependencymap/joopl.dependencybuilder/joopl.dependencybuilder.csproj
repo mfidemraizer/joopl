@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="JsParser.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="Namespace.cs" />
     <Compile Include="Program.cs" />
