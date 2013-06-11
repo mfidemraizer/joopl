@@ -6,11 +6,6 @@ namespace joopl.dependencybuilder
     [DataContract(IsReference = false)]
     public sealed class Member
     {
-        public Member()
-        {
-            Dependencies = new List<Member>();
-        }
-
         [DataMember(Name = "kind")]
         public string Kind
         {
@@ -38,13 +33,6 @@ namespace joopl.dependencybuilder
 
         [DataMember(Name = "file")]
         public string File
-        {
-            get;
-            set;
-        }
-
-        [DataMember(Name = "dependencies")]
-        public List<Member> Dependencies
         {
             get;
             set;

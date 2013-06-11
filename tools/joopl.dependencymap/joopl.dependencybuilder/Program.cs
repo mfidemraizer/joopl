@@ -15,7 +15,7 @@ namespace joopl.dependencybuilder
 
             List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory);
 
-            builder.BuildDependencyUsageMapAsJson(dependencyMap, baseDirectory);
+            string a = builder.BuildDependencyUsageMapAsJson(dependencyMap, baseDirectory);
 
             File.WriteAllText
             (

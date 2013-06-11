@@ -72,9 +72,12 @@ namespace joopl.dependencybuilder
                         if (tokens[tokenIndex].Value == "$extends")
                         {
                             string memberName = null;
+                            bool withNs = false;
 
                             if (tokens[tokenIndex + 2].Value == "$global")
                             {
+                                withNs = true;
+
                                 memberName = string.Join
                                             (
                                                 string.Empty,
@@ -84,25 +87,53 @@ namespace joopl.dependencybuilder
                                                     .ToArray()
                                             );
                             }
+                            else
+                            {
+                                memberName = tokens[tokenIndex + 4].Value;
+                            }
 
-                            Member scopedMember = dependencyMap
-                                                        .SelectMany(mappedNs => mappedNs.Members)
-                                                        .FirstOrDefault(member => member.Name == memberName && scopeNamespaces.Any(scopedNs => scopedNs == member.Namespace));
+                            IEnumerable<Member> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
 
-                            fileManifest.DependentFiles.Add(scopedMember.File);
+                            Member scopedMember;
+
+                            if (withNs)
+                            {
+                                string[] memberPath = memberName.Split('.');
+                                string scopedNs = string.Join(string.Empty, memberPath.Take(memberPath.Length - 1).ToArray());
+
+                                memberName = memberPath.Last();
+
+                                scopedMember = mappedMembers.FirstOrDefault
+                                (
+                                    member => member.Name == memberName && member.Parent.Name == scopedNs
+                                );
+                            }
+                            else
+                            {
+                                scopedMember = mappedMembers.FirstOrDefault
+                                (
+                                    member => member.Name == memberName && scopeNamespaces.Any(scopedNs => scopedNs == member.Namespace)
+                                );
+                            }
+
+                            if (scopedMember != null)
+                            {
+                                fileManifest.DependendsOn.Add(scopedMember);
+                            }
                         }
                     }
 
                     tokenIndex++;
                 }
 
+                fileManifest.FileName = relativeFilePath;
                 usageMap.Add(fileManifest);
 
                 scopeNamespaces.Clear();
                 tokenIndex = 0;
             }
 
-            return JsonConvert.SerializeObject(namespaces, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return JsonConvert.SerializeObject(usageMap, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         public List<Namespace> BuildDependencyMap(string baseDirectory)
