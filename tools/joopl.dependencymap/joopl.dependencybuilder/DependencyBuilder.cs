@@ -118,6 +118,11 @@ namespace joopl.dependencybuilder
 
                             if (scopedMember != null)
                             {
+                                if (fileManifest.DependendsOn == null)
+                                {
+                                    fileManifest.DependendsOn = new List<Member>();
+                                }
+
                                 fileManifest.DependendsOn.Add(scopedMember);
                             }
                         }
@@ -133,7 +138,7 @@ namespace joopl.dependencybuilder
                 tokenIndex = 0;
             }
 
-            return JsonConvert.SerializeObject(usageMap, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return JsonConvert.SerializeObject(usageMap, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         public List<Namespace> BuildDependencyMap(string baseDirectory)

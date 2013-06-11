@@ -8,7 +8,6 @@ namespace joopl.dependencybuilder
     {
         public FileManifest()
         {
-            DependendsOn = new List<Member>();
         }
 
         [DataMember(Name = "fileName")]
