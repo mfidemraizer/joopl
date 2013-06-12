@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace joopl.dependencybuilder
+namespace joopl.DependencyBuilder
 {
     public class JsParser
     {
@@ -18,7 +18,7 @@ namespace joopl.dependencybuilder
                 {
                     ScriptEngine engine = new ScriptEngine();
 
-                    using (Stream esprimaStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("joopl.dependencybuilder.libs.esprima.js"))
+                    using (Stream esprimaStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("joopl.DependencyBuilder.Libs.esprima.js"))
                     using (StreamReader esprimaReader = new StreamReader(esprimaStream))
                     {
                         engine.Evaluate(esprimaReader.ReadToEnd());

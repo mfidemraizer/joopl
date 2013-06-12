@@ -1,23 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
-namespace joopl.dependencybuilder
+namespace joopl.DependencyBuilder
 {
     public sealed class DependencyBuilder
     {
-        public string BuildDependencyUsageMapAsJson(List<Namespace> dependencyMap, string baseDirectory)
+        public List<FileManifest> BuildDependencyUsageMap(List<Namespace> dependencyMap, string baseDirectory, string[] excludeFiles = null)
         {
+            IEnumerable<IDictionary<string, object>> thirdPartyDependencies = null;
+
+            if (File.Exists(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")))
+            {
+                thirdPartyDependencies = JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")));  
+            }
+
             List<KeyValuePair<string, string>> tokens;
             int tokenIndex = 0;
-            Namespace ns = null;
             string relativeFilePath = null;
 
-            IEnumerable<string> files = new DirectoryInfo(baseDirectory).GetFiles("*.js", SearchOption.AllDirectories)
-                                .Select(info => info.FullName);
+            IEnumerable<FileInfo> files = new DirectoryInfo(baseDirectory).GetFiles("*.js", SearchOption.AllDirectories);
 
             List<Namespace> namespaces = new List<Namespace>();
             List<string> scopeNamespaces = new List<string>();
@@ -27,10 +33,15 @@ namespace joopl.dependencybuilder
 
             JsParser jsParser = new JsParser();
 
-            foreach (string file in files)
+            foreach (FileInfo file in files)
             {
-                tokens = jsParser.ParseTokens(file);
-                relativeFilePath = file.Replace(baseDirectory, string.Empty).Replace('\\', '/').TrimStart('/');
+                if (excludeFiles != null && excludeFiles.Contains(file.Name))
+                {
+                    continue;
+                }
+
+                tokens = jsParser.ParseTokens(file.FullName);
+                relativeFilePath = file.FullName.Replace(baseDirectory, string.Empty).Replace('\\', '/').TrimStart('/');
                 fileManifest = new FileManifest();
 
                 while (tokenIndex < tokens.Count)
@@ -92,9 +103,9 @@ namespace joopl.dependencybuilder
                                 memberName = tokens[tokenIndex + 4].Value;
                             }
 
-                            IEnumerable<Member> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
+                            IEnumerable<Type> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
 
-                            Member scopedMember;
+                            Type scopedMember;
 
                             if (withNs)
                             {
@@ -120,11 +131,93 @@ namespace joopl.dependencybuilder
                             {
                                 if (fileManifest.DependendsOn == null)
                                 {
-                                    fileManifest.DependendsOn = new List<Member>();
+                                    fileManifest.DependendsOn = new List<TypeRef>();
                                 }
 
-                                fileManifest.DependendsOn.Add(scopedMember);
+                                if (scopedMember.File != file.Name && fileManifest.DependendsOn.Count(typeRef => typeRef.Name == scopedMember.Name && typeRef.Namespace == scopedMember.Namespace) == 0)
+                                {
+                                    fileManifest.DependendsOn.Add(scopedMember);
+                                }
                             }
+                        }
+                        else if (thirdPartyDependencies != null && thirdPartyDependencies.Count() > 0 && tokens[tokenIndex].Value.StartsWith("use "))
+                        {
+                            if (fileManifest.Libraries == null)
+                            {
+                                fileManifest.Libraries = new List<string>();
+                            }
+
+                            string dependencyName = tokens[tokenIndex].Value.Split(' ').Last();
+
+                            fileManifest.Libraries.Add((string)thirdPartyDependencies.Single(some => (string)some["name"] == dependencyName)["uri"]);
+
+                        }
+                        else if (tokens[tokenIndex].Value == "new")
+                        {
+                            string memberName = null;
+                            bool withNs = false;
+
+                            if (tokens[tokenIndex + 2].Value != ".")
+                            {
+                                tokenIndex++;
+                                continue;
+                            }
+
+                            if (tokens[tokenIndex + 1].Value == "$global")
+                            {
+                                withNs = true;
+
+                                memberName = string.Join
+                                            (
+                                                string.Empty,
+                                                tokens.Skip(tokenIndex + 4)
+                                                    .TakeWhile(someToken => someToken.Value != "," && someToken.Value != ";")
+                                                    .Select(someToken => someToken.Value)
+                                                    .ToArray()
+                                            );
+                            }
+                            else
+                            {
+                                memberName = tokens[tokenIndex + 3].Value;
+                            }
+
+                            IEnumerable<Type> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
+
+                            Type scopedMember;
+
+                            if (withNs)
+                            {
+                                string[] memberPath = memberName.Split('.');
+                                string scopedNs = string.Join(string.Empty, memberPath.Take(memberPath.Length - 1).ToArray());
+
+                                memberName = memberPath.Last();
+
+                                scopedMember = mappedMembers.FirstOrDefault
+                                (
+                                    member => member.Name == memberName && member.Parent.Name == scopedNs
+                                );
+                            }
+                            else
+                            {
+                                scopedMember = mappedMembers.FirstOrDefault
+                                (
+                                    member => member.Name == memberName && scopeNamespaces.Any(scopedNs => scopedNs == member.Namespace)
+                                );
+                            }
+
+                            if (scopedMember != null)
+                            {
+                                if (fileManifest.DependendsOn == null)
+                                {
+                                    fileManifest.DependendsOn = new List<TypeRef>();
+                                }
+
+                                if (scopedMember.File != file.Name && fileManifest.DependendsOn.Count(typeRef => typeRef.Name == scopedMember.Name && typeRef.Namespace == scopedMember.Namespace) == 0)
+                                {
+                                    fileManifest.DependendsOn.Add(scopedMember);
+                                }
+                            }
+
                         }
                     }
 
@@ -132,16 +225,20 @@ namespace joopl.dependencybuilder
                 }
 
                 fileManifest.FileName = relativeFilePath;
-                usageMap.Add(fileManifest);
+
+                if (fileManifest.DependendsOn != null && fileManifest.DependendsOn.Count > 0)
+                {
+                    usageMap.Add(fileManifest);
+                }
 
                 scopeNamespaces.Clear();
                 tokenIndex = 0;
             }
 
-            return JsonConvert.SerializeObject(usageMap, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return usageMap;
         }
 
-        public List<Namespace> BuildDependencyMap(string baseDirectory)
+        public List<Namespace> BuildDependencyMap(string baseDirectory, string[] excludeFiles = null)
         {
             List<KeyValuePair<string, string>> tokens;
             int tokenIndex = 0;
@@ -149,17 +246,21 @@ namespace joopl.dependencybuilder
             Namespace ns = null;
             string relativeFilePath = null;
 
-            IEnumerable<string> files = new DirectoryInfo(baseDirectory).GetFiles("*.js", SearchOption.AllDirectories)
-                                .Select(info => info.FullName);
+            IEnumerable<FileInfo> files = new DirectoryInfo(baseDirectory).GetFiles("*.js", SearchOption.AllDirectories);
 
             List<Namespace> namespaces = new List<Namespace>();
 
             JsParser jsParser = new JsParser();
 
-            foreach (string file in files)
+            foreach (FileInfo file in files)
             {
-                tokens = jsParser.ParseTokens(file);
-                relativeFilePath = file.Replace(baseDirectory, string.Empty).Replace('\\', '/').TrimStart('/');
+                if (excludeFiles != null && excludeFiles.Contains(file.Name))
+                {
+                    continue;
+                }
+
+                tokens = jsParser.ParseTokens(file.FullName);
+                relativeFilePath = file.FullName.Replace(baseDirectory, string.Empty).Replace('\\', '/').TrimStart('/');
 
                 while (tokenIndex < tokens.Count)
                 {
@@ -186,9 +287,9 @@ namespace joopl.dependencybuilder
                     }
                     else if (new[] { "$def", "$enumdef" }.Any(token => token == tokens[tokenIndex].Value))
                     {
-                        if (ns != null)
+                        if (ns != null && new Regex("^([A-Z][A-Za-z0-9]+)$").IsMatch(tokens[tokenIndex - 2].Value))
                         {
-                            ns.Members.Add(new Member { Parent = ns, File = relativeFilePath, Name = tokens[tokenIndex - 2].Value });
+                            ns.Members.Add(new Type { Parent = ns, File = relativeFilePath, Name = tokens[tokenIndex - 2].Value });
                         }
 
                         tokenIndex++;

@@ -3,24 +3,33 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace joopl.dependencybuilder
+namespace joopl.DependencyBuilder
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string baseDirectory = args[Array.IndexOf(args, "-directory") + 1];
+            string baseDirectory = args[Array.IndexOf(args, "-directories") + 1];
+            string outputDir = args[Array.IndexOf(args, "-outputdir") + 1];
+            string[] excludeFiles = args[Array.IndexOf(args, "-excludefiles") + 1].Split(';');
 
             DependencyBuilder builder = new DependencyBuilder();
 
-            List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory);
+            List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory, excludeFiles);
+            List<FileManifest> dependencyUsageMap = builder.BuildDependencyUsageMap(dependencyMap, baseDirectory, excludeFiles);
 
-            string a = builder.BuildDependencyUsageMapAsJson(dependencyMap, baseDirectory);
+            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
             File.WriteAllText
             (
-                Path.Combine(baseDirectory, "DependencyMap.json"),
-                JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+                Path.Combine(outputDir, "DependencyMap.json"),
+                JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, settings)
+            );
+
+            File.WriteAllText
+            (
+                Path.Combine(outputDir, "DependencyUsageMap.json"),
+                JsonConvert.SerializeObject(dependencyUsageMap, Formatting.Indented, settings)
             );
         }
     }

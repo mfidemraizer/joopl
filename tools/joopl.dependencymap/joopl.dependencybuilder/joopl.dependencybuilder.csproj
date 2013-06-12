@@ -7,7 +7,7 @@
     <ProjectGuid>{5464824C-748C-4D3A-8490-8DE09D92B153}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>joopl.dependencybuilder</RootNamespace>
+    <RootNamespace>joopl.DependencyBuilder</RootNamespace>
     <AssemblyName>joopl.dependencybuilder</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,7 +51,8 @@
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="FileManifest.cs" />
     <Compile Include="JsParser.cs" />
-    <Compile Include="Member.cs" />
+    <Compile Include="Type.cs" />
+    <Compile Include="TypeRef.cs" />
     <Compile Include="Namespace.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,7 +62,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="libs\esprima.js" />
+    <EmbeddedResource Include="Libs\esprima.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

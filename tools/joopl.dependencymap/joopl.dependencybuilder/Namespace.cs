@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace joopl.dependencybuilder
+namespace joopl.DependencyBuilder
 {
     [DataContract(IsReference = false)]
     public sealed class Namespace
@@ -9,7 +9,7 @@ namespace joopl.dependencybuilder
         public Namespace()
         {
             Files = new List<string>();
-            Members = new List<Member>();
+            Members = new List<Type>();
         }
 
         [DataMember(Name = "kind")]
@@ -33,7 +33,7 @@ namespace joopl.dependencybuilder
         }
 
         [DataMember(Name = "members")]
-        public List<Member> Members
+        public List<Type> Members
         {
             get;
             set;
