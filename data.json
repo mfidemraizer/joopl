@@ -303,7 +303,7 @@
                 }
             ],
             "example": [
-                "\n    $namespace.using(\"joopl\", function() {\n        var State = $enumdef({\n            open: 0,\n            closed: 1\n        });\n\n        this.Enum.Parse(State, \"open\")\n    });"
+                "\n    $namespace.using(\"joopl\", function() {\n        var State = $enumdef({\n            open: 0,\n            closed: 1\n        });\n\n        this.Enum.parseName(State, \"open\")\n    });"
             ],
             "class": "Enum"
         }
