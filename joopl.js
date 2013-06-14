@@ -1556,7 +1556,7 @@ var $enumdef = null;
                             closed: 1
                         });
 
-                        this.Enum.Parse(State, "open")
+                        this.Enum.parseName(State, "open")
                     });
                 */
                 parseName: function(enumType, valueName) {
