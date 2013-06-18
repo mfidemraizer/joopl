@@ -32,8 +32,8 @@ namespace joopl.DependencyBuilder
             set;
         }
 
-        [DataMember(Name = "file")]
-        public string File
+        [DataMember(Name = "fileName")]
+        public string FileName
         {
             get;
             set;

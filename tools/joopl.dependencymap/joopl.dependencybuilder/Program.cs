@@ -22,14 +22,14 @@ namespace joopl.DependencyBuilder
 
             File.WriteAllText
             (
-                Path.Combine(outputDir, "DependencyMap.json"),
-                JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, settings)
+                Path.Combine(outputDir, "DependencyMap.js"),
+                "\"use strict\";\n$global.__DependencyMap = " + JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, settings) + ';'
             );
 
             File.WriteAllText
             (
-                Path.Combine(outputDir, "DependencyUsageMap.json"),
-                JsonConvert.SerializeObject(dependencyUsageMap, Formatting.Indented, settings)
+                Path.Combine(outputDir, "DependencyUsageMap.js"),
+                "\"use strict\";\n$global.__DependencyUsageMap = " + JsonConvert.SerializeObject(dependencyUsageMap, Formatting.Indented, settings) + ';'
             );
         }
     }

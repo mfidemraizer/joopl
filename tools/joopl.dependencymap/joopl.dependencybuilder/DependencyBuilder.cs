@@ -16,7 +16,7 @@ namespace joopl.DependencyBuilder
 
             if (File.Exists(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")))
             {
-                thirdPartyDependencies = JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")));  
+                thirdPartyDependencies = JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")));
             }
 
             List<KeyValuePair<string, string>> tokens;
@@ -129,14 +129,9 @@ namespace joopl.DependencyBuilder
 
                             if (scopedMember != null)
                             {
-                                if (fileManifest.DependendsOn == null)
+                                if ((scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js") && scopedMember.FileName != file.Name && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0)
                                 {
-                                    fileManifest.DependendsOn = new List<TypeRef>();
-                                }
-
-                                if (scopedMember.File != file.Name && fileManifest.DependendsOn.Count(typeRef => typeRef.Name == scopedMember.Name && typeRef.Namespace == scopedMember.Namespace) == 0)
-                                {
-                                    fileManifest.DependendsOn.Add(scopedMember);
+                                    fileManifest.DependendsOn.Add(scopedMember.FileName);
                                 }
                             }
                         }
@@ -170,8 +165,8 @@ namespace joopl.DependencyBuilder
                                 memberName = string.Join
                                             (
                                                 string.Empty,
-                                                tokens.Skip(tokenIndex + 4)
-                                                    .TakeWhile(someToken => someToken.Value != "," && someToken.Value != ";")
+                                                tokens.Skip(tokenIndex + 3)
+                                                    .TakeWhile(someToken => someToken.Value != "(" && someToken.Value != "," && someToken.Value != ";")
                                                     .Select(someToken => someToken.Value)
                                                     .ToArray()
                                             );
@@ -188,7 +183,7 @@ namespace joopl.DependencyBuilder
                             if (withNs)
                             {
                                 string[] memberPath = memberName.Split('.');
-                                string scopedNs = string.Join(string.Empty, memberPath.Take(memberPath.Length - 1).ToArray());
+                                string scopedNs = string.Join(".", memberPath.Take(memberPath.Length - 1).ToArray());
 
                                 memberName = memberPath.Last();
 
@@ -207,14 +202,9 @@ namespace joopl.DependencyBuilder
 
                             if (scopedMember != null)
                             {
-                                if (fileManifest.DependendsOn == null)
+                                if ((scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js") && scopedMember.FileName != file.Name && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0)
                                 {
-                                    fileManifest.DependendsOn = new List<TypeRef>();
-                                }
-
-                                if (scopedMember.File != file.Name && fileManifest.DependendsOn.Count(typeRef => typeRef.Name == scopedMember.Name && typeRef.Namespace == scopedMember.Namespace) == 0)
-                                {
-                                    fileManifest.DependendsOn.Add(scopedMember);
+                                    fileManifest.DependendsOn.Add(scopedMember.FileName);
                                 }
                             }
 
@@ -226,16 +216,56 @@ namespace joopl.DependencyBuilder
 
                 fileManifest.FileName = relativeFilePath;
 
-                if (fileManifest.DependendsOn != null && fileManifest.DependendsOn.Count > 0)
-                {
-                    usageMap.Add(fileManifest);
-                }
+                usageMap.Add(fileManifest);
 
                 scopeNamespaces.Clear();
                 tokenIndex = 0;
             }
 
+            foreach (FileManifest manifest in usageMap)
+            {
+                manifest.DependendsOn = GetDependencies(usageMap, manifest);
+                manifest.DependendsOn.Reverse();
+            }
+
             return usageMap;
+        }
+
+        private List<string> GetDependencies(IEnumerable<FileManifest> usageMap, FileManifest parentManifest = null, List<string> dependencies = null)
+        {
+            dependencies = dependencies ?? new List<string>();
+
+            if (parentManifest == null)
+            {
+                foreach (FileManifest manifest in usageMap)
+                {
+                    if (manifest.DependendsOn.Count > 0)
+                    {
+                        foreach (string fileName in manifest.DependendsOn)
+                        {
+                            if ((fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
+                            {
+                                dependencies.Add(fileName);
+
+                                GetDependencies(usageMap, usageMap.Single(some => some.FileName == fileName), dependencies);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (parentManifest.DependendsOn.Count > 0)
+            {
+                foreach (string fileName in parentManifest.DependendsOn)
+                {
+                    if ((fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
+                    {
+                        dependencies.Add(fileName);
+                        GetDependencies(usageMap, usageMap.Single(some => some.FileName == fileName), dependencies);
+                    }
+                }
+            }
+
+            return dependencies;
         }
 
         public List<Namespace> BuildDependencyMap(string baseDirectory, string[] excludeFiles = null)
@@ -289,7 +319,7 @@ namespace joopl.DependencyBuilder
                     {
                         if (ns != null && new Regex("^([A-Z][A-Za-z0-9]+)$").IsMatch(tokens[tokenIndex - 2].Value))
                         {
-                            ns.Members.Add(new Type { Parent = ns, File = relativeFilePath, Name = tokens[tokenIndex - 2].Value });
+                            ns.Members.Add(new Type { Parent = ns, FileName = relativeFilePath, Name = tokens[tokenIndex - 2].Value });
                         }
 
                         tokenIndex++;

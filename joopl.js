@@ -22,6 +22,7 @@ var $interfacedef = null; // A shortcut to $interface.declare(...)
 var $implements = null; // Holds a function to check if an object implements an interface
 var $global = {}; // Represents the global scope.
 var $enumdef = null;
+var $manifest = null;
 
 (function (undefined) {
     "use strict";
@@ -222,6 +223,18 @@ var $enumdef = null;
 
     Object.freeze(TypeUtil);
 
+
+    $manifest = {
+        _files: [],
+
+        get lastFile() {
+            return this._files[this._files.length - 1];
+        },
+        
+        file: function (fileName) {
+            this._files.push(fileName);
+        }
+    };
 
     /**
     The `$namespace` keyword represents an static object holding methods/functions to manage namespaces.

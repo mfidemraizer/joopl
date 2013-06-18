@@ -52,7 +52,7 @@
     <Compile Include="FileManifest.cs" />
     <Compile Include="JsParser.cs" />
     <Compile Include="Type.cs" />
-    <Compile Include="TypeRef.cs" />
+    <Compile Include="FileManifestRef.cs" />
     <Compile Include="Namespace.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

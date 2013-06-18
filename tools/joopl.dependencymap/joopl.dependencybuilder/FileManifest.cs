@@ -1,11 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 
 namespace joopl.DependencyBuilder
 {
+    [DebuggerDisplay("{FileName}")]
     [DataContract(IsReference = false)]
     public sealed class FileManifest
     {
+        public FileManifest()
+        {
+            DependendsOn = new List<string>();
+        }
+
         [DataMember(Name = "fileName")]
         public string FileName
         {
@@ -21,7 +28,7 @@ namespace joopl.DependencyBuilder
         }
 
         [DataMember(Name = "dependsOn")]
-        public List<TypeRef> DependendsOn
+        public List<string> DependendsOn
         {
             get;
             set;
