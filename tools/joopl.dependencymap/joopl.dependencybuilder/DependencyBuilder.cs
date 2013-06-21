@@ -129,7 +129,12 @@ namespace joopl.DependencyBuilder
 
                             if (scopedMember != null)
                             {
-                                if ((scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js") && scopedMember.FileName != file.Name && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0)
+                                if (
+                                    (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
+                                    && relativeFilePath != file.Name
+                                    && scopedMember.FileName != file.Name
+                                    && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
+                                )
                                 {
                                     fileManifest.DependendsOn.Add(scopedMember.FileName);
                                 }
@@ -202,7 +207,12 @@ namespace joopl.DependencyBuilder
 
                             if (scopedMember != null)
                             {
-                                if ((scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js") && scopedMember.FileName != file.Name && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0)
+                                if (
+                                    (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
+                                    && relativeFilePath != file.Name
+                                    && scopedMember.FileName != file.Name 
+                                    && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
+                                )
                                 {
                                     fileManifest.DependendsOn.Add(scopedMember.FileName);
                                 }
@@ -225,7 +235,7 @@ namespace joopl.DependencyBuilder
             foreach (FileManifest manifest in usageMap)
             {
                 manifest.DependendsOn = GetDependencies(usageMap, manifest);
-                manifest.DependendsOn.Reverse();
+               /// manifest.DependendsOn.Reverse();
             }
 
             return usageMap;
@@ -243,7 +253,7 @@ namespace joopl.DependencyBuilder
                     {
                         foreach (string fileName in manifest.DependendsOn)
                         {
-                            if ((fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
+                            if ((fileName != manifest.FileName && fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
                             {
                                 dependencies.Add(fileName);
 
@@ -257,7 +267,7 @@ namespace joopl.DependencyBuilder
             {
                 foreach (string fileName in parentManifest.DependendsOn)
                 {
-                    if ((fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
+                    if ((fileName != parentManifest.FileName && fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
                     {
                         dependencies.Add(fileName);
                         GetDependencies(usageMap, usageMap.Single(some => some.FileName == fileName), dependencies);
