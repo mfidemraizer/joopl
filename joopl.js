@@ -223,6 +223,43 @@ var $manifest = null;
 
     Object.freeze(TypeUtil);
 
+    var DependencyUtil = {
+        findFileInUsageMap: function (fileName) {
+            var usageMap = $global.__DependencyUsageMap;
+            var found = false;
+            var index = 0;
+
+            while (!found && index < usageMap.length) {
+                if (usageMap[index].fileName == fileName) {
+                    found = true;
+                } else {
+                    index++;
+                }
+            }
+
+            if (found) {
+                return usageMap[index];
+            } else {
+                return null;
+            }
+        },
+
+        buildDependencyList: function (fileName) {
+            var map = $global.__DependencyMap;
+            var usageMap = $global.__DependencyUsageMap;
+
+            var fileManifest = this.findFileInUsageMap(fileName);
+
+            var dependencies = [];
+
+            for (var manifestIndex = 0; manifestIndex < fileManifest.dependsOn.length; manifestIndex++) {
+                dependencies.add(fileManifest.dependsOn[manifestIndex]);
+            }
+
+        }
+    };
+
+    Object.freeze(DependencyUtil);
 
     $manifest = {
         _files: [],
@@ -230,11 +267,13 @@ var $manifest = null;
         get lastFile() {
             return this._files[this._files.length - 1];
         },
-        
+
         file: function (fileName) {
             this._files.push(fileName);
         }
     };
+
+    Object.freeze($manifest);
 
     /**
     The `$namespace` keyword represents an static object holding methods/functions to manage namespaces.
@@ -412,14 +451,36 @@ var $manifest = null;
                 var instance = new scope.ClassA();
             });
 
-
-
         @method using
         @param paths {Array} An array of strings of the namespaces to import
         @param scopedFunc {Function} A function to create a namespace scope (optional)
         @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
         */
         using: function (paths, scopedFunc, scopeIsNs) {
+            var enableHeadJS = !$global.__DependenciesAreLoaded && window.head != undefined && window.head.js != undefined;
+
+            // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
+            // of DependencyUsageMap dependencies
+            if (enableHeadJS && $global.__DependencyUsageMap) {
+                $global.__DependenciesAreLoaded = true;
+
+                var found = false;
+                var index = 0;
+                var currentFile = $manifest.lastFile;
+
+                while (!found && index < $global.__DependencyUsageMap.length) {
+                    if ($global.__DependencyUsageMap[index].fileName == currentFile) {
+                        found = true;
+                    } else {
+                        index++;
+                    }
+                }
+
+                if (found) {
+                    head.js.apply(Window, $global.__DependencyUsageMap[index].dependsOn);
+                }
+            }
+
             if (paths === undefined) {
                 debugger;
                 throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
@@ -439,6 +500,16 @@ var $manifest = null;
                 throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
             }
 
+            if (enableHeadJS) {
+                window.head.ready((function () {
+                    this.loadNamespaces(paths, scopedFunc, scopeIsNs);
+                }).bind(this));
+            } else {
+                this.loadNamespaces(paths, scopedFunc, scopeIsNs);
+            }
+        },
+
+        loadNamespaces: function (paths, scopedFunc, scopeIsNs) {
             var nsIdentifiers = null;
             var currentNs = $global;
             var nsIndex = 0;
@@ -1230,8 +1301,7 @@ var $manifest = null;
             }
         }
 
-        if($global.joopl.Type instanceof Function)
-        { // Metadata block
+        if ($global.joopl.Type instanceof Function) { // Metadata block
             var hasMetadata = false;
 
             if (Array.isArray(args.$attributes)) {
@@ -1342,7 +1412,7 @@ var $manifest = null;
                 }
             }
         });
-        
+
         /**
         Represents the base class for any attribute.
 
@@ -1482,7 +1552,7 @@ var $manifest = null;
         @since 2.3.0
         */
         var EnumValue = $def({
-            $constructor: function(args) {
+            $constructor: function (args) {
                 this.$_.value = args.value;
             },
             $members: {
@@ -1502,11 +1572,11 @@ var $manifest = null;
                 @return {Number} The flag of two or more enumeration values
                 @example var flag = State.open.enum.or(State.closed); // This is State.open | State.closed
                 */
-                or: function(enumValue) {
+                or: function (enumValue) {
                     var value = this.value | enumValue;
 
                     var result = new Number(value);
-                    result.enum = new EnumValue({ value: value});
+                    result.enum = new EnumValue({ value: value });
 
                     Object.freeze(result);
 
@@ -1521,11 +1591,11 @@ var $manifest = null;
                 @return {Number} The flag of two or more enumeration values
                 @example var flag = State.open.enum.and(State.closed); // This is State.open & State.closed
                 */
-                and: function(enumValue) {
+                and: function (enumValue) {
                     var value = this.value & enumValue;
 
                     var result = new Number(value);
-                    result.enum = new EnumValue({ value: value});
+                    result.enum = new EnumValue({ value: value });
 
                     Object.freeze(result);
 
@@ -1543,7 +1613,7 @@ var $manifest = null;
                     var hasOpen = flag.enum.hasFlag(State.open);
 
                 */
-                hasFlag: function(enumValue) {
+                hasFlag: function (enumValue) {
                     return (this.value & enumValue) === Number(enumValue);
                 }
             }
@@ -1572,8 +1642,8 @@ var $manifest = null;
                         this.Enum.parseName(State, "open")
                     });
                 */
-                parseName: function(enumType, valueName) {
-                    if(enumType.valueNames.indexOf(valueName) > -1) {
+                parseName: function (enumType, valueName) {
+                    if (enumType.valueNames.indexOf(valueName) > -1) {
                         return enumType[valueName];
                     } else {
                         throw new scope.ArgumentException({
@@ -1723,23 +1793,23 @@ var $manifest = null;
         @class $enumdef
         @since 2.3.0
         */
-        $enumdef = function(enumDef) {
-            if(typeof enumDef != "object") {
+        $enumdef = function (enumDef) {
+            if (typeof enumDef != "object") {
                 throw new scope.ArgumentException({
                     argName: "enumDef",
                     reason: "No definition for the enumeration given"
                 });
             }
 
-            var enumerationType = function() {
+            var enumerationType = function () {
             };
 
             enumerationType.prototype = new scope.Object();
 
             var enumNames = [];
 
-            for(var propertyName in enumDef) {
-                if(typeof enumDef[propertyName] != "number") {
+            for (var propertyName in enumDef) {
+                if (typeof enumDef[propertyName] != "number") {
                     throw new scope.ArgumentException({
                         argName: "enumDef",
                         reason: "An enumeration definition must contain numeric properties only"
@@ -1778,7 +1848,7 @@ var $manifest = null;
             return enumerationType;
         };
 
-    Object.freeze($enumdef);
+        Object.freeze($enumdef);
 
         this.EventManager = $def({
             $constructor: function (args) {

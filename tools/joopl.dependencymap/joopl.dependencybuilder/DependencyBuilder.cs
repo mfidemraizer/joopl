@@ -131,12 +131,11 @@ namespace joopl.DependencyBuilder
                             {
                                 if (
                                     (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
-                                    && relativeFilePath != file.Name
-                                    && scopedMember.FileName != file.Name
+                                    && !scopedMember.FileName.Contains(file.Name)
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
-                                    fileManifest.DependendsOn.Add(scopedMember.FileName);
+                                    fileManifest.DependendsOn.Insert(0, scopedMember.FileName);
                                 }
                             }
                         }
@@ -209,8 +208,7 @@ namespace joopl.DependencyBuilder
                             {
                                 if (
                                     (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
-                                    && relativeFilePath != file.Name
-                                    && scopedMember.FileName != file.Name 
+                                    && !scopedMember.FileName.Contains(file.Name) 
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
@@ -226,6 +224,11 @@ namespace joopl.DependencyBuilder
 
                 fileManifest.FileName = relativeFilePath;
 
+                if (fileManifest.DependendsOn.Count == 0)
+                {
+                    fileManifest.DependendsOn = null;
+                }
+
                 usageMap.Add(fileManifest);
 
                 scopeNamespaces.Clear();
@@ -234,8 +237,11 @@ namespace joopl.DependencyBuilder
 
             foreach (FileManifest manifest in usageMap)
             {
-                manifest.DependendsOn = GetDependencies(usageMap, manifest);
-               /// manifest.DependendsOn.Reverse();
+                if (manifest.DependendsOn != null)
+                {
+                    manifest.DependendsOn = GetDependencies(usageMap, manifest);
+                    manifest.DependendsOn.Reverse();
+                }
             }
 
             return usageMap;
@@ -263,7 +269,7 @@ namespace joopl.DependencyBuilder
                     }
                 }
             }
-            else if (parentManifest.DependendsOn.Count > 0)
+            else if (parentManifest.DependendsOn != null && parentManifest.DependendsOn.Count > 0)
             {
                 foreach (string fileName in parentManifest.DependendsOn)
                 {
