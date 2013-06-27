@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace joopl.DependencyBuilder
 {
@@ -32,6 +33,7 @@ namespace joopl.DependencyBuilder
             List<FileManifest> usageMap = new List<FileManifest>();
 
             JsParser jsParser = new JsParser();
+            IEnumerable<Type> allTypes = dependencyMap.SelectMany(ns => ns.Members);
 
             foreach (FileInfo file in files)
             {
@@ -151,56 +153,35 @@ namespace joopl.DependencyBuilder
                             fileManifest.Libraries.Add((string)thirdPartyDependencies.Single(some => (string)some["name"] == dependencyName)["uri"]);
 
                         }
-                        else if (tokens[tokenIndex].Value == "new")
+                        else
                         {
-                            string memberName = null;
-                            bool withNs = false;
+                            Type scopedMember = allTypes.SingleOrDefault
+                            (
+                                type => scopeNamespaces.Any(ns => ns == type.Namespace) && type.Name == tokens[tokenIndex].Value
+                            );
 
-                            if (tokens[tokenIndex + 2].Value != ".")
+                            if (scopedMember == null)
                             {
-                                tokenIndex++;
-                                continue;
-                            }
+                                int tokenSearchIndex = tokenIndex - 1;
+                                string[] endOfSearchTokens = new string[] { "{", "}", "=", ";", "(", ")" };
+                                StringBuilder fullNs = new StringBuilder();
+                                bool end = false;
 
-                            if (tokens[tokenIndex + 1].Value == "$global")
-                            {
-                                withNs = true;
+                                while (!end && tokenSearchIndex >= 0 && !endOfSearchTokens.Contains(tokens[tokenSearchIndex].Value))
+                                {
+                                    if (tokens[tokenSearchIndex].Value != "$global")
+                                    {
+                                        fullNs.Append(tokens[tokenSearchIndex].Value);
+                                    }
 
-                                memberName = string.Join
-                                            (
-                                                string.Empty,
-                                                tokens.Skip(tokenIndex + 3)
-                                                    .TakeWhile(someToken => someToken.Value != "(" && someToken.Value != "," && someToken.Value != ";")
-                                                    .Select(someToken => someToken.Value)
-                                                    .ToArray()
-                                            );
-                            }
-                            else
-                            {
-                                memberName = tokens[tokenIndex + 3].Value;
-                            }
+                                    tokenSearchIndex--;
+                                }
 
-                            IEnumerable<Type> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
+                                string foundNs = fullNs.ToString().Trim('.');
 
-                            Type scopedMember;
-
-                            if (withNs)
-                            {
-                                string[] memberPath = memberName.Split('.');
-                                string scopedNs = string.Join(".", memberPath.Take(memberPath.Length - 1).ToArray());
-
-                                memberName = memberPath.Last();
-
-                                scopedMember = mappedMembers.FirstOrDefault
+                                scopedMember = allTypes.SingleOrDefault
                                 (
-                                    member => member.Name == memberName && member.Parent.Name == scopedNs
-                                );
-                            }
-                            else
-                            {
-                                scopedMember = mappedMembers.FirstOrDefault
-                                (
-                                    member => member.Name == memberName && scopeNamespaces.Any(scopedNs => scopedNs == member.Namespace)
+                                    type => type.Namespace == foundNs && type.Name == tokens[tokenIndex].Value
                                 );
                             }
 
@@ -208,14 +189,13 @@ namespace joopl.DependencyBuilder
                             {
                                 if (
                                     (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
-                                    && !scopedMember.FileName.Contains(file.Name) 
+                                    && !scopedMember.FileName.Contains(file.Name)
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
                                     fileManifest.DependendsOn.Add(scopedMember.FileName);
                                 }
                             }
-
                         }
                     }
 
@@ -276,6 +256,7 @@ namespace joopl.DependencyBuilder
                     if ((fileName != parentManifest.FileName && fileName != "joopl.js" && fileName != "joopl.min.js") && !dependencies.Contains(fileName))
                     {
                         dependencies.Add(fileName);
+                        dependencies.Reverse();
                         GetDependencies(usageMap, usageMap.Single(some => some.FileName == fileName), dependencies);
                     }
                 }

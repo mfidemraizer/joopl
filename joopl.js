@@ -1,5 +1,5 @@
-ï»¿// (c) joopl
-// By MatÃ­as Fidemraizer (http://www.matiasfidemraizer.com) (http://www.linkedin.com/in/mfidemraizer/en)
+// (c) joopl
+// By Matías Fidemraizer (http://www.matiasfidemraizer.com) (http://www.linkedin.com/in/mfidemraizer/en)
 // -------------------------------------------------
 // http://joopl.codeplex.com
 //
@@ -262,14 +262,40 @@ var $manifest = null;
     Object.freeze(DependencyUtil);
 
     $manifest = {
-        _files: [],
+        file: function (executingFileName, scopeFunc) {
+            var scopeMetadata = {
+                executingFileName: executingFileName
+            };
 
-        get lastFile() {
-            return this._files[this._files.length - 1];
-        },
+            var enableHeadJS = $global.__DependencyUsageMap !== undefined && window.head != undefined && window.head.js != undefined;
 
-        file: function (fileName) {
-            this._files.push(fileName);
+            scopeFunc = scopeFunc.bind(scopeMetadata);
+
+            // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
+            // of DependencyUsageMap dependencies
+            if (enableHeadJS) {
+                var found = false;
+                var index = 0;
+
+                while (!found && index < $global.__DependencyUsageMap.length) {
+                    if ($global.__DependencyUsageMap[index].fileName == executingFileName) {
+                        found = true;
+                    } else {
+                        index++;
+                    }
+                }
+
+                if (found) {
+                    var args = $global.__DependencyUsageMap[index].dependsOn.splice(0);
+                    args.push(function () {
+                        scopeFunc();
+                    });
+
+                    head.js.apply(window, args);
+                }
+            } else {
+                scopeFunc();
+            }
         }
     };
 
@@ -457,30 +483,6 @@ var $manifest = null;
         @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
         */
         using: function (paths, scopedFunc, scopeIsNs) {
-            var enableHeadJS = !$global.__DependenciesAreLoaded && window.head != undefined && window.head.js != undefined;
-
-            // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
-            // of DependencyUsageMap dependencies
-            if (enableHeadJS && $global.__DependencyUsageMap) {
-                $global.__DependenciesAreLoaded = true;
-
-                var found = false;
-                var index = 0;
-                var currentFile = $manifest.lastFile;
-
-                while (!found && index < $global.__DependencyUsageMap.length) {
-                    if ($global.__DependencyUsageMap[index].fileName == currentFile) {
-                        found = true;
-                    } else {
-                        index++;
-                    }
-                }
-
-                if (found) {
-                    head.js.apply(Window, $global.__DependencyUsageMap[index].dependsOn);
-                }
-            }
-
             if (paths === undefined) {
                 debugger;
                 throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
@@ -500,16 +502,6 @@ var $manifest = null;
                 throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
             }
 
-            if (enableHeadJS) {
-                window.head.ready((function () {
-                    this.loadNamespaces(paths, scopedFunc, scopeIsNs);
-                }).bind(this));
-            } else {
-                this.loadNamespaces(paths, scopedFunc, scopeIsNs);
-            }
-        },
-
-        loadNamespaces: function (paths, scopedFunc, scopeIsNs) {
             var nsIdentifiers = null;
             var currentNs = $global;
             var nsIndex = 0;
@@ -567,7 +559,7 @@ var $manifest = null;
             } else {
                 return nsScope;
             }
-        }
+        },
     };
 
     Object.freeze($namespace);
@@ -678,7 +670,7 @@ var $manifest = null;
     A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).
 
     Any class constructor, property or method has a reserved variable called `$_` accessible through `this.$_` on which class fields can be declared and
-    manipulated. For example, `this.$_.myName = "Matias";` will declare a class field called `myName` with a default value `MatÃ­as`.
+    manipulated. For example, `this.$_.myName = "Matias";` will declare a class field called `myName` with a default value `Matías`.
 
         var A = $def({
             $constructor: function() {
