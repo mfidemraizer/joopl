@@ -1,7 +1,7 @@
-// (c) joopl
+// (c) joopl 
 // By Matías Fidemraizer (http://www.matiasfidemraizer.com) (http://www.linkedin.com/in/mfidemraizer/en)
 // -------------------------------------------------
-// http://joopl.codeplex.com
+// Project site on GitHub: http://mfidemraizer.github.io/joopl/
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
