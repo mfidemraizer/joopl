@@ -1320,6 +1320,15 @@ var $manifest = null;
         return classDef;
     };
 
+    Object.defineProperty(
+        Object.prototype,
+        "def", {
+            value: $def,
+            configurable: false,
+            enumerable: false
+        }
+    );
+
     Object.freeze($def);
 
     $namespace.register("joopl", function () {
