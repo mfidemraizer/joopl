@@ -1,0 +1,8 @@
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\joopl.dependencybuilder.exe.config
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\joopl.dependencybuilder.exe
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\joopl.dependencybuilder.pdb
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\Jurassic.dll
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\Newtonsoft.Json.dll
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\Newtonsoft.Json.xml
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Debug\joopl.dependencybuilder.exe
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Debug\joopl.dependencybuilder.pdb
