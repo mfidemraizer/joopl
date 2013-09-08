@@ -1220,6 +1220,10 @@ var $manifest = null;
     $def = function (args) {
         var classDef = null;
 
+        if (!args) {
+            args = this;
+        }
+
         if (args.$inmutable === true && Object.freeze) {
             classDef = function (args, callConstructor) {
                 TypeUtil.buildObject(this, args, callConstructor === undefined);

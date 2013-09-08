@@ -18,7 +18,7 @@
             "use strict";
 
             test("Define a new class with attributes. Check that the given attributes are present", function () {
-                var TestAttr = $def({
+                var TestAttr = {
                     $extends: $global.joopl.Attribute,
                     $constructor: function (args) {
                         this.$base.$ctor(args);
@@ -26,11 +26,11 @@
                     $members: {
                         get testData() { return "hello world"; }
                     }
-                });
+                }.def();
 
-                var A = $def({
+                var A = {
                     $attributes: [new TestAttr()]
-                });
+                }.def();
 
                 ok(A.type.hasAttribute(TestAttr), "The test class must contain the attribute");
                 ok(A.type.getAttribute(TestAttr).testData == "hello world");
