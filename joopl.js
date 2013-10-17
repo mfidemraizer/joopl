@@ -27,7 +27,7 @@ var $manifest = null;
 (function (undefined) {
     "use strict";
 
-    var version = "2.3.0";
+    var version = "2.3.1";
 
     // An object containing a set of core features used by jOOPL
     var TypeUtil = {
@@ -1656,6 +1656,38 @@ var $manifest = null;
                             reason: "Given value name could not be found as value of the given enumeration type"
                         });
                     }
+                },
+
+                /** 
+                @method parseNames
+                @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                @param valueNames {String} A comma-separated list of a mask of given enumeration type (i.e. "open, closed, working").
+                @example
+                    $namespace.using("joopl", function() {
+                        var State = $enumdef({
+                            open: 1,
+                            closed: 2
+                        });
+
+                        this.Enum.parseNames(State, "open, closed")
+                    });
+                */
+                parseNames: function (enumType, valueNames) {
+                    if (!(valueNames && typeof valueNames == "string")) {
+                        throw new scope.ArgumentException({
+                            argName: "valueName",
+                            reason: "Wrong value names"
+                        });
+                    }
+
+                    var valueNamesArr = valueNames.replace(" ", "").split(",");
+                    var value = 0;
+
+                    for (var nameIndex = 0; nameIndex < valueNamesArr.length; nameIndex++) {
+                        value += this.parseName(enumType, valueNamesArr[nameIndex])
+                    }
+
+                    return new EnumValue({ value: value });
                 }
             }
         }));
@@ -1823,7 +1855,6 @@ var $manifest = null;
 
                 var enumValue = new Number(enumDef[propertyName]);
                 enumValue.enum = new EnumValue({ value: enumValue });
-
 
                 Object.defineProperty(
                     enumerationType,

@@ -40,13 +40,19 @@
 
             test("Define an enumeration. Parse a name into a value of the defined enumeration.", function () {
                 var State = $enumdef({
-                    open: 0,
-                    closed: 1
+                    none: 0,
+                    open: 1,
+                    closed: 2,
+                    dead: 4
                 });
 
-                var value = $global.joopl.Enum.parseName(State, "closed");
+                var result = $global.joopl.Enum.parseName(State, "closed");
 
-                ok(value == State.closed, "Parsed value is one of the defined enumeration");
+                ok(result == State.closed, "Parsed value is one of the defined enumeration");
+
+                result = $global.joopl.Enum.parseNames(State, "open,closed");
+
+                ok(result.hasFlag(State.open) && result.hasFlag(State.closed));
             });
         })(undefined);
     </script>
