@@ -17,47 +17,74 @@
 
 // Keywords
 var $namespace = null; // Holds an object to manage namespaces
-var $def = null; // Declares a class
-var $interfacedef = null; // A shortcut to $interface.declare(...)
-var $implements = null; // Holds a function to check if an object implements an interface
 var $global = {}; // Represents the global scope.
-var $enumdef = null;
 var $manifest = null;
 
 (function (undefined) {
     "use strict";
 
-    var version = "2.3.1";
+    var version = "2.4.0";
+    var $enumdef = null;
+    var $def = null;
+
+    var Namespace = function (args) {
+        Object.defineProperty(
+            this,
+            "name", {
+                value: args.name,
+                writable: false,
+                configurable: false,
+                enumerable: true
+            }
+        );
+
+        Object.defineProperty(
+            this,
+            "declareClass", {
+                value: function (classDef) {
+                    Object.defineProperty(
+                        this,
+                        classDef.name, {
+                            value: $def(classDef),
+                            writable: false,
+                            configurable: false,
+                            enumerable: true
+                        }
+                    );
+                },
+                writable: false,
+                enumerable: true,
+                configurable: false
+            }
+        );
+
+        Object.defineProperty(
+            this,
+            "declareEnum", {
+                value: function (name, enumDef) {
+                    Object.defineProperty(
+                        this,
+                        name, {
+                            value: $enumdef(enumDef),
+                            writable: false,
+                            configurable: false,
+                            enumerable: true
+                        }
+                    );
+                },
+                writable: false,
+                enumerable: true,
+                configurable: false
+            }
+        );
+    };
+
+    Object.freeze(Namespace);
 
     // An object containing a set of core features used by jOOPL
     var TypeUtil = {
-        // Determines if some identifier is a jOOPL keyword.
-        isSystemReservedName: function (name) {
-            var reserved = false
-
-            switch (name.toLowerCase()) {
-                case "$ctor":
-                case "$bctor":
-                case "$global":
-                case "$def":
-                case "$interfacedef":
-                case "$new":
-                case "$namespace":
-                case "$extends":
-                case "$implements":
-                case "$_":
-                case "joopl":
-                case "typeKind":
-                case "$metadata":
-                    return true;
-
-                default:
-                    return false;
-            }
-        },
-
         //  Creates a property on the given class definition based on a provided property descriptor.
-        // @classDef: The class definition (it must be the constructor function!
+        // @classDef: The class definition (it must be the ctor function!
         // @name: The property name
         // @descriptor: An object representing the property descriptor
         // @context: An optional context object that will work as the "this" keyword binder for the getter and/or setter when defining the property.
@@ -80,7 +107,7 @@ var $manifest = null;
         },
 
         // Creates a property.
-        // @classDef: A class definition (it must be the class constructor function).
+        // @classDef: A class definition (it must be the class ctor function).
         // @name: The property name.
         // @getter: The getter parameterless function.
         // @setter: The setter function with a parameter representing the value to set.
@@ -149,26 +176,58 @@ var $manifest = null;
             eventManager.register(name);
         },
 
-        // Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the constructor of the whole class instance.
+        // Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the ctor of the whole class instance.
         // @instance: The class instance
-        // @args: The constructor arguments.
-        buildObject: function (instance, args, callConstructor) {
-            if (typeof instance.$base == "function") {
-                instance.$base = new instance.$base(args, false);
-                instance.$_ = instance.$base.$_;
+        // @args: The ctor arguments.
+        buildObject: function (instance, args, callctor) {
+            if (typeof instance.base == "function") {
+                Object.defineProperty(
+                    instance,
+                    "base",
+                    {
+                        value: new instance.base(args, false),
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    }
+                );
+
+                Object.defineProperty(
+                    instance,
+                    "_", {
+                        value: instance.base._,
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    }
+                );
             } else {
-                instance.$_ = {};
+
+                Object.defineProperty(
+                    instance,
+                    "_", {
+                        value: {},
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    }
+                );
             }
 
-            if (callConstructor) {
-                instance.$ctor.call(instance, args);
+            if (callctor) {
+                instance.ctor.call(instance, args);
             }
 
-            if (instance.$base != null && instance.$base != undefined && instance.$base.$base != null && instance.$base.$base != undefined) {
-                instance.$_.$base = instance.$base.$base;
-            }
 
-            instance.$_.$derived = instance;
+            Object.defineProperty(
+                instance._,
+                "derived", {
+                    value: instance,
+                    writable: false,
+                    configurable: true,
+                    enumerable: false
+                }
+            );
 
             return instance;
         },
@@ -179,9 +238,17 @@ var $manifest = null;
         buildInheritance: function (derived, parent) {
             if (parent != null) {
                 // Adding all class fields to the derived class...
-                for (var fieldName in parent.prototype.$_) {
-                    if (!derived.prototype.$_[fieldName]) {
-                        derived.prototype.$_[fieldName] = parent.prototype.$_[fieldName];
+                for (var fieldName in parent.prototype._) {
+                    if (!derived.prototype._[fieldName]) {
+                        Object.defineProperty(
+                            derived.prototype._,
+                            fieldName, {
+                                value: parent.prototype._[fieldName],
+                                writable: true,
+                                configurable: false,
+                                enumerable: true
+                            }
+                        );
                     }
                 }
 
@@ -195,12 +262,29 @@ var $manifest = null;
                     if (propertyDescriptor) {
                         // and the value of the descriptor is a function it means that it's inheriting a method.
                         if (typeof propertyDescriptor.value == "function") {
-                            derived.prototype[memberName] = parent.prototype[memberName];
+                            Object.defineProperty(
+                                derived.prototype,
+                                memberName, {
+                                    value: parent.prototype[memberName],
+                                    writable: false,
+                                    enumerable: true,
+                                    configurable: true
+                                }
+                            );
+                            // derived.prototype[memberName] = parent.prototype[memberName];
                         } else { // If not, it is a property accessor.
                             this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
                         }
                     } else if (typeof parent.prototype[memberName] == "function") { // It can also happen that it's a function defined in the $global.joopl.Object prototype...
-                        derived.prototype[memberName] = parent.prototype[memberName];
+                        Object.defineProperty(
+                            derived.prototype,
+                            memberName, {
+                                value: parent.prototype[memberName],
+                                writable: false,
+                                enumerable: true,
+                                configurable: false
+                            }
+                        );
                     }
                 }
             }
@@ -212,12 +296,6 @@ var $manifest = null;
         // @someRef: The object reference.
         hasValue: function (someRef) {
             return someRef !== undefined && someRef != null;
-        },
-
-        // Whether determines if some object reference holds a function and returns true/false.
-        // @someRef: The object reference.
-        isFunction: function (someRef) {
-            return typeof someRef === "function";
         }
     };
 
@@ -352,7 +430,7 @@ var $manifest = null;
             $namespace.register("joopl.samples");
 
             $global.joopl.samples.SomeClass = $def({ 
-                $members: {
+                members: {
                     someMethod: function() {}
                 }
             });
@@ -369,7 +447,7 @@ var $manifest = null;
                 // That's great because there is no need to access to the full namespace path
                 // to work on adding members to it!
                 this.ClassA = $def({
-                    $members: {
+                    members: {
                         someMethod: function() {
                             return "hello world";
                         }
@@ -393,17 +471,15 @@ var $manifest = null;
 
                 // The current namespace  is not registered (if evals true)
                 if (!parentNs[currentNs]) {
-                    parentNs[currentNs] = {};
-
-                    // Any namespace will hold an "isNamespace" property
-                    // in order to correctly identify if an object within
-                    // the namespaces is a namespace or a class!
                     Object.defineProperty(
-                        parentNs[currentNs], "isNamespace", {
-                            value: true,
+                        parentNs,
+                        currentNs, {
+                            value: new Namespace({ name: currentNs }),
+                            writable: false,
                             configurable: false,
                             enumerable: true
-                        });
+                        }
+                    );
                 }
 
                 parentNs = parentNs[currentNs];
@@ -454,7 +530,7 @@ var $manifest = null;
 
             $namespace.register("joopl.samples", function() {
                 this.ClassA = $def({
-                    $members: {
+                    members: {
                         someMethod: function() {
                         }
                     }
@@ -564,60 +640,12 @@ var $manifest = null;
 
     Object.freeze($namespace);
 
-    $implements = function (clazz, someInterface) {
-        for (var interfaceMember in someInterface.prototype) {
-            if (
-                    TypeUtil.isFunction(someInterface.prototype[interfaceMember])
-                    &&
-                    (
-                        !TypeUtil.isFunction(clazz.prototype[interfaceMember])
-                        || clazz.prototype[interfaceMember] === undefined
-                        || clazz.prototype[interfaceMember].length !== someInterface.prototype[interfaceMember].length
-                    )
-            ) {
-                return { success: false, memberName: interfaceMember };
-            }
-        }
-
-        return { success: true, memberName: null };
-    };
-
-    Object.freeze($implements);
-
-    $interfacedef = function (args) {
-        var interfaceDef = function () {
-        };
-
-        interfaceDef.prototype.joopl = version;
-
-        Object.defineProperty(interfaceDef.prototype, "typeKind", { value: MemberKind.Interface, enumerable: true });
-
-        if (typeof args.$extends != "Array") {
-            TypeUtil.buildInheritance(interfaceDef, args.$extends);
-        }
-        else {
-            for (var interfaceIndex = 0; interfaceIndex < args.$extends.length; interfaceIndex++) {
-                TypeUtil.buildInheritance(interfaceDef, args.$extends[interfaceIndex]);
-            }
-        }
-
-        if (args.$members) {
-            for (var memberName in args.$members) {
-                interfaceDef.prototype[memberName] = args.$members[memberName];
-            }
-        }
-
-        return interfaceDef;
-    };
-
-    Object.freeze($interfacedef);
-
     /**
     ## <a id="index"></a> Index
 
     * 1.0\. [Defining a class](#class-define)
         * 1.1\. [Fields](#class-fields)
-        * 1.2\. [Constructors](#class-constructors)
+        * 1.2\. [ctors](#class-ctors)
         * 1.3\. [Properties](#class-properties)
         * 1.4\. [Methods/Functions](#class-methods)
         * 1.5\. [Events](#class-events)
@@ -625,8 +653,8 @@ var $manifest = null;
     * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
         * 3.1\. [Class inheritance](#class-inheritance)
         * 3.2\. [Inheritance with polymorphism](#class-polymorphism)
-            * 3.2.1\. [The `this.$base` keyword](#class-base)
-            * 3.2.2\. [The derived class constructor calls the parent's class constructor](#class-baseconstructor)
+            * 3.2.1\. [The `this.base` keyword](#class-base)
+            * 3.2.2\. [The derived class ctor calls the parent's class ctor](#class-basector)
             * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
         * 3.3\. [The isTypeOf operator](#class-istypeof)
 
@@ -638,23 +666,23 @@ var $manifest = null;
     The `$def` operator is required in order to define classes. In fact, `$def` is a function and it accepts an object of arguments as
     input parameter. The essential parameters are:
 
-    - **$constructor** *(optional)*. The constructor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.
-    - **$members** *(optional)*. An object containing the methods and properties for the whole class.
+    - **ctor** *(optional)*. The ctor of the class is a method called first when an instance of some class is created. If no ctor is provided, jOOPL automatically creates a default parameterless ctor.
+    - **members** *(optional)*. An object containing the methods and properties for the whole class.
 
     A basic class may look like the next code listing:
 
         var A = $def({
-            // Constructor 
-            $constructor: function() {
-                this.$_.name = null;
+            // ctor 
+            ctor: function() {
+                this._.name = null;
             },
-            $members: {
+            members: {
                 get name() {
-                    return this.$_.name;
+                    return this._.name;
                 }
 
                 set name(value) {
-                    this.$_.name = value;
+                    this._.name = value;
                 }
 
                 sayYourName: function() {
@@ -667,54 +695,54 @@ var $manifest = null;
     <h4 id="class-fields">1.1 Class fields</h4> 
     ([Back to index](#index))
 
-    A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).
+    A class field is a variable declared in the class that can be accessed from any member (ctors, properties and methods).
 
-    Any class constructor, property or method has a reserved variable called `$_` accessible through `this.$_` on which class fields can be declared and
-    manipulated. For example, `this.$_.myName = "Matias";` will declare a class field called `myName` with a default value `Matías`.
+    Any class ctor, property or method has a reserved variable called `_` accessible through `this._` on which class fields can be declared and
+    manipulated. For example, `this._.myName = "Matias";` will declare a class field called `myName` with a default value `Matías`.
 
         var A = $def({
-            $constructor: function() {
+            ctor: function() {
                 // This is a class field:
-                this.$_.value = "A string for the class field";
+                this._.value = "A string for the class field";
             }
         });
 
-    <h4 id="class-constructors">1.2 Constructors</h4>
+    <h4 id="class-ctors">1.2 ctors</h4>
     ([Back to index](#index))
 
-    In classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing 
+    In classes, the ctor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing 
     the whole class.
 
-    For example, class constructors are the place to define class fields:
+    For example, class ctors are the place to define class fields:
 
         var A = $def({
-            // Constructor 
-            $constructor: function() {
-                this.$_.myName = "Matias";
+            // ctor 
+            ctor: function() {
+                this._.myName = "Matias";
             }
         });
 
-    In instance, the class constructor has access to the already declared methods and properties:
+    In instance, the class ctor has access to the already declared methods and properties:
 
         var A = $def({
-            // Constructor 
-            $constructor: function() {
-                this.$_.myName = "Matias";
+            // ctor 
+            ctor: function() {
+                this._.myName = "Matias";
 
-                // The "someMethod()" method can be called from the constructor!
+                // The "someMethod()" method can be called from the ctor!
                 this.initialize();
             }
 
-            $members :{
+            members :{
                 initialize: function() {
-                    alert("hello world called from the constructor!")
+                    alert("hello world called from the ctor!")
                 }
             }
         });
 
     ##### See also
 
-    - [Call parent class constructor](#class-baseconstructor)
+    - [Call parent class ctor](#class-basector)
 
     <h4 id="class-properties">1.3 Properties</h4>
     ([Back to index](#index))
@@ -804,19 +832,19 @@ var $manifest = null;
     jOOPL fully supports JavaScript 1.8.x properties like the described before:
 
         var A = $def({
-            $constructor: function() {
+            ctor: function() {
                 // Define a class field for later provide access to it through a property getter and setter
-                this.$_.name = null;
+                this._.name = null;
             },
-            $members: {
-                // Gets the value held by the this.$_.name class field:
+            members: {
+                // Gets the value held by the this._.name class field:
                 get name() {
-                    return this.$_.name;
+                    return this._.name;
                 },
 
-                // Sets a new value to the this.$_.name class field:
+                // Sets a new value to the this._.name class field:
                 set name(value) {
-                    this.$_.name = value;
+                    this._.name = value;
                 }
             }
         });
@@ -843,10 +871,10 @@ var $manifest = null;
     - build
     - ...
 
-    Class methods are defined as regular JavaScript functions and as part of the `$members` in a class definition:
+    Class methods are defined as regular JavaScript functions and as part of the `members` in a class definition:
 
         var A = $def({
-            $members: {
+            members: {
                 do: function() {
                     return "do what?";
                 }
@@ -877,17 +905,17 @@ var $manifest = null;
     if a class needs to implement an event to notify to others that it said "hello world", an event "saying" would be declared this way:
 
         var A = $def({
-            $members: {
-                $events: ["saying"]
+            members: {
+                events: ["saying"]
             }
         });
 
-    The above code declares an event "saying". Events are declared as an array of identifiers (names) as value of the `$events` special member. Once
+    The above code declares an event "saying". Events are declared as an array of identifiers (names) as value of the `events` special member. Once
     an event is declared, the next step is triggering/raising/firing it somewhere in the whole class:
         
         var A = $def({
-            $members: {
-                $events: ["saying"],
+            members: {
+                events: ["saying"],
 
                 helloWorld: function() {
                     // This is triggering the event. jOOPL has created an special function called
@@ -933,11 +961,11 @@ var $manifest = null;
 
     Once a class is defined using the `$def` keyword, an instance of the class must be created in order to use it. 
 
-    In jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard
+    In jOOPL and JavaScript, a class is a standard ctor function and instances can be created using also the standard
     `new` operator:
 
         var A = $def({
-            $members: {
+            members: {
                 someMethod: function() {
                     alert("hello world");
                 }
@@ -968,23 +996,23 @@ var $manifest = null;
 
     Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.
 
-    The `$def` keyword supports an additional and optional parameter called `$extends` which specifies that the declaring class extends another class.
+    The `$def` keyword supports an additional and optional parameter called `inherits` which specifies that the declaring class inherits another class.
 
     A class `A` may implement some methods and properties and a class `B` can inherit `A` and it will not need to implement them as all members from `A`
     are already available as members of `B`:
 
         // Defining a class A having a method "do()"
         var A = $def({
-            $members: {
+            members: {
                 do: function() {
                     // Do some stuff
                 }
             }
         });
 
-        // Class B extends A
+        // Class B inherits A
         var B = $def({
-            $extends: A
+            inherits: A
         });
 
         var instance = new B();
@@ -1010,7 +1038,7 @@ var $manifest = null;
     `SpecializedSalutation` that inherits `Salutation` class, the whole derived class can override the `sayHello` method and make it say **"Hello, world!"**:
 
         var Salutator = $def({
-            $members: {
+            members: {
                 sayHello: function() {
                     return "hello world"
                 }
@@ -1018,8 +1046,8 @@ var $manifest = null;
         });
 
         var SpecializedSalutator = $def({
-            $extends: Salutator,
-            $members: {
+            inherits: Salutator,
+            members: {
                 // Overrides the parent class sayHello implementation
                 sayHello: function() {
                     return "Hello, world!";
@@ -1034,19 +1062,19 @@ var $manifest = null;
         // which was returning "hello world"
         alert(text); 
 
-    <h4 id="class-base">3.2.1 The `this.$base` keyword</h4>
+    <h4 id="class-base">3.2.1 The `this.base` keyword</h4>
     ([Back to index](#index))
 
     Any method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
     overriden member.
 
-    The overriden members may or may not call the parent class member implementation using the `this.$base` keyword. 
+    The overriden members may or may not call the parent class member implementation using the `this.base` keyword. 
 
     For example, there is a class `Calculator` having a method `add`, and a specialized calculator called `UnsignedCalculator` which makes any addition an absolute result,
     the code would look like this:
 
         var Calculator = $def({
-            $members: {
+            members: {
                 add: function(num1, num2) {
                     // It simply adds num2 to num1
                     return num1 + num2;
@@ -1055,10 +1083,10 @@ var $manifest = null;
         });
 
         var UnsignedCalculator = $def({
-            $members: {
+            members: {
                 add: function(num1, num2) {
                     // This is calling the "add"'s parent class implementation
-                    var result = this.$base.add(num1, num2);
+                    var result = this.base.add(num1, num2);
 
                     // Now the result from calling the base implementation of this method
                     // is converted to an unsigned number
@@ -1067,65 +1095,65 @@ var $manifest = null;
             }
         });
 
-    <h4 id="class-baseconstructor">3.2.2 The derived class constructor calls the parent's class constructor</h4> 
+    <h4 id="class-basector">3.2.2 The derived class ctor calls the parent's class ctor</h4> 
     ([Back to index](#index))
 
-    Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
+    Even class ctors can call their parent class ctor. This is extremely useful if the parent class or another class in the same
     hierarchy requires some construction-time initialization:
 
         // The top-most parent class Person defines basic data
         // and provides getter and setter properties in order to
         // get or set the whole contained data.
         //
-        // The constructor receives as arguments the default data.
+        // The ctor receives as arguments the default data.
         var Person = $def({
-            $constructor: function(args) {
-                this.$_.name = args.name;
-                this.$_.secondName = args.secondName;
-                this.$_.age = args.age;
+            ctor: function(args) {
+                this._.name = args.name;
+                this._.secondName = args.secondName;
+                this._.age = args.age;
             },
-            $members: {
+            members: {
                 get name() {
-                    return this.$_.name;
+                    return this._.name;
                 },
                 set name(value) {
-                    this.$_.name = value;
+                    this._.name = value;
                 },
 
                 get secondName() {
-                    return this.$_.secondName;
+                    return this._.secondName;
                 },
                 set secondName(value) {
-                    this.$_.secondName = value;
+                    this._.secondName = value;
                 }
 
                 get age(){
-                    return this.$_.age;
+                    return this._.age;
                 },
                 set age(value) {
-                    this.$_.age = value;
+                    this._.age = value;
                 }
             }
         });
 
         // The Employee class inherits Person and adds
-        // more data. The Employee constructor both defines
-        // new class fields and calls the Person's constructor
-        // by invoking this.$base.$ctor(args), thus the base constructor
+        // more data. The Employee ctor both defines
+        // new class fields and calls the Person's ctor
+        // by invoking this.base.ctor(args), thus the base ctor
         // will receive the expected arguments.
         var Employee = $def({
-           $extends: Person,
-           $constructor: function(args) {
-                this.$base.$ctor(args);
+           inherits: Person,
+           ctor: function(args) {
+                this.base.ctor(args);
 
-                this.$_.companyName = args.companyName;
-                this.$_.salary = args.salary;
+                this._.companyName = args.companyName;
+                this._.salary = args.salary;
            } 
         });
 
-        // Now this is creating an instance of Employee. As the Employee constructor
-        // calls its base Person class' constructor, it will be correctly initialized 
-        // with the data passed as constructor arguments:
+        // Now this is creating an instance of Employee. As the Employee ctor
+        // calls its base Person class' ctor, it will be correctly initialized 
+        // with the data passed as ctor arguments:
         var instance = new Employee({
             name: "Matias",
             secondName: "Fidemraizer",
@@ -1150,12 +1178,12 @@ var $manifest = null;
     method and performs the whole area calculation. The `Square` class will now need to override the base `toString()` `Polygon`'s method in order to
     show the area.
 
-    In jOOPL, the most derived or specialized member is accessed through the special class field `this.$_.$derived`. 
+    In jOOPL, the most derived or specialized member is accessed through the special class field `this._.$derived`. 
 
     Here is a sample of the above explanation:
 
         var Polygon = $def({
-            $members: {
+            members: {
                 calcArea: function() {
                     // A generic polygon will not know how to calculate the area. The
                     // derived classes will do it!
@@ -1163,23 +1191,23 @@ var $manifest = null;
 
                 toString: function() {
                     // See how calcArea() from the most derived class is accessed:
-                    return "The area of this polygon is: '" + this.$_.$derived.calcArea(); + "'";
+                    return "The area of this polygon is: '" + this._.$derived.calcArea(); + "'";
                 }
             }
         });
 
         var Square = $def({
-            $constructor: function(args) {
-                this.$_.x = args.x;
-                this.$_.y = args.y;
+            ctor: function(args) {
+                this._.x = args.x;
+                this._.y = args.y;
             },
-            $extends: Polygon,
-            $members: {
+            inherits: Polygon,
+            members: {
                 get x() {
-                    return this.$_.x;
+                    return this._.x;
                 },
                 get y() {
-                    return this.$_.y;
+                    return this._.y;
                 },
 
                 calcArea: function() {
@@ -1225,47 +1253,85 @@ var $manifest = null;
         }
 
         if (args.$inmutable === true && Object.freeze) {
-            classDef = function (args, callConstructor) {
-                TypeUtil.buildObject(this, args, callConstructor === undefined);
+            classDef = function (args, callctor) {
+                TypeUtil.buildObject(this, args, callctor === undefined);
 
                 Object.freeze(this);
             };
 
-        } else if (args.$dynamic === false && Object.preventExtensions) {
-            classDef = function (args, callConstructor) {
-                TypeUtil.buildObject(this, args, callConstructor === undefined);
+        } else if (args.dynamic === false && Object.preventExtensions) {
+            classDef = function (args, callctor) {
+                TypeUtil.buildObject(this, args, callctor === undefined);
 
                 Object.preventExtensions(this);
             };
 
         } else {
-            classDef = function (args, callConstructor) {
-                TypeUtil.buildObject(this, args, callConstructor === undefined);
+            classDef = function (args, callctor) {
+                TypeUtil.buildObject(this, args, callctor === undefined);
             };
         }
 
-        if (args.$extends) {
-            TypeUtil.buildInheritance(classDef, args.$extends);
-            classDef.prototype.$base = args.$extends;
+        if (args.inherits) {
+            TypeUtil.buildInheritance(classDef, args.inherits);
+
+            Object.defineProperty(
+                classDef.prototype,
+                "base", {
+                    value: args.inherits,
+                    writable: false,
+                    configurable: false,
+                    enumerable: false
+                }
+            );
         } else {
             classDef.prototype = new $global.joopl.Object();
         }
 
-        if (args.$constructor) {
-            classDef.prototype.$ctor = args.$constructor;
+        var ctor = null;
+
+        if (args.ctor) {
+            ctor = args.ctor;
         } else {
-            classDef.prototype.$ctor = function () { };
+            ctor = function () { };
         }
 
-        if (args.$members) {
+        Object.defineProperty(
+            classDef.prototype,
+            "ctor", {
+                value: ctor,
+                writable: false,
+                configurable: false,
+                enumerable: false
+            }
+        );
+
+        if (args.members) {
             var propertyDescriptor = null;
 
-            for (var memberName in args.$members) {
-                propertyDescriptor = Object.getOwnPropertyDescriptor(args.$members, memberName);
+            for (var memberName in args.members) {
+                propertyDescriptor = Object.getOwnPropertyDescriptor(args.members, memberName);
 
                 if (typeof propertyDescriptor.value == "function") {
-                    classDef.prototype[memberName] = args.$members[memberName];
-                } else if (memberName == "$events" && typeof propertyDescriptor.value == "object") {
+                    if (classDef.prototype.hasOwnProperty(memberName)) {
+                        Object.defineProperty(
+                            classDef.prototype,
+                            memberName, {
+                                value: args.members[memberName]
+                            }
+                        );
+                    } else {
+                        Object.defineProperty(
+                            classDef.prototype,
+                            memberName, {
+                                value: args.members[memberName],
+                                writable: false,
+                                configurable: true,
+                                enumerable: true
+                            }
+                        );
+                    }
+                } else if (memberName == "events" && typeof propertyDescriptor.value == "object") {
                     for (var eventIndex in propertyDescriptor.value) {
                         TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
                     }
@@ -1276,62 +1342,46 @@ var $manifest = null;
             }
         }
 
-        if (args.$implements) {
-            var result = null;
-
-            if (typeof args.$implements != "Array") {
-                result = $interface.implementz(classDef, args.$implements);
-
-                if (!interfaceResultTuple.success) {
-                    throw new $global.joopl.NotImplementedException({ memberName: result.memberName });
-                }
-            }
-            else {
-                for (var someInterface in args.$implements) {
-                    result = $interface.implementz(classDef, args.$implements[someInterface]);
-
-                    if (!result.success) {
-                        throw new $global.joopl.NotImplementedException({ memberName: result.memberName });
-                    }
-                }
-            }
-        }
-
         if ($global.joopl.Type instanceof Function) { // Metadata block
             var hasMetadata = false;
 
-            if (Array.isArray(args.$attributes)) {
-                for (var attrIndex in args.$attributes) {
-                    if (!args.$attributes[attrIndex] && !(args.$attributes[attrIndex].isTypeOf instanceof Function) && !args.$attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
+            if (Array.isArray(args.attributes)) {
+                for (var attrIndex in args.attributes) {
+                    if (!args.attributes[attrIndex] && !(args.attributes[attrIndex].isTypeOf instanceof Function) && !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
                         debugger;
                         throw new $global.joopl.ArgumentException({
-                            argName: "$attributes",
+                            argName: "attributes",
                             reason: "A non-attribute type given as attribute"
                         });
                     }
                 }
 
-                hasMetadata = args.$attributes.length > 0;
+                hasMetadata = args.attributes.length > 0;
             }
 
             if (hasMetadata) {
-                Object.defineProperty(classDef, "type", { configurable: false, enumerable: true, value: new $global.joopl.Type({ attributes: args.$attributes }) });
+                Object.defineProperty(
+                    classDef,
+                    "type", {
+                        configurable: false,
+                        enumerable: true,
+                        writable: false,
+                        value: new $global.joopl.Type({ name: args.name, attributes: args.attributes })
+                    });
             } else {
-                Object.defineProperty(classDef, "type", { configurable: false, enumerable: true, value: new $global.joopl.Type({ attributes: [] }) });
+                Object.defineProperty(
+                    classDef,
+                    "type", {
+                        configurable: false,
+                        enumerable: true,
+                        writable: false,
+                        value: new $global.joopl.Type({ name: args.name, attributes: [] })
+                    });
             }
         }
 
         return classDef;
     };
-
-    Object.defineProperty(
-        Object.prototype,
-        "def", {
-            value: $def,
-            configurable: false,
-            enumerable: false
-        }
-    );
 
     Object.freeze($def);
 
@@ -1353,9 +1403,9 @@ var $manifest = null;
                 if (this instanceof type) {
                     isMember = true;
                 } else {
-                    while (!isMember && lastBase.$base) {
-                        if (!(isMember = lastBase.$base instanceof type)) {
-                            lastBase = lastBase.$base;
+                    while (!isMember && lastBase.base) {
+                        if (!(isMember = lastBase.base instanceof type)) {
+                            lastBase = lastBase.base;
                         }
                     }
                 }
@@ -1371,10 +1421,15 @@ var $manifest = null;
         @since 2.3.0
         */
         this.Type = $def({
-            $constructor: function (args) {
-                this.$_.attributes = args.attributes;
+            ctor: function (args) {
+                this._.attributes = args.attributes;
+                this._.name = args.name;
             },
-            $members: {
+            members: {
+                get name() {
+                    return this._.name;
+                },
+
                 /**
                 Gets all type's attributes.
 
@@ -1382,7 +1437,7 @@ var $manifest = null;
                 @type Attribute
                 */
                 get attributes() {
-                    return this.$_.attributes;
+                    return this._.attributes;
                 },
 
                 /**
@@ -1429,7 +1484,7 @@ var $manifest = null;
 
         <h2 id="attribute-definition">1.0 What is an attribute?</h2>
         
-        Usually class definitions contain a class constructor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
+        Usually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
 
         In some cases, classes require some descriptive information that may be useful by the consumers. 
 
@@ -1439,7 +1494,7 @@ var $manifest = null;
 
         An attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.
 
-        Finally, a class supports as many attributes as the code requires. The `$attributes` parameters for the `$def` operator is an array of attributes.
+        Finally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.
 
         <h2 id="attribute-howto">2.0 How to implement and consume an attribute</h2>
         
@@ -1447,7 +1502,7 @@ var $manifest = null;
 
             $namespace.register("myNamespace", function() {
                 this.RequiresAuthenticationAttribute = $def({
-                    $extends: $global.joopl.Attribute
+                    inherits: $global.joopl.Attribute
                 });
             });
 
@@ -1455,7 +1510,7 @@ var $manifest = null;
 
             $namespace.register("myNamespace", function() {
                 this.MyClass = $def({
-                    $attributes: [new RequiresAuthenticationAttribute()]
+                    attributes: [new RequiresAuthenticationAttribute()]
                 });
             });
 
@@ -1476,31 +1531,31 @@ var $manifest = null;
 
             $namespace.register("myNamespace", function() {
                 this.DefaultPropertyAttribute = $def({
-                    $extends: $global.joopl.Attribute,
-                    $constructor: function(args) {
-                        this.$_.defaultPropertyName = args.defaultPropertyName;
+                    inherits: $global.joopl.Attribute,
+                    ctor: function(args) {
+                        this._.defaultPropertyName = args.defaultPropertyName;
                     },
-                    $members: {
-                        get defaultPropertyName() { return this.$_.defaultPropertyName; }
+                    members: {
+                        get defaultPropertyName() { return this._.defaultPropertyName; }
                     }
                 });
 
                 this.Person = $def({
-                    $attributes: [new DefaultPropertyAttribute("nickname")],
-                    $constructor: function() {
-                        this.$_.firstName = null;
-                        this.$_.surname = null;
-                        this.$_.nickname = null;
+                    attributes: [new DefaultPropertyAttribute("nickname")],
+                    ctor: function() {
+                        this._.firstName = null;
+                        this._.surname = null;
+                        this._.nickname = null;
                     }
-                    $members: {
-                        get firstName() { return this.$_.firstName; },
-                        set firstName(value) { this.$_.firstName = value; },
+                    members: {
+                        get firstName() { return this._.firstName; },
+                        set firstName(value) { this._.firstName = value; },
 
-                        get surname() { return this.$_.surname; },
-                        set surname(value) { this.$_.surname = value; },
+                        get surname() { return this._.surname; },
+                        set surname(value) { this._.surname = value; },
 
-                        get nickname() { return this.$_.nickname; },
-                        set nickname(value) { this.$_.nickname = value; }
+                        get nickname() { return this._.nickname; },
+                        set nickname(value) { this._.nickname = value; }
                     }
                 });
             });
@@ -1544,7 +1599,7 @@ var $manifest = null;
         @since 2.3.0
         */
         this.Attribute = $def({
-            $members: {
+            members: {
             }
         });
 
@@ -1557,17 +1612,17 @@ var $manifest = null;
         @since 2.3.0
         */
         var EnumValue = $def({
-            $constructor: function (args) {
-                this.$_.value = args.value;
+            ctor: function (args) {
+                this._.value = args.value;
             },
-            $members: {
+            members: {
                 /** 
                 Gets the enumeration value.
 
                 @property value
                 @type Number
                 */
-                get value() { return this.$_.value; },
+                get value() { return this._.value; },
 
                 /** 
                 Performs a bitwise OR with the given enumeration value
@@ -1632,7 +1687,7 @@ var $manifest = null;
         @since 2.3.0
         */
         this.Enum = new ($def({
-            $members: {
+            members: {
                 /** 
                 @method parseName
                 @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
@@ -1737,7 +1792,7 @@ var $manifest = null;
         <h3 id="enum-howto">3. Enumerations how-to</h3>
         <a href="#index">Back to index</a>
 
-        Enumerations are created using the `$enumdef` operator. The `$enumdef` operator is a constructor accepting an object
+        Enumerations are created using the `$enumdef` operator. The `$enumdef` operator is a ctor accepting an object
         defining one or more constants:
 
             $namespace.register("mynamespace", function() {
@@ -1768,7 +1823,7 @@ var $manifest = null;
                 var scope = this;
 
                 this.MyClass = $def({
-                    $members: {
+                    members: {
                         // The @verb argument will only support verbs of the HttpVerb enumeration
                         doRequest: function(verb, url, args) {
                             switch(verb) {
@@ -1792,7 +1847,7 @@ var $manifest = null;
         <h4 id="enum-values">3.2 Enumeration values</h4>
         <a href="#index">Back to index</a>
 
-        An enumeration value is an instance of standard ECMA-Script `Number` object (the primitive `Number` type wrapper). jOOPL extends `Number` and
+        An enumeration value is an instance of standard ECMA-Script `Number` object (the primitive `Number` type wrapper). jOOPL inherits `Number` and
         any enumeration value has also a reserved property `enum` ( see {{#crossLink "EnumValue"}}{{/crossLink}} to explore available methods and properties of
         an enumeration value).
 
@@ -1862,7 +1917,8 @@ var $manifest = null;
                     {
                         value: enumValue,
                         configurable: false,
-                        enumerable: true
+                        enumerable: true,
+                        writable: false
                     }
                 );
 
@@ -1875,7 +1931,8 @@ var $manifest = null;
                 {
                     value: enumNames,
                     configurable: false,
-                    enumerable: false
+                    enumerable: false,
+                    writable: false
                 }
             );
 
@@ -1886,13 +1943,14 @@ var $manifest = null;
 
         Object.freeze($enumdef);
 
-        this.EventManager = $def({
-            $constructor: function (args) {
-                this.$_.source = args.source;
+        this.declareClass({
+            name: "EventManager",
+            ctor: function (args) {
+                this._.source = args.source;
             },
-            $members: {
+            members: {
                 get source() {
-                    return this.$_.source;
+                    return this._.source;
                 },
 
                 raiseHandlers: function (source, delegates, args, context) {
@@ -1946,20 +2004,21 @@ var $manifest = null;
             },
         });
 
-        this.Exception = $def({
-            $constructor: function (args) {
-                this.$_.message = args.message;
-                this.$_.innerException = args.innerException;
+        this.declareClass({
+            name: "Exception",
+            ctor: function (args) {
+                this._.message = args.message;
+                this._.innerException = args.innerException;
             },
 
-            $members:
+            members:
             {
                 get message() {
-                    return this.$_.message;
+                    return this._.message;
                 },
 
                 get innerException() {
-                    return this.$_.innerException;
+                    return this._.innerException;
                 },
 
                 toString: function () {
@@ -1968,10 +2027,11 @@ var $manifest = null;
             }
         });
 
-        this.ArgumentException = $def({
-            $extends: this.Exception,
-            $constructor: function (args) {
-                this.$_.argName = args.argName;
+        this.declareClass({
+            name: "ArgumentException",
+            inherits: this.Exception,
+            ctor: function (args) {
+                this._.argName = args.argName;
 
                 var message = "The given argument '" + args.argName + "' is not valid";
 
@@ -1979,21 +2039,22 @@ var $manifest = null;
                     message += " (Reason: " + args.reason + ")";
                 }
 
-                this.$base.$ctor({
+                this.base.ctor({
                     message: message
                 });
             },
-            $members: {
+            members: {
                 get argName() {
-                    return this.$_.argName;
+                    return this._.argName;
                 }
             }
         });
 
-        this.NotImplementedException = $def({
-            $extends: this.Exception,
-            $constructor: function (args) {
-                this.$base.$ctor(
+        this.declareClass({
+            name: "NotImplementedException",
+            inherits: this.Exception,
+            ctor: function (args) {
+                this.base.ctor(
                     {
                         message: !TypeUtil.hasValue(args) || !TypeUtil.hasValue(args.memberName) ?
                                         "A method or property is not implemented"
@@ -2002,11 +2063,11 @@ var $manifest = null;
                     }
                 );
 
-                this.$_.memberName = args.memberName;
+                this._.memberName = args.memberName;
             },
-            $members: {
+            members: {
                 get memberName() {
-                    return this.$_.memberName;
+                    return this._.memberName;
                 }
             }
         });
