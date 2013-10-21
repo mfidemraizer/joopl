@@ -41,10 +41,10 @@ var $manifest = null;
         Object.defineProperty(
             this,
             "declareClass", {
-                value: function (classDef) {
+                value: function (className, classDef) {
                     Object.defineProperty(
                         this,
-                        classDef.name, {
+                        className, {
                             value: $def(classDef),
                             writable: false,
                             configurable: false,
@@ -1248,8 +1248,11 @@ var $manifest = null;
     $def = function (args) {
         var classDef = null;
 
-        if (!args) {
+        if (!args && this) {
             args = this;
+        }
+        else if (!args && !this) {
+            args = {};
         }
 
         if (args.$inmutable === true && Object.freeze) {
@@ -1943,8 +1946,7 @@ var $manifest = null;
 
         Object.freeze($enumdef);
 
-        this.declareClass({
-            name: "EventManager",
+        this.declareClass("EventManager", {
             ctor: function (args) {
                 this._.source = args.source;
             },
@@ -2004,8 +2006,7 @@ var $manifest = null;
             },
         });
 
-        this.declareClass({
-            name: "Exception",
+        this.declareClass("Exception", {
             ctor: function (args) {
                 this._.message = args.message;
                 this._.innerException = args.innerException;
@@ -2027,8 +2028,7 @@ var $manifest = null;
             }
         });
 
-        this.declareClass({
-            name: "ArgumentException",
+        this.declareClass("ArgumentException", {
             inherits: this.Exception,
             ctor: function (args) {
                 this._.argName = args.argName;
@@ -2050,8 +2050,7 @@ var $manifest = null;
             }
         });
 
-        this.declareClass({
-            name: "NotImplementedException",
+        this.declareClass("NotImplementedException", {
             inherits: this.Exception,
             ctor: function (args) {
                 this.base.ctor(

@@ -19,8 +19,7 @@
 
             test("Define a new class with attributes. Check that the given attributes are present", function () {
                 $namespace.register("jooplattributetest", function () {
-                    this.declareClass({
-                        name: "TestAttr",
+                    this.declareClass("TestAttr", {
                         inherits: $global.joopl.Attribute,
                         ctor: function (args) {
                             this.base.ctor(args);
@@ -30,8 +29,7 @@
                         }
                     });
 
-                    this.declareClass({
-                        name: "A",
+                    this.declareClass("A", {
                         attributes: [new this.TestAttr()]
                     });
 
@@ -43,8 +41,7 @@
 
             test("Define a new class with attributes. Adding instances that are not Attribute must fail", function () {
                 $namespace.register("jooplattributetest2", function () {
-                    this.declareClass({
-                        name: "TestAttr",
+                    this.declareClass("TestAttr", {
                         ctor: function (args) {
                             this.base.ctor(args);
                         },
@@ -56,8 +53,7 @@
                     var that = this;
 
                     throws(function () {
-                        that.def({
-                            name: "A",
+                        that.def("A", {
                             attributes: [new that.TestAttr()]
                         });
                     });
@@ -66,8 +62,7 @@
 
             test("Define a new class, instantiate it and test if its methods and properties are working", function () {
                 $namespace.register("classtest1", function () {
-                    this.declareClass({
-                        name: "A",
+                    this.declareClass("A", {
                         ctor: function () {
                             this._.value = null;
                         },
@@ -103,8 +98,7 @@
 
             test("Define a new class, instantiate it and test if each instance do not share the class field reference", function () {
                 $namespace.register("classtest2", function () {
-                    this.declareClass({
-                        name: "A",
+                    this.declareClass("A", {
                         ctor: function () {
                             this._.value = [];
                         },
@@ -129,8 +123,7 @@
 
             test("Create an inheritance and check that all members are present in the inherited class and they are also working as expected", function () {
                 $namespace.register("joopltest", function () {
-                    this.declareClass({
-                        name: "A",
+                    this.declareClass("A", {
                         ctor: function () {
                             this._.value = null;
                             this._.value2 = "read-only value";
@@ -156,8 +149,7 @@
                     });
 
 
-                    this.declareClass({
-                        name: "B",
+                    this.declareClass("B", {
                         inherits: this.A,
                         ctor: function () {
                             var b = null;
@@ -170,8 +162,7 @@
                         }
                     });
 
-                    this.declareClass({
-                        name: "C",
+                    this.declareClass("C", {
                         ctor: function () {
                             this.base.ctor();
                         },
@@ -189,15 +180,13 @@
 
                 test("Create an inheritance  (B inherits A, C inherits B) and check that the most specialized class in the hierarchy is still of type of its base ones", function () {
                     $namespace.register("joopltest2", function () {
-                        this.declareClass({ name: "A" });
+                        this.declareClass("A");
 
-                        this.declareClass({
-                            name: "B",
+                        this.declareClass("B", {
                             inherits: this.A
                         });
 
-                        this.declareClass({
-                            name: "C",
+                        this.declareClass("C", {
                             inherits: this.B
                         });
 
@@ -211,8 +200,7 @@
 
                 test("Create an inheritance with polymorphism and check that the polymorphic method and property are worked as expected", function () {
                     $namespace.register("classpolymorphismtest", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             ctor: function () {
                                 this._.value = "hello world";
                             },
@@ -227,8 +215,7 @@
                             }
                         });
 
-                        this.declareClass({
-                            name: "B",
+                        this.declareClass("B", {
                             inherits: this.A,
                             ctor: function () {
                                 this.base.ctor();
@@ -244,8 +231,7 @@
                             }
                         });
 
-                        this.declareClass({
-                            name: "C",
+                        this.declareClass("C", {
                             inherits: this.B,
                             ctor: function () {
                                 this.base.ctor();
@@ -272,8 +258,7 @@
 
                 test("A base class has a polymorphic method. The base class will be inherited by others and the polymorphic method will be called in the base class like an abstract method", function () {
                     $namespace.register("classpolymorphismtest2", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             ctor: function () {
                             },
                             members: {
@@ -286,8 +271,7 @@
                             }
                         });
 
-                        this.declareClass({
-                            name: "B",
+                        this.declareClass("B", {
                             inherits: this.A,
                             ctor: function () {
                                 this.base.ctor();
@@ -296,8 +280,7 @@
                             }
                         });
 
-                        this.declareClass({
-                            name: "C",
+                        this.declareClass("C", {
                             inherits: this.B,
                             ctor: function () {
                                 this.base.ctor();
@@ -319,8 +302,7 @@
 
                 test("Create an inmutable object", function () {
                     $namespace.register("inmutableobjecttest", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             ctor: function () {
                                 this._.classField = "hello world";
                             },
@@ -381,8 +363,7 @@
 
                 test("Create an non-dynamic object", function () {
                     $namespace.register("nondynamicobjecttest", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             ctor: function () {
                             },
                             members: {
@@ -433,8 +414,7 @@
 
                 test("Try to create an event and trigger it", function () {
                     $namespace.register("eventtest", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             members: {
                                 events: ["click"]
                             }
@@ -458,8 +438,7 @@
 
                 test("Try to create an event, bind a handler, unbind it and trigger the event. No event handler should be bound.", function () {
                     $namespace.register("eventtest2", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             members: {
                                 events: ["click"]
                             }
@@ -489,8 +468,7 @@
 
                 test("Try to create an event, create the handler in some method and trigger it", function () {
                     $namespace.register("eventtest3", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             ctor: function () {
                                 this.bindEvents();
                             },
@@ -518,15 +496,13 @@
 
                 test("Try to create an event and trigger it with inheritance", function () {
                     $namespace.register("eventtest4", function () {
-                        this.declareClass({
-                            name: "A",
+                        this.declareClass("A", {
                             members: {
                                 events: ["click"]
                             }
                         });
 
-                        this.declareClass({
-                            name: "B",
+                        this.declareClass("B", {
                             inherits: this.A
                         });
                     });
