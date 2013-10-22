@@ -17,7 +17,7 @@
 
 // Keywords
 var $namespace = null; // Holds an object to manage namespaces
-var $global = {}; // Represents the global scope.
+var $global = null; // Represents the global scope.
 var $manifest = null;
 
 (function (undefined) {
@@ -40,12 +40,32 @@ var $manifest = null;
 
         Object.defineProperty(
             this,
+            "fullName", {
+                value: args.fullName,
+                writable: false,
+                configurable: false,
+                enumerable: true
+            }
+        );
+
+        Object.defineProperty(
+            this,
+            "parent", {
+                value: args.parent,
+                writable: false,
+                configurable: false,
+                enumerable: true
+            }
+        );
+
+        Object.defineProperty(
+            this,
             "declareClass", {
                 value: function (className, classDef) {
                     Object.defineProperty(
                         this,
                         className, {
-                            value: $def(classDef),
+                            value: $def(className, this, classDef),
                             writable: false,
                             configurable: false,
                             enumerable: true
@@ -80,6 +100,8 @@ var $manifest = null;
     };
 
     Object.freeze(Namespace);
+
+    $global = new Namespace({ name: "$global", fullName: "$global", parent: null });
 
     // An object containing a set of core features used by jOOPL
     var TypeUtil = {
@@ -256,35 +278,37 @@ var $manifest = null;
 
                 // Adding both methods and properties to the derived class...
                 for (var memberName in parent.prototype) {
-                    propertyDescriptor = Object.getOwnPropertyDescriptor(parent.prototype, memberName);
+                    if (!derived.prototype.hasOwnProperty(memberName) && !$global.joopl.Object.prototype.hasOwnProperty(memberName)) {
+                        propertyDescriptor = Object.getOwnPropertyDescriptor(parent.prototype, memberName);
 
-                    // If it has a property descriptor...
-                    if (propertyDescriptor) {
-                        // and the value of the descriptor is a function it means that it's inheriting a method.
-                        if (typeof propertyDescriptor.value == "function") {
+                        // If it has a property descriptor...
+                        if (propertyDescriptor) {
+                            // and the value of the descriptor is a function it means that it's inheriting a method.
+                            if (typeof propertyDescriptor.value == "function") {
+                                Object.defineProperty(
+                                    derived.prototype,
+                                    memberName, {
+                                        value: parent.prototype[memberName],
+                                        writable: false,
+                                        enumerable: true,
+                                        configurable: true
+                                    }
+                                );
+                                // derived.prototype[memberName] = parent.prototype[memberName];
+                            } else { // If not, it is a property accessor.
+                                this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
+                            }
+                        } else if (typeof parent.prototype[memberName] == "function") { // It can also happen that it's a function defined in the $global.joopl.Object prototype...
                             Object.defineProperty(
                                 derived.prototype,
                                 memberName, {
                                     value: parent.prototype[memberName],
                                     writable: false,
                                     enumerable: true,
-                                    configurable: true
+                                    configurable: false
                                 }
                             );
-                            // derived.prototype[memberName] = parent.prototype[memberName];
-                        } else { // If not, it is a property accessor.
-                            this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
                         }
-                    } else if (typeof parent.prototype[memberName] == "function") { // It can also happen that it's a function defined in the $global.joopl.Object prototype...
-                        Object.defineProperty(
-                            derived.prototype,
-                            memberName, {
-                                value: parent.prototype[memberName],
-                                writable: false,
-                                enumerable: true,
-                                configurable: false
-                            }
-                        );
                     }
                 }
             }
@@ -465,16 +489,18 @@ var $manifest = null;
             // The parent namespace of everything is the reserved $global object!
             var parentNs = $global;
             var currentNs = null;
+            var nsPath = [];
 
             for (var nsIndex = 0; nsIndex < nsIdentifiers.length; nsIndex++) {
                 currentNs = nsIdentifiers[nsIndex];
+                nsPath.push(currentNs);
 
                 // The current namespace  is not registered (if evals true)
                 if (!parentNs[currentNs]) {
                     Object.defineProperty(
                         parentNs,
                         currentNs, {
-                            value: new Namespace({ name: currentNs }),
+                            value: new Namespace({ parent: parentNs, name: currentNs, fullName: nsPath.join(".") }),
                             writable: false,
                             configurable: false,
                             enumerable: true
@@ -1245,7 +1271,7 @@ var $manifest = null;
     @class $def
     @static
     */
-    $def = function (args) {
+    $def = function (className, namespace, args) {
         var classDef = null;
 
         if (!args && this) {
@@ -1275,21 +1301,7 @@ var $manifest = null;
             };
         }
 
-        if (args.inherits) {
-            TypeUtil.buildInheritance(classDef, args.inherits);
-
-            Object.defineProperty(
-                classDef.prototype,
-                "base", {
-                    value: args.inherits,
-                    writable: false,
-                    configurable: false,
-                    enumerable: false
-                }
-            );
-        } else {
-            classDef.prototype = new $global.joopl.Object();
-        }
+        classDef.prototype = new $global.joopl.Object();
 
         var ctor = null;
 
@@ -1345,42 +1357,47 @@ var $manifest = null;
             }
         }
 
-        if ($global.joopl.Type instanceof Function) { // Metadata block
-            var hasMetadata = false;
 
-            if (Array.isArray(args.attributes)) {
-                for (var attrIndex in args.attributes) {
-                    if (!args.attributes[attrIndex] && !(args.attributes[attrIndex].isTypeOf instanceof Function) && !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
-                        debugger;
-                        throw new $global.joopl.ArgumentException({
-                            argName: "attributes",
-                            reason: "A non-attribute type given as attribute"
-                        });
-                    }
+        if (args.inherits) {
+            TypeUtil.buildInheritance(classDef, args.inherits);
+
+            Object.defineProperty(
+                classDef.prototype,
+                "base", {
+                    value: args.inherits,
+                    writable: false,
+                    configurable: false,
+                    enumerable: false
                 }
+            );
+        }
 
-                hasMetadata = args.attributes.length > 0;
+        var hasMetadata = false;
+
+        if (Array.isArray(args.attributes)) {
+            for (var attrIndex in args.attributes) {
+                if (!args.attributes[attrIndex] && !(args.attributes[attrIndex].isTypeOf instanceof Function) && !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
+                    debugger;
+                    throw new $global.joopl.ArgumentException({
+                        argName: "attributes",
+                        reason: "A non-attribute type given as attribute"
+                    });
+                }
             }
 
-            if (hasMetadata) {
-                Object.defineProperty(
-                    classDef,
-                    "type", {
-                        configurable: false,
-                        enumerable: true,
-                        writable: false,
-                        value: new $global.joopl.Type({ name: args.name, attributes: args.attributes })
-                    });
-            } else {
-                Object.defineProperty(
-                    classDef,
-                    "type", {
-                        configurable: false,
-                        enumerable: true,
-                        writable: false,
-                        value: new $global.joopl.Type({ name: args.name, attributes: [] })
-                    });
-            }
+            hasMetadata = true;
+        }
+
+        if (typeof $global.joopl.Type == "function") {
+            Object.defineProperty(
+                classDef,
+                "type", {
+                    configurable: false,
+                    enumerable: true,
+                    writable: false,
+                    value: new $global.joopl.Type({ name: className, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
+                }
+            );
         }
 
         return classDef;
@@ -1423,14 +1440,23 @@ var $manifest = null;
         @class Type
         @since 2.3.0
         */
-        this.Type = $def({
+        this.declareClass("Type", {
             ctor: function (args) {
                 this._.attributes = args.attributes;
                 this._.name = args.name;
+                this._.namespace = args.namespace;
             },
             members: {
                 get name() {
                     return this._.name;
+                },
+
+                get fullName() {
+                    return this.namespace.fullName + "." + this.name;
+                },
+
+                get namespace() {
+                    return this._.namespace;
                 },
 
                 /**
@@ -1601,7 +1627,7 @@ var $manifest = null;
         @class Attribute
         @since 2.3.0
         */
-        this.Attribute = $def({
+        this.declareClass("Attribute", {
             members: {
             }
         });
@@ -1614,7 +1640,7 @@ var $manifest = null;
         @class EnumValue
         @since 2.3.0
         */
-        var EnumValue = $def({
+        var EnumValue = $def("EnumValue", { name: "joopl" }, {
             ctor: function (args) {
                 this._.value = args.value;
             },
@@ -1689,7 +1715,7 @@ var $manifest = null;
         @static
         @since 2.3.0
         */
-        this.Enum = new ($def({
+        this.Enum = new ($def("Enum", this, {
             members: {
                 /** 
                 @method parseName
