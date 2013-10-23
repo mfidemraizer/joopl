@@ -1389,15 +1389,15 @@ var $manifest = null;
         }
 
         if (typeof $global.joopl.Type == "function") {
-            Object.defineProperty(
-                classDef,
-                "type", {
-                    configurable: false,
-                    enumerable: true,
-                    writable: false,
-                    value: new $global.joopl.Type({ name: className, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
-                }
-            );
+            var typeDescriptor = {
+                configurable: true,
+                enumerable: true,
+                writable: false,
+                value: new $global.joopl.Type({ name: className, baseType: args.inherits ? args.inherits.type : null, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
+            };
+
+            Object.defineProperty(classDef, "type", typeDescriptor);
+            Object.defineProperty(classDef.prototype, "type", typeDescriptor);
         }
 
         return classDef;
@@ -1413,7 +1413,6 @@ var $manifest = null;
 
         this.Object.prototype = {
             get joopl() { return version; },
-            get typeKind() { return "class"; },
 
             isTypeOf: function (type) {
                 var allBases = [];
@@ -1445,6 +1444,7 @@ var $manifest = null;
                 this._.attributes = args.attributes;
                 this._.name = args.name;
                 this._.namespace = args.namespace;
+                this._.baseType = args.baseType;
             },
             members: {
                 get name() {
@@ -1453,6 +1453,10 @@ var $manifest = null;
 
                 get fullName() {
                     return this.namespace.fullName + "." + this.name;
+                },
+
+                get baseType() {
+                    return this._.baseType;
                 },
 
                 get namespace() {
