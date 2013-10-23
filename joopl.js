@@ -1932,6 +1932,7 @@ var $manifest = null;
             enumerationType.prototype = new scope.Object();
 
             var enumNames = [];
+            var enumValue;
 
             for (var propertyName in enumDef) {
                 if (typeof enumDef[propertyName] != "number") {
@@ -1941,13 +1942,12 @@ var $manifest = null;
                     });
                 }
 
-                var enumValue = new Number(enumDef[propertyName]);
+                enumValue = new Number(enumDef[propertyName]);
                 enumValue.enum = new EnumValue({ value: enumValue });
 
                 Object.defineProperty(
                     enumerationType,
-                    propertyName,
-                    {
+                    propertyName, {
                         value: enumValue,
                         configurable: false,
                         enumerable: true,
@@ -1964,7 +1964,7 @@ var $manifest = null;
                 {
                     value: enumNames,
                     configurable: false,
-                    enumerable: false,
+                    enumerable: true,
                     writable: false
                 }
             );
@@ -1976,6 +1976,41 @@ var $manifest = null;
 
         Object.freeze($enumdef);
 
+        this.declareClass("Event", {
+            ctor: function (args) {
+                this._.handlers = [];
+                this._.source = args.source;
+            },
+            members: {
+                get handlers() { return this._.handlers; },
+                get source() { return this._.source; },
+
+                addEventListener: function (handler) {
+                    var index = this.handlers.indexOf(handler);
+
+                    if (index == -1) {
+                        this.handlers.push(handler);
+                    }
+                },
+
+                removeEventListener: function (handler) {
+                    var index = this.handlers.indexOf(handler);
+
+                    if (index >= 0) {
+                        this.handlers.splice(index, 1);
+                    }
+                },
+
+                raise: function (args) {
+                    if (this.handlers.length > 0) {
+                        for (var delegateIndex in this.handlers) {
+                            this.handlers[delegateIndex].bind(args ? (args.$this ? args.$this : this.source) : this.source)(args ? (args.args ? args.args : null) : null);
+                        }
+                    }
+                }
+            }
+        });
+
         this.declareClass("EventManager", {
             ctor: function (args) {
                 this._.source = args.source;
@@ -1983,27 +2018,6 @@ var $manifest = null;
             members: {
                 get source() {
                     return this._.source;
-                },
-
-                raiseHandlers: function (source, delegates, args, context) {
-                    var current = null;
-                    var currentType = null;
-
-                    for (var delegateIndex in delegates) {
-                        current = delegates[delegateIndex];
-                        currentType = typeof current;
-
-                        switch (currentType) {
-                            case "function":
-                                current.bind(context ? context : source)(args ? args : null);
-                                break;
-
-                            case "object":
-                                var func = current.handler;
-                                func.bind(current.context ? current.context : (context ? context : source))(args ? args.args : null);
-                                break;
-                        }
-                    }
                 },
 
                 register: function (eventName) {
@@ -2014,32 +2028,42 @@ var $manifest = null;
                     Object.defineProperty(
                         this,
                         eventName, {
-                            get: function () {
-                                return function (args, context) {
-                                    return that.raiseHandlers(this, delegates, args, context);
-                                }
-                            },
-                            set: function (delegateFunc) {
-                                var index = delegates.indexOf(delegateFunc);
-
-                                if (index == -1) {
-                                    delegates.push(delegateFunc);
-                                } else {
-                                    delegates.splice(index, 1);
-                                }
-                            },
+                            value: new $global.joopl.Event({ source: this.source }),
+                            writable: false,
                             configurable: false,
-                            enumerable: false
+                            enumerable: true
                         }
                     );
                 }
             },
         });
 
+        this.declareClass("Environment", {
+            members: {
+                events: ["exceptionThrown"],
+
+                notifyException: function (exception) {
+                    this.exceptionThrown.raise({ thrownException: exception });
+                }
+            }
+        });
+
+        Object.defineProperty(
+            this.Environment,
+            "current", {
+                value: new this.Environment(),
+                writable: false,
+                configurable: false,
+                enumerable: true
+            }
+        );
+
         this.declareClass("Exception", {
             ctor: function (args) {
                 this._.message = args.message;
                 this._.innerException = args.innerException;
+
+                $global.joopl.Environment.current.notifyException(this);
             },
 
             members:
@@ -2053,7 +2077,7 @@ var $manifest = null;
                 },
 
                 toString: function () {
-                    return this.message;
+                    return "An exception of type '" + this.type.fullName + "' has been thrown with message '" + this.message + "'";
                 }
             }
         });

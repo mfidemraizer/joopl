@@ -333,7 +333,7 @@
 
                     throws(function () {
                         "use strict";
-                        
+
                         $namespace.using("inmutableobjecttest", function () {
                             var instance = new this.A();
 
@@ -392,7 +392,7 @@
 
                     throws(function () {
                         "use strict";
-                        
+
                         $namespace.using("nondynamicobjecttest", function () {
                             var instance = new this.A();
                             delete instance.value;
@@ -421,18 +421,18 @@
                         });
                     });
 
-                    $namespace.using("eventtest", function() {
+                    $namespace.using("eventtest", function () {
                         var instance = new this.A();
                         var context = {};
 
                         // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
-                        instance.click = function (args) {
+                        instance.click.addEventListener(function (args) {
                             ok(this == context, "The context object is correctly bound to the 'this' keyword");
                             ok(args.text == "hello world", "The test event is triggered successfully");
-                        }
+                        });
 
                         // triggers the event!
-                        instance.click({ text: "hello world" }, context);
+                        instance.click.raise({ args: { text: "hello world" }, $this: context });
                     });
                 });
 
@@ -445,7 +445,7 @@
                         });
                     });
 
-                    $namespace.using("eventtest2", function() {
+                    $namespace.using("eventtest2", function () {
                         var instance = new this.A();
                         var context = {};
 
@@ -456,11 +456,11 @@
                         };
 
                         // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
-                        instance.click = handler;
-                        instance.click = handler;
+                        instance.click.addEventListener(handler);
+                        instance.click.removeEventListener(handler);
 
                         // triggers the event!
-                        instance.click({ args: { text: "hello world" }, context: context });
+                        instance.click.raise({ args: { text: "hello world" }, context: context });
 
                         ok(!handled, "The event handler was not triggered");
                     });
@@ -474,19 +474,19 @@
                             },
                             members: {
                                 bindEvents: function () {
-                                    this.saidHello = function (args) {
+                                    this.saidHello.addEventListener(function (args) {
                                         ok(args.text == "hello world!", "The event args are the expected ones");
-                                    }
+                                    });
                                 },
                                 sayHello: function () {
-                                    this.saidHello({ text: "hello world!" });
+                                    this.saidHello.raise({ args: { text: "hello world!" } });
                                 },
                                 events: ["saidHello"]
                             }
                         });
                     });
 
-                    $namespace.using("eventtest3", function() {
+                    $namespace.using("eventtest3", function () {
                         var instance = new this.A();
                         var context = {};
 
@@ -507,21 +507,18 @@
                         });
                     });
 
-                    $namespace.using("eventtest4", function() {
+                    $namespace.using("eventtest4", function () {
                         var instance = new this.B();
                         var context = {};
 
                         // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
-                        instance.click = {
-                            handler: function (args) {
-                                ok(this == context, "The context object is correctly bound to the 'this' keyword");
-                                ok(args.text == "hello world", "The test event is triggered successfully");
-                            },
-                            context: context
-                        };
+                        instance.click.addEventListener(function (args) {
+                            ok(this == context, "The context object is correctly bound to the 'this' keyword");
+                            ok(args.text == "hello world", "The test event is triggered successfully");
+                        });
 
                         // triggers the event!
-                        instance.click({ args: { text: "hello world" }, context: context });
+                        instance.click.raise({ args: { text: "hello world" }, $this: context });
                     });
                 });
             });
