@@ -85,7 +85,7 @@ var $manifest = null;
                     Object.defineProperty(
                         this,
                         name, {
-                            value: $enumdef(enumDef),
+                            value: $enumdef(name, this, enumDef),
                             writable: false,
                             configurable: false,
                             enumerable: true
@@ -1918,7 +1918,7 @@ var $manifest = null;
         @class $enumdef
         @since 2.3.0
         */
-        $enumdef = function (enumDef) {
+        $enumdef = function (name, namespace, enumDef) {
             if (typeof enumDef != "object") {
                 throw new scope.ArgumentException({
                     argName: "enumDef",
@@ -1966,6 +1966,16 @@ var $manifest = null;
                     configurable: false,
                     enumerable: true,
                     writable: false
+                }
+            );
+
+            Object.defineProperty(
+                enumerationType,
+                "type", {
+                    value: new $global.joopl.Type({ name: name, fullName: namespace.fullName + "." + name, namespace: namespace }),
+                    writable: false,
+                    configurable: false,
+                    enumerable: true
                 }
             );
 
