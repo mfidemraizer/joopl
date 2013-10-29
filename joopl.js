@@ -1626,7 +1626,7 @@ var $manifest = null;
         The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:
 
             $namespace.register("myNamespace", function() {
-                this.RequiresAuthenticationAttribute = $def({
+                this.declareClass("RequiresAuthenticationAttribute", {
                     inherits: $global.joopl.Attribute
                 });
             });
@@ -1634,15 +1634,15 @@ var $manifest = null;
         Later on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:
 
             $namespace.register("myNamespace", function() {
-                this.MyClass = $def({
-                    attributes: [new RequiresAuthenticationAttribute()]
+                this.declareClass("MyClass", {
+                    attributes: [new this.RequiresAuthenticationAttribute()]
                 });
             });
 
         Finally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:
 
-            $namespace.register("myNamespace", function() {
-                if(this.MyClass.type.hasAttribute(RequiresAuthenticationAttribute)) {
+            $namespace.using("myNamespace", function() {
+                if(this.MyClass.type.hasAttribute(this.RequiresAuthenticationAttribute)) {
                     // Do some stuff if MyClass has the whole attribute
                 } else {
                     throw Error("Sorry, this code will not execute classes if they do not require authentication...");
@@ -1655,7 +1655,7 @@ var $manifest = null;
         For example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?
 
             $namespace.register("myNamespace", function() {
-                this.DefaultPropertyAttribute = $def({
+                this.declareClass("DefaultPropertyAttribute", {
                     inherits: $global.joopl.Attribute,
                     ctor: function(args) {
                         this._.defaultPropertyName = args.defaultPropertyName;
@@ -1665,8 +1665,8 @@ var $manifest = null;
                     }
                 });
 
-                this.Person = $def({
-                    attributes: [new DefaultPropertyAttribute("nickname")],
+                this.declareClass("Person", {
+                    attributes: [new this.DefaultPropertyAttribute("nickname")],
                     ctor: function() {
                         this._.firstName = null;
                         this._.surname = null;
@@ -1688,20 +1688,20 @@ var $manifest = null;
         
         Now, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:
 
-            $namespace.register("myNamespace", function() {
+            $namespace.using("myNamespace", function() {
                 
                 // The first step is creating a regular instance of Person
-                var person = new Person();
+                var person = new this.Person();
                 person.firstName = "Matias";
                 person.surname = "Fidemraizer";
                 person.nickname = "mfidemraizer";
 
                 // Secondly, this is checking if the Person class has the whole attribute
-                if(Person.type.hasAttribute(DefaultPropertyAttribute)) {
+                if(Person.type.hasAttribute(this.DefaultPropertyAttribute)) {
                     // Yes, it has the attribute!
                     //
                     // Then, the attribute instance is retrieved from the type information
-                    var defaultProperty = Person.type.getAttribute(DefaultPropertyAttribute);
+                    var defaultProperty = Person.type.getAttribute(this.DefaultPropertyAttribute);
 
                     // Once the attribute is retrieved, the code can access the "defaultPropertyName" instance property
                     // of the DefaultPropertyAttribute
