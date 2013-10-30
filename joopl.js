@@ -838,6 +838,10 @@ var $manifest = null;
     Object.freeze($def);
 
     $namespace.register("joopl", function () {
+        /**
+            @namespace joopl
+        */
+
         var scope = this;
 
         /** 
@@ -856,6 +860,7 @@ var $manifest = null;
 
                 @property joopl Returns jOOPL library version
                 @type string
+                @readonly
             */
             get joopl() { return version; },
 
@@ -887,10 +892,11 @@ var $manifest = null;
         };
 
         /**
-        Represents type information and provides access to types' metadata.
+            Represents type information and provides access to types' metadata.
 
-        @class Type
-        @since 2.3.0
+            @class Type
+            @final
+            @since 2.3.0
         */
         this.declareClass("Type", {
             ctor: function (args) {
@@ -905,6 +911,7 @@ var $manifest = null;
 
                     @property name
                     @type string
+                    @readonly
                 */
                 get name() {
                     return this._.name;
@@ -915,6 +922,7 @@ var $manifest = null;
 
                     @property fullName
                     @type string
+                    @readonly
                 */
                 get fullName() {
                     return this.namespace.fullName + "." + this.name;
@@ -925,6 +933,7 @@ var $manifest = null;
 
                     @property baseType
                     @type joopl.Type
+                    @readonly
                 */
                 get baseType() {
                     return this._.baseType;
@@ -935,28 +944,31 @@ var $manifest = null;
 
                     @property baseType
                     @type joopl.Namespace
+                    @readonly
                 */
                 get namespace() {
                     return this._.namespace;
                 },
 
                 /**
-                Gets all type's attributes.
+                    Gets all type's attributes.
 
-                @property attributes
-                @type Attribute
+                    @property attributes
+                    @type joopl.Attribute
+                    @readonly
                 */
                 get attributes() {
                     return this._.attributes;
                 },
 
                 /**
-                Gets an attribute instance by giving its type, if the type has the whole attribute
+                    Gets an attribute instance by giving its type, if the type has the whole attribute
 
-                @method getAttribute
-                @return {Attribute} The attribute instance or `null` if the type does not have the given attribute type
-                @example 
-                    MyClass.type.getAttribute(MyAttribute);
+                    @method getAttribute
+                    @param {joopl.Attribute} An attribute class definition (rather than an instance!)
+                    @return {joopl.Attribute} The attribute instance or `null` if the type does not have the given attribute type
+                    @example 
+                        this.MyClass.type.getAttribute(this.MyAttribute);
                 */
                 getAttribute: function (attributeType) {
                     var found = false;
@@ -977,6 +989,14 @@ var $manifest = null;
                     }
                 },
 
+                /**
+                    Determines whether a given type has an attribute giving its class (rather than giving an instance!)
+
+                    @method hasAttribute
+                    @param {joopl.Attribute} The whole attribute class
+                    @example
+                        this.SomeClass.type.hasAttribute(SomeAttribute);
+                */
                 hasAttribute: function (attributeType) {
                     return this.getAttribute(attributeType) != null;
                 }
@@ -984,129 +1004,129 @@ var $manifest = null;
         });
 
         /**
-        Represents the base class for any attribute.
+            Represents the base class for any attribute.
 
-        <h2 id="index">Index</h2>
+            <h2 id="index">Index</h2>
 
-        * 1.0\. [What is an attribute?](#attribute-definition)
-        * 2.0\. [How to implement and consume an attribute](#attribute-howto)
-            * 2.1\. [Attributes with parameters](#attribute-params)
+            * 1.0\. [What is an attribute?](#attribute-definition)
+            * 2.0\. [How to implement and consume an attribute](#attribute-howto)
+                * 2.1\. [Attributes with parameters](#attribute-params)
 
-        <h2 id="attribute-definition">1.0 What is an attribute?</h2>
-        
-        Usually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
+            <h2 id="attribute-definition">1.0 What is an attribute?</h2>
+            
+            Usually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
 
-        In some cases, classes require some descriptive information that may be useful by the consumers. 
+            In some cases, classes require some descriptive information that may be useful by the consumers. 
 
-        For example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. 
+            For example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. 
 
-        How can an arbitrary class tell the environment "*I will not work if the authenticated user is not an administrator*"? **The answer is *attributes**.*
+            How can an arbitrary class tell the environment "*I will not work if the authenticated user is not an administrator*"? **The answer is *attributes**.*
 
-        An attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.
+            An attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.
 
-        Finally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.
+            Finally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.
 
-        <h2 id="attribute-howto">2.0 How to implement and consume an attribute</h2>
-        
-        The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:
+            <h2 id="attribute-howto">2.0 How to implement and consume an attribute</h2>
+            
+            The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:
 
-            $namespace.register("myNamespace", function() {
-                this.declareClass("RequiresAuthenticationAttribute", {
-                    inherits: $global.joopl.Attribute
+                $namespace.register("myNamespace", function() {
+                    this.declareClass("RequiresAuthenticationAttribute", {
+                        inherits: $global.joopl.Attribute
+                    });
                 });
-            });
 
-        Later on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:
+            Later on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:
 
-            $namespace.register("myNamespace", function() {
-                this.declareClass("MyClass", {
-                    attributes: [new this.RequiresAuthenticationAttribute()]
+                $namespace.register("myNamespace", function() {
+                    this.declareClass("MyClass", {
+                        attributes: [new this.RequiresAuthenticationAttribute()]
+                    });
                 });
-            });
 
-        Finally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:
+            Finally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:
 
-            $namespace.using("myNamespace", function() {
-                if(this.MyClass.type.hasAttribute(this.RequiresAuthenticationAttribute)) {
-                    // Do some stuff if MyClass has the whole attribute
-                } else {
-                    throw Error("Sorry, this code will not execute classes if they do not require authentication...");
-                }
-            });
-
-        <h3 id="attribute-params">2.1 Attributes with parameters</h3>
-        Sometimes using an attribute *as is* is not enough, because the attribute itself should contain data. 
-
-        For example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?
-
-            $namespace.register("myNamespace", function() {
-                this.declareClass("DefaultPropertyAttribute", {
-                    inherits: $global.joopl.Attribute,
-                    ctor: function(args) {
-                        this._.defaultPropertyName = args.defaultPropertyName;
-                    },
-                    members: {
-                        get defaultPropertyName() { return this._.defaultPropertyName; }
+                $namespace.using("myNamespace", function() {
+                    if(this.MyClass.type.hasAttribute(this.RequiresAuthenticationAttribute)) {
+                        // Do some stuff if MyClass has the whole attribute
+                    } else {
+                        throw Error("Sorry, this code will not execute classes if they do not require authentication...");
                     }
                 });
 
-                this.declareClass("Person", {
-                    attributes: [new this.DefaultPropertyAttribute("nickname")],
-                    ctor: function() {
-                        this._.firstName = null;
-                        this._.surname = null;
-                        this._.nickname = null;
-                    }
-                    members: {
-                        get firstName() { return this._.firstName; },
-                        set firstName(value) { this._.firstName = value; },
+            <h3 id="attribute-params">2.1 Attributes with parameters</h3>
+            Sometimes using an attribute *as is* is not enough, because the attribute itself should contain data. 
 
-                        get surname() { return this._.surname; },
-                        set surname(value) { this._.surname = value; },
+            For example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?
 
-                        get nickname() { return this._.nickname; },
-                        set nickname(value) { this._.nickname = value; }
-                    }
+                $namespace.register("myNamespace", function() {
+                    this.declareClass("DefaultPropertyAttribute", {
+                        inherits: $global.joopl.Attribute,
+                        ctor: function(args) {
+                            this._.defaultPropertyName = args.defaultPropertyName;
+                        },
+                        members: {
+                            get defaultPropertyName() { return this._.defaultPropertyName; }
+                        }
+                    });
+
+                    this.declareClass("Person", {
+                        attributes: [new this.DefaultPropertyAttribute("nickname")],
+                        ctor: function() {
+                            this._.firstName = null;
+                            this._.surname = null;
+                            this._.nickname = null;
+                        }
+                        members: {
+                            get firstName() { return this._.firstName; },
+                            set firstName(value) { this._.firstName = value; },
+
+                            get surname() { return this._.surname; },
+                            set surname(value) { this._.surname = value; },
+
+                            get nickname() { return this._.nickname; },
+                            set nickname(value) { this._.nickname = value; }
+                        }
+                    });
                 });
-            });
 
-        
-        Now, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:
+            
+            Now, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:
 
-            $namespace.using("myNamespace", function() {
-                
-                // The first step is creating a regular instance of Person
-                var person = new this.Person();
-                person.firstName = "Matias";
-                person.surname = "Fidemraizer";
-                person.nickname = "mfidemraizer";
-
-                // Secondly, this is checking if the Person class has the whole attribute
-                if(Person.type.hasAttribute(this.DefaultPropertyAttribute)) {
-                    // Yes, it has the attribute!
-                    //
-                    // Then, the attribute instance is retrieved from the type information
-                    var defaultProperty = Person.type.getAttribute(this.DefaultPropertyAttribute);
-
-                    // Once the attribute is retrieved, the code can access the "defaultPropertyName" instance property
-                    // of the DefaultPropertyAttribute
-                    var defaultPropertyName = defaultProperty.defaultPropertyName;
+                $namespace.using("myNamespace", function() {
                     
-                    // Since any object is also an associative array (this is plain JavaScript!), 
-                    // the default property can be retrieved by using the "defaultPropertyName" variable
-                    // as key of the array
-                    var defaultPropertyValue = person[defaultPropertyName];
+                    // The first step is creating a regular instance of Person
+                    var person = new this.Person();
+                    person.firstName = "Matias";
+                    person.surname = "Fidemraizer";
+                    person.nickname = "mfidemraizer";
 
-                    // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, 
-                    // it will be "mfidemraizer", because the Person class has the DefaultPropertyAttribute set to "nickname"!
-                    var p = document.createElement("p");
-                    p.appendChild(document.createTextNode(defaultPropertyValue));
-                    document.body.appendChild(p);
-                }
-            });
+                    // Secondly, this is checking if the Person class has the whole attribute
+                    if(Person.type.hasAttribute(this.DefaultPropertyAttribute)) {
+                        // Yes, it has the attribute!
+                        //
+                        // Then, the attribute instance is retrieved from the type information
+                        var defaultProperty = Person.type.getAttribute(this.DefaultPropertyAttribute);
+
+                        // Once the attribute is retrieved, the code can access the "defaultPropertyName" instance property
+                        // of the DefaultPropertyAttribute
+                        var defaultPropertyName = defaultProperty.defaultPropertyName;
+                        
+                        // Since any object is also an associative array (this is plain JavaScript!), 
+                        // the default property can be retrieved by using the "defaultPropertyName" variable
+                        // as key of the array
+                        var defaultPropertyValue = person[defaultPropertyName];
+
+                        // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, 
+                        // it will be "mfidemraizer", because the Person class has the DefaultPropertyAttribute set to "nickname"!
+                        var p = document.createElement("p");
+                        p.appendChild(document.createTextNode(defaultPropertyValue));
+                        document.body.appendChild(p);
+                    }
+                });
         
-        @class Attribute
-        @since 2.3.0
+            @class Attribute
+            @since 2.3.0
         */
         this.declareClass("Attribute", {
             members: {
@@ -1114,12 +1134,13 @@ var $manifest = null;
         });
 
         /**
-        Represents an enumeration value and provides access to common operations for the whole enumeration value.
+            Represents an enumeration value and provides access to common operations for the whole enumeration value.
 
-        See {{#crossLink "$enumdef"}}{{/crossLink}} to learn more about enumerations.
+            See {{#crossLink "$enumdef"}}{{/crossLink}} to learn more about enumerations.
 
-        @class EnumValue
-        @since 2.3.0
+            @class EnumValue
+            @final
+            @since 2.3.0
         */
         var EnumValue = $def("EnumValue", { name: "joopl" }, {
             ctor: function (args) {
@@ -1127,20 +1148,21 @@ var $manifest = null;
             },
             members: {
                 /** 
-                Gets the enumeration value.
+                    Gets the enumeration value.
 
-                @property value
-                @type Number
+                    @property value
+                    @type Number
                 */
                 get value() { return this._.value; },
 
                 /** 
-                Performs a bitwise OR with the given enumeration value
+                    Performs a bitwise OR with the given enumeration value
 
-                @method or
-                @param enumValue {Number} An enumeration value
-                @return {Number} The flag of two or more enumeration values
-                @example var flag = State.open.enum.or(State.closed); // This is State.open | State.closed
+                    @method or
+                    @param enumValue {Number} An enumeration value
+                    @return {Number} The flag of two or more enumeration values
+                    @example 
+                        var flag = State.open.enum.or(State.closed); // This is State.open | State.closed
                 */
                 or: function (enumValue) {
                     var value = this.value | enumValue;
@@ -1154,12 +1176,12 @@ var $manifest = null;
                 },
 
                 /** 
-                Performs a bitwise AND with the given enumeration value
+                    Performs a bitwise AND with the given enumeration value
 
-                @method and
-                @param enumValue {Number} An enumeration value
-                @return {Number} The flag of two or more enumeration values
-                @example var flag = State.open.enum.and(State.closed); // This is State.open & State.closed
+                    @method and
+                    @param enumValue {Number} An enumeration value
+                    @return {Number} The flag of two or more enumeration values
+                    @example var flag = State.open.enum.and(State.closed); // This is State.open & State.closed
                 */
                 and: function (enumValue) {
                     var value = this.value & enumValue;
@@ -1173,15 +1195,14 @@ var $manifest = null;
                 },
 
                 /** 
-                Determines if some enumeration value contains other enumeration value.
+                    Determines if some enumeration value contains other enumeration value.
 
-                @method hasFlag
-                @param enumValue {Number} An enumeration value
-                @return {Boolean} A boolean specifying if the given enumeration value was found in the flag.
-                @example 
-                    var flag = State.open.enum.or(State.closed);
-                    var hasOpen = flag.enum.hasFlag(State.open);
-
+                    @method hasFlag
+                    @param enumValue {Number} An enumeration value
+                    @return {Boolean} A boolean specifying if the given enumeration value was found in the flag.
+                    @example 
+                        var flag = State.open.enum.or(State.closed);
+                        var hasOpen = flag.enum.hasFlag(State.open);
                 */
                 hasFlag: function (enumValue) {
                     return (this.value & enumValue) === Number(enumValue);
@@ -1190,27 +1211,30 @@ var $manifest = null;
         });
 
         /**
-        Represents an utility class to work with enumerations.
+            Represents an utility class to work with enumerations.
 
-        @class Enum
-        @static
-        @since 2.3.0
+            @class Enum
+            @static
+            @since 2.3.0
         */
         this.Enum = new ($def("Enum", this, {
             members: {
                 /** 
-                @method parseName
-                @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
-                @param valueName {String} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
-                @example
-                    $namespace.using("joopl", function() {
-                        var State = $enumdef({
-                            open: 0,
-                            closed: 1
-                        });
+                    Parses a text into a given enumeration value
 
-                        this.Enum.parseName(State, "open")
-                    });
+                    @method parseName
+                    @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                    @param valueName {string} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
+                    @static
+                    @example
+                        $namespace.using("joopl", function() {
+                            var State = $enumdef({
+                                open: 0,
+                                closed: 1
+                            });
+
+                            this.Enum.parseName(State, "open")
+                        });
                 */
                 parseName: function (enumType, valueName) {
                     if (enumType.valueNames.indexOf(valueName) > -1) {
@@ -1224,18 +1248,21 @@ var $manifest = null;
                 },
 
                 /** 
-                @method parseNames
-                @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
-                @param valueNames {String} A comma-separated list of a mask of given enumeration type (i.e. "open, closed, working").
-                @example
-                    $namespace.using("joopl", function() {
-                        var State = $enumdef({
-                            open: 1,
-                            closed: 2
-                        });
+                    Parses a comma-separated list of text values as a mask of given enumeration
 
-                        this.Enum.parseNames(State, "open, closed")
-                    });
+                    @method parseNames
+                    @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                    @param valueNames {String} A comma-separated list of a mask of given enumeration type (i.e. "open, closed, working").
+                    @static
+                    @example
+                        $namespace.using("joopl", function() {
+                            var State = $enumdef({
+                                open: 1,
+                                closed: 2
+                            });
+
+                            this.Enum.parseNames(State, "open, closed")
+                        });
                 */
                 parseNames: function (enumType, valueNames) {
                     if (!(valueNames && typeof valueNames == "string")) {
@@ -1387,16 +1414,52 @@ var $manifest = null;
             },
         });
 
+        /**
+            Represents a set of environmental values and operations
+
+            @class Environment
+            @final
+        */
         this.declareClass("Environment", {
             members: {
+                /**
+                    Occurs when any exception of any type is thrown within current application
+
+                    @event exceptionThrown
+                    @param {joopl.Exception} thrownException The exception that has been thrown
+                    @example
+                        // Listening exceptions...
+                        $global.joopl.Environment.current.exceptionThrown.addEventListener(function(e) {
+                            var exception = e.thrownException;
+                        });
+
+                        // Raising the event...
+                        $global.joopl.Environment.current.notifyException(someException);
+                */
                 events: ["exceptionThrown"],
 
+                /**
+                    Notifies a given exception to all subscribers
+
+                    @method notifyException
+                    @param {joopl.Exception} exception The exception to be notified
+                    @example 
+                        $global.joopl.Environment.current.notifyException(someException);
+                */
                 notifyException: function (exception) {
-                    this.exceptionThrown.raise({ thrownException: exception });
+                    this.exceptionThrown.raise({ args: { thrownException: exception } });
                 }
             }
         });
 
+        /**
+            Gets current Environment instance
+
+            @property current
+            @type Environment
+            @readonly
+            @static
+        */
         Object.defineProperty(
             this.Environment,
             "current", {
@@ -1407,7 +1470,21 @@ var $manifest = null;
             }
         );
 
+        /**
+            Represents the base class for any exception 
+
+            @class Exception
+        */
         this.declareClass("Exception", {
+
+            /**
+                @class Exception
+                @constructor
+                @param {string} message A human-readable reason text for the whole exception
+                @param {Exception} innerException An inner exception that is more specific to occured error
+                @example 
+                    throw new Error($global.joopl.Exception({ message: "Some", innerException: otherException }));
+            */
             ctor: function (args) {
                 this._.message = args.message;
                 this._.innerException = args.innerException;
@@ -1417,10 +1494,24 @@ var $manifest = null;
 
             members:
             {
+                /**
+                    Gets the human-readable reason text for this exception
+
+                    @property message
+                    @type string
+                    @readonly
+                */
                 get message() {
                     return this._.message;
                 },
 
+                /**
+                    Gets an inner exception (optional) which provides for information about the sorrounding one
+
+                    @property innerException
+                    @type Exception
+                    @readonly
+                */
                 get innerException() {
                     return this._.innerException;
                 },
@@ -1431,6 +1522,7 @@ var $manifest = null;
             }
         });
 
+        
         this.declareClass("ArgumentException", {
             inherits: this.Exception,
             ctor: function (args) {
