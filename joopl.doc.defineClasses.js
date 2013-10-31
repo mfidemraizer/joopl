@@ -7,6 +7,7 @@
         * 1.3\. [Properties](#class-properties)
         * 1.4\. [Methods/Functions](#class-methods)
         * 1.5\. [Events](#class-events)
+        * 1.6\. [Type property on classes and instances: type metadata](#type-metadata)
     * 2.0\. [Creating instances of classes - the `new` operator](#class-instances)
     * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
         * 3.1\. [Class inheritance](#class-inheritance)
@@ -333,7 +334,29 @@
             // Setting the same handler again removes it from the event.
             instance.saying.removeEventListener(handler);
         });
-    
+
+
+    <h4 id="type-metadata">1.6 Type property on classes and instances: type metadata</h4> 
+    ([Back to index](#index))
+
+    Since 2.4 version of jOOPL, any class and instance has a built-in property called `type`. This property gives access to both class or instance
+    type metadata like its namespace path, name, name with namespace path, ...
+
+    For example, declaring a class like follows:
+
+        $namespace.register("joopl.sample", function() {
+            this.declareClass("A");
+            
+            // Getting class name from type property of A class
+            var className = this.A.type.name;
+
+            // Gettings class name from type property of A instance
+            var instance = new this.A();
+            className = instance.type.name;
+        });
+
+    Further details can be found on <a href="joopl.Type.html" target="_self">`Type` class documentation</a>.
+
     <h3 id="class-instances">2. Creating instances of classes</h3>
     ([Back to index](#index))
 
