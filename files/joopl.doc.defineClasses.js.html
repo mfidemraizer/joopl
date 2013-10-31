@@ -39,9 +39,9 @@
                 <div id="api-list">
     <h2 class="off-left">> Object-oriented programming</h2>
     <ol id="oop-hints">
-        <li><a href="../classes/$namespace.html#method_register" target="_self">Registering namespaces how-to</a></li>
-        <li><a href="../classes/$namespace.html#method_using" target="_self">Importing namespaces</a></li>
-        <li><a href="../classes/$namespace.html#namespace-global" target="_self">$global namespace</a></li>
+        <li><a href="../classes/joopl.$namespace.html#method_register" target="_self">Registering namespaces how-to</a></li>
+        <li><a href="../classes/joopl.$namespace.html#method_using" target="_self">Importing namespaces</a></li>
+        <li><a href="../classes/joopl.$namespace.html#namespace-global" target="_self">$global namespace</a></li>
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-define" target="_self">Define a class how-to</a></li>
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-constructors" target="_self">Class constructors</a></li>
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-properties" target="_self">Class properties</a></li>
@@ -50,6 +50,7 @@
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-instances" target="_self">Creating class instances how-to</a></li>
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-inheritance" target="_self">Class inheritance how-to</a></li>
         <li><a href="../classes/Define%20classes%20with%20jOOPL.html#class-polymorphism" target="_self">Class polymorphism how-to</a></li>
+        <li><a href="../classes/Define%20classes%20with%20jOOPL.html#type-metadata" target="_self">Type metadata</a></li>
         <li><a href="../classes/Declaring%20enumerations%20with%20jOOPL.html#index" target="_self">Enumerations</a></li>
         <li><a href="../classes/joopl.Attribute.html#index" target="_self">Custom metadata: attributes</a></li>
         <li><a href="../classes/Exception%20throwing%20best%20practices.html" target="_self">Throwing exceptions best practice</a></li>
@@ -64,14 +65,14 @@
 
     <h2 class="off-left">> API reference</h2>
     <ol id="class-list"> 
-        <li><a href="../classes/joopl.object.html" target="_self"><strong>joopl.Object</strong></a></li>
-        <li><a href="../classes/joopl.attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
-        <li><a href="../classes/joopl.enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
-        <li><a href="../classes/joopl.enumvalue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
-        <li><a href="../classes/joopl.type.html" target="_self"><strong>joopl.Type</strong></a></li>
-        <li><a href="../classes/joopl.exception.html" target="_self"><strong>joopl.Exception</strong></a></li>
-        <li><a href="../classes/joopl.argumentexception.html" target="_self"><strong>joopl.ArgumentException</strong></a></li>
-        <li><a href="../classes/joopl.notimplementedexception.html" target="_self"><strong>joopl.NotImplementedException</strong></a></li>
+        <li><a href="../classes/joopl.Object.html" target="_self"><strong>joopl.Object</strong></a></li>
+        <li><a href="../classes/joopl.Attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
+        <li><a href="../classes/joopl.Enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
+        <li><a href="../classes/joopl.EnumValue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
+        <li><a href="../classes/joopl.Type.html" target="_self"><strong>joopl.Type</strong></a></li>
+        <li><a href="../classes/joopl.Exception.html" target="_self"><strong>joopl.Exception</strong></a></li>
+        <li><a href="../classes/joopl.ArgumentException.html" target="_self"><strong>joopl.ArgumentException</strong></a></li>
+        <li><a href="../classes/joopl.NotImplementedException.html" target="_self"><strong>joopl.NotImplementedException</strong></a></li>
     </ol>
 
     <h2 class="off-left">> Quick links</h2>
@@ -151,6 +152,7 @@
         * 1.3\. [Properties](#class-properties)
         * 1.4\. [Methods/Functions](#class-methods)
         * 1.5\. [Events](#class-events)
+        * 1.6\. [Type property on classes and instances: type metadata](#type-metadata)
     * 2.0\. [Creating instances of classes - the &#x60;new&#x60; operator](#class-instances)
     * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
         * 3.1\. [Class inheritance](#class-inheritance)
@@ -477,7 +479,29 @@
             // Setting the same handler again removes it from the event.
             instance.saying.removeEventListener(handler);
         });
-    
+
+
+    &lt;h4 id=&quot;type-metadata&quot;&gt;1.6 Type property on classes and instances: type metadata&lt;/h4&gt; 
+    ([Back to index](#index))
+
+    Since 2.4 version of jOOPL, any class and instance has a built-in property called &#x60;type&#x60;. This property gives access to both class or instance
+    type metadata like its namespace path, name, name with namespace path, ...
+
+    For example, declaring a class like follows:
+
+        $namespace.register(&quot;joopl.sample&quot;, function() {
+            this.declareClass(&quot;A&quot;);
+            
+            // Getting class name from type property of A class
+            var className = this.A.type.name;
+
+            // Gettings class name from type property of A instance
+            var instance = new this.A();
+            className = instance.type.name;
+        });
+
+    Further details can be found on &lt;a href=&quot;joopl.Type.html&quot; target=&quot;_self&quot;&gt;&#x60;Type&#x60; class documentation&lt;/a&gt;.
+
     &lt;h3 id=&quot;class-instances&quot;&gt;2. Creating instances of classes&lt;/h3&gt;
     ([Back to index](#index))
 
