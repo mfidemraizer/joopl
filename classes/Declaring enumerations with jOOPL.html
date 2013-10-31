@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: $enumdef - { joopl };</title>
+    <title>jOOPL: Declaring enumerations with jOOPL - { joopl };</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -41,40 +41,44 @@
     <ol id="oop-hints">
         <li><a href="../classes/$namespace.html#method_register" target="_self">Registering namespaces how-to</a></li>
         <li><a href="../classes/$namespace.html#method_using" target="_self">Importing namespaces</a></li>
-        <li><a href="../classes/$def.html#class-define" target="_self">Define a class how-to</a></li>
-        <li><a href="../classes/$def.html#class-constructors" target="_self">Class constructors</a></li>
-        <li><a href="../classes/$def.html#class-properties" target="_self">Class properties</a></li>
-        <li><a href="../classes/$def.html#class-methods" target="_self">Class methods</a></li>
-        <li><a href="../classes/$def.html#class-events" target="_self">Custom events how-to</a></li>
-        <li><a href="../classes/$def.html#class-instances" target="_self">Creating class instances how-to</a></li>
-        <li><a href="../classes/$def.html#class-inheritance" target="_self">Class inheritance how-to</a></li>
-        <li><a href="../classes/$def.html#class-polymorphism" target="_self">Class polymorphism how-to</a></li>
-        <li><a href="../classes/$enumdef.html#index" target="_self">Enumerations</a></li>
-        <li><a href="../classes/Attribute.html#index" target="_self">Custom metadata: attributes</a></li>
+        <li><a href="../classes/$namespace.html#namespace-global" target="_self">$global namespace</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-define" target="_self">Define a class how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-constructors" target="_self">Class constructors</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-properties" target="_self">Class properties</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-methods" target="_self">Class methods</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-events" target="_self">Custom events how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-instances" target="_self">Creating class instances how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-inheritance" target="_self">Class inheritance how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-polymorphism" target="_self">Class polymorphism how-to</a></li>
+        <li><a href="../classes/Declaring%20enumerations%20with%20jOOPL.html#index" target="_self">Enumerations</a></li>
+        <li><a href="../classes/joopl.Attribute.html#index" target="_self">Custom metadata: attributes</a></li>
+        <li><a href="../classes/Exception%20throwing%20best%20practices.html" target="_self">Throwing exceptions best practice</a></li>
     </ol>
 
-    <h2 class="off-left">> Keywords</h2>
-    <ol id="keyword-list"> 
-        <li><a href="../classes/$namespace.html#namespace-global" target="_self"><strong>$global</strong></a></li>
-        <li><a href="../classes/$def.html" target="_self"><strong>$def</strong></a></li>
-        <li><a href="../classes/$enumdef.html" target="_self"><strong>$enumdef</strong></a></li>
-        <li><a href="../classes/$def.html#class-istypeof" target="_self">Object.<strong>isTypeOf</strong></a></li>
+    <h2 class="off-left">> Tests</h2>
+    <ol id="oop-hints">
+        <li><a href="../test/namespace.test.html" target="_self">Namespace tests</a></li>
+        <li><a href="../test/class.test.html" target="_self">Class tests</a></li>
+        <li><a href="../test/enum.test.html" target="_self">Enumeration tests</a></li>
     </ol>
-
 
     <h2 class="off-left">> API reference</h2>
     <ol id="class-list"> 
-        <li><a href="../classes/Attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
-        <li><a href="../classes/Enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
-        <li><a href="../classes/EnumValue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
-        <li><a href="../classes/Type.html" target="_self"><strong>joopl.Type</strong></a></li>
+        <li><a href="../classes/joopl.object.html" target="_self"><strong>joopl.Object</strong></a></li>
+        <li><a href="../classes/joopl.attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
+        <li><a href="../classes/joopl.enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
+        <li><a href="../classes/joopl.enumvalue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
+        <li><a href="../classes/joopl.type.html" target="_self"><strong>joopl.Type</strong></a></li>
+        <li><a href="../classes/joopl.exception.html" target="_self"><strong>joopl.Exception</strong></a></li>
+        <li><a href="../classes/joopl.argumentexception.html" target="_self"><strong>joopl.ArgumentException</strong></a></li>
+        <li><a href="../classes/joopl.notimplementedexception.html" target="_self"><strong>joopl.NotImplementedException</strong></a></li>
     </ol>
 
     <h2 class="off-left">> Quick links</h2>
     <ol id="quick-links">
         <li><a href="https://groups.google.com/forum/#!forum/joopl" target="_blank">jOOPL Google Group</a></li>
         <li><a href="https://github.com/mfidemraizer/joopl" target="_blank">jOOPL on GitHub</a></li>
-        <li><a href="http://cdn.jsdelivr.net/joopl/2.3.0/joopl.min.js" target="_blank"><strong>Download minified jOOPL 2.3.0 (CDN)</strong></a></li>
+        <li><a href="http://cdn.jsdelivr.net/joopl/2.4.0/joopl.min.js" target="_blank"><strong>Download minified jOOPL 2.4.0 (CDN)</strong></a></li>
         <li><a href="https://github.com/mfidemraizer/joopl/issues" target="_blank">Issue tracker</a></li>
     </ol>
 
@@ -91,19 +95,33 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/$def.html">$def</a></li>
+                <li><a href="../classes/Declaring enumerations with jOOPL.html">Declaring enumerations with jOOPL</a></li>
             
-                <li><a href="../classes/$enumdef.html">$enumdef</a></li>
+                <li><a href="../classes/Define classes with jOOPL.html">Define classes with jOOPL</a></li>
             
-                <li><a href="../classes/$namespace.html">$namespace</a></li>
+                <li><a href="../classes/Exception throwing best practices.html">Exception throwing best practices</a></li>
             
-                <li><a href="../classes/Attribute.html">Attribute</a></li>
+                <li><a href="../classes/joopl.$namespace.html">joopl.$namespace</a></li>
             
-                <li><a href="../classes/Enum.html">Enum</a></li>
+                <li><a href="../classes/joopl.ArgumentException.html">joopl.ArgumentException</a></li>
             
-                <li><a href="../classes/EnumValue.html">EnumValue</a></li>
+                <li><a href="../classes/joopl.Attribute.html">joopl.Attribute</a></li>
             
-                <li><a href="../classes/Type.html">Type</a></li>
+                <li><a href="../classes/joopl.Enum.html">joopl.Enum</a></li>
+            
+                <li><a href="../classes/joopl.EnumValue.html">joopl.EnumValue</a></li>
+            
+                <li><a href="../classes/joopl.Environment.html">joopl.Environment</a></li>
+            
+                <li><a href="../classes/joopl.Exception.html">joopl.Exception</a></li>
+            
+                <li><a href="../classes/joopl.NotImplementedException.html">joopl.NotImplementedException</a></li>
+            
+                <li><a href="../classes/joopl.Object.html">joopl.Object</a></li>
+            
+                <li><a href="../classes/joopl.Type.html">joopl.Type</a></li>
+            
+                <li><a href="../classes/Namespace.html">Namespace</a></li>
             
             </ul>
 
@@ -120,7 +138,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: $enumdef</h1>
+                        <h1>Now on: Declaring enumerations with jOOPL</h1>
 <div class="box meta">
     
 
@@ -129,16 +147,14 @@
     
 
     
-        <p>Available since 2.3.0</p>
-    
 </div>
 
 
 
 <div class="box intro">
-    <p>Represents the operator to define enumerations.</p>
+    <h2 id="index">Index</h2>
 
-<h2 id="index">Index</h2>
+<p>If you are looking for code samples, <a href="../test/enum.test.html" target="_self">please see enumeration tests' and their source code.</a></p>
 
 <ul>
 <li>1.0. <a href="#enum-definition">What is an enumeration?</a></li>
@@ -169,14 +185,18 @@ if(someVar == 1) {
 
 <p>jOOPL introduces true enumerations and the above code could be turned into:</p>
 
-<pre class="code prettyprint"><code>var HttpState = $enumdef({
-    closed: 0,
-    open: 1
-});
+<pre class="code prettyprint"><code>$namespace.register("joopl.enumerations", function() {
+    this.declareEnum("HttpState", {
+        closed: 0,
+        open: 1
+    });
 
-if(someVar == HttpState.open) {
-    // Do stuff
-}
+    var someVar = this.HttpState.open;
+
+    if(someVar == this.HttpState.open) {
+        // Do stuff
+    }
+});
 </code></pre>
 
 <p>The above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may
@@ -187,11 +207,11 @@ mean.</p>
 
 <p><a href="#index">Back to index</a></p>
 
-<p>Enumerations are created using the <code>$enumdef</code> operator. The <code>$enumdef</code> operator is a constructor accepting an object
+<p>Enumerations are created using the <code>$enumdef</code> operator. The <code>$enumdef</code> operator is a ctor accepting an object
 defining one or more constants:</p>
 
 <pre class="code prettyprint"><code>$namespace.register("mynamespace", function() {
-    this.MyEnum = $enumdef({
+    this.declareEnum("State", {
         open: 0,
         closed: 1,
         disconnected: 2,
@@ -211,7 +231,7 @@ defining one or more constants:</p>
 <p>For example, some code may have a class with a method accepting a limited number of HTTP verbs:</p>
 
 <pre class="code prettyprint"><code>$namespace.register("mynamspace", function() {
-    this.HttpVerb = $enumdef({
+    this.declareEnum("HttpVerb", {
         get: 0,
         post: 1,
         put : 2
@@ -219,8 +239,8 @@ defining one or more constants:</p>
 
     var scope = this;
 
-    this.MyClass = $def({
-        $members: {
+    this.declareClass("MyClass", {
+        members: {
             // The @verb argument will only support verbs of the HttpVerb enumeration
             doRequest: function(verb, url, args) {
                 switch(verb) {
@@ -246,8 +266,8 @@ defining one or more constants:</p>
 
 <p><a href="#index">Back to index</a></p>
 
-<p>An enumeration value is an instance of standard ECMA-Script <code>Number</code> object (the primitive <code>Number</code> type wrapper). jOOPL extends <code>Number</code> and
-any enumeration value has also a reserved property <code>enum</code> ( see <a href="..\classes\EnumValue.html" class="crosslink">EnumValue</a> to explore available methods and properties of
+<p>An enumeration value is an instance of standard ECMA-Script <code>Number</code> object (the primitive <code>Number</code> type wrapper). jOOPL inherits <code>Number</code> and
+any enumeration value has also a reserved property <code>enum</code> ( see EnumValue to explore available methods and properties of
 an enumeration value).</p>
 
 <p>The <code>enum</code> property represents a set of common operations for enum values.</p>
@@ -258,7 +278,7 @@ an enumeration value).</p>
 
 <p>Sometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:</p>
 
-<pre class="code prettyprint"><code>var state = State.open;
+<pre class="code prettyprint"><code>var state = this.State.open;
 </code></pre>
 
 <p>jOOPL provides support for <em>flags</em> (combination of more than an enumeration values) using bit-wise operators like <code>OR</code> and <code>AND</code> in order to create enumeration 
@@ -266,22 +286,24 @@ values containing more than an enumeration value.</p>
 
 <p>For example, taking this enumeration as example:</p>
 
-<pre class="code prettyprint"><code>var States = $def({
-    open: 0,
-    closed: 1,
-    working: 2
+<pre class="code prettyprint"><code>$namespace.register("joopl.enumerations", function() {
+    this.declareEnum("States", {
+        open: 0,
+        closed: 1,
+        working: 2
+    });
 });
 </code></pre>
 
 <p>Some code may need to express that something is <code>open</code> but it is also <code>working</code>. This is achieved by using the <code>OR</code> operator:</p>
 
-<pre class="code prettyprint"><code>var openAndWorking = State.open.enum.or(State.working);
+<pre class="code prettyprint"><code>var openAndWorking = this.State.open.enum.or(State.working);
 </code></pre>
 
-<p>And, finally, if some other code needs to evaluate that the enumeration value includes <code>open</code> (see <code>EnumValue.</code><a href="..\classes\EnumValue.html#method_hasFlag" class="crosslink">hasFlag</a>
+<p>And, finally, if some other code needs to evaluate that the enumeration value includes <code>open</code> (see <code>EnumValue.</code>EnumValue/hasFlag:method
 method for further details):</p>
 
-<pre class="code prettyprint"><code>if(openAndWorking.enum.hasFlag(State.open)) {
+<pre class="code prettyprint"><code>if(openAndWorking.enum.hasFlag(this.State.open)) {
     // Do stuff if it is open already
 }
 </code></pre>
