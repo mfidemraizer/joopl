@@ -4,13 +4,13 @@
 
             <h3>Useful links</h3>
             <ol id="main-links">
-                <li id="joopl-minified"><a href="http://cdn.jsdelivr.net/joopl/2.3.0/joopl.min.js" target="_self">jOOPL 2.3.0 CDN</a></li>
+                <li id="joopl-minified"><a href="http://cdn.jsdelivr.net/joopl/2.4.0/joopl.min.js" target="_self">jOOPL 2.4.0 CDN</a></li>
                 <li id="joopl-sourcecode"><a href="https://github.com/mfidemraizer/joopl" target="_self">Source code on GitHub!</a></li>
             </ol>
 
             <p>jOOPL stands for <strong>J</strong>avaScript <strong>O</strong>bject-<strong>O</strong>riented <strong>P</strong>rogramming <strong>L</strong>ibrary.</p>
             <p>JavaScript has a limited but yet useful type definition system. In comparison to other modern programming languages like C#, Java, Ruby, Python and many others, JavaScript is not class-oriented but prototype-oriented.</p>
-            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it retaains 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
+            <p>jOOPL introduces a powerful class-oriented type definition system that equals most of features found in modern and well-known object-oriented languages like C# and Java, and it retains 100% compatibility with plain JavaScript objects since jOOPL creates standard JavaScript constructors.</p>
 
             <h3>Licensing</h3>
             <p>jOOPL is a completely open sourced, free-of-charge JavaScript library distributed under the Apache License 2.0.</p>
@@ -47,14 +47,14 @@
                 <li>Declarative class metadata using attributes</li>
             </ol>
 
-            <p>And it is a tiny JavaScript library when minimized (<i>~8KB</i>)!!</p>
+            <p>And it is a tiny JavaScript library when minimized (<i>~10KB</i>)!!</p>
 
             <h3>I see, I see (blah, blah...). And what about a hello world sample? ;-)</h3>
             <p>The next code listing creates a namespace called <i>samples</i>. A class <i>ClassA</i> in the namespace (the <i>this</i> keyword
             represents the registered namespace) implements a method to say "hello world!" and, finally, an instance of the whole class is created in order to call the method to say <i>hello world!</i>:</p>
             <pre>
 $namespace.register("samples", function() {
-    this.ClassA = $def({
+    this.declareClass("A", {
         $members: {
             helloWorld: function() {
                 alert("hello world!");

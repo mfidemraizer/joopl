@@ -858,7 +858,7 @@ var $manifest = null;
             /**
                 Gets jOOPL library version (f.e. "2.4.0")
 
-                @property joopl Returns jOOPL library version
+                @property joopl
                 @type string
                 @readonly
             */
@@ -1004,8 +1004,6 @@ var $manifest = null;
         });
 
         /**
-            Represents the base class for any attribute.
-
             <h2 id="index">Index</h2>
 
             * 1.0\. [What is an attribute?](#attribute-definition)
@@ -1228,12 +1226,12 @@ var $manifest = null;
                     @static
                     @example
                         $namespace.using("joopl", function() {
-                            var State = $enumdef({
-                                open: 0,
-                                closed: 1
+                            this.declareEnum("State", {
+                                open: 1,
+                                closed: 2
                             });
 
-                            this.Enum.parseName(State, "open")
+                            var open = this.Enum.parseName(State, "open")
                         });
                 */
                 parseName: function (enumType, valueName) {
@@ -1256,7 +1254,7 @@ var $manifest = null;
                     @static
                     @example
                         $namespace.using("joopl", function() {
-                            var State = $enumdef({
+                            this.declareEnum("State", {
                                 open: 1,
                                 closed: 2
                             });

@@ -1,7 +1,7 @@
 /**
-Represents the operator to define enumerations.
-
 <h2 id="index">Index</h2>
+
+If you are looking for code samples, <a href="../test/enum.test.html" target="_self">please see enumeration tests' and their source code.</a>
 
 * 1.0\. [What is an enumeration?](#enum-definition)
 * 2.0\. [What is the goal of enumerations](#enum-goal)
