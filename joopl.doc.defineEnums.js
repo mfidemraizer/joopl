@@ -27,14 +27,18 @@ In regular JavaScript, when some code needs to identify states uses integers (`N
 
 jOOPL introduces true enumerations and the above code could be turned into:
 
-    var HttpState = $enumdef({
-        closed: 0,
-        open: 1
-    });
+    $namespace.register("joopl.enumerations", function() {
+        this.declareEnum("HttpState", {
+            closed: 0,
+            open: 1
+        });
 
-    if(someVar == HttpState.open) {
-        // Do stuff
-    }
+        var someVar = this.HttpState.open;
+
+        if(someVar == this.HttpState.open) {
+            // Do stuff
+        }
+    });
 
 The above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may
 increase code readibility, since developers will not need to check documentation in order to know what `0` or `1` states
@@ -47,7 +51,7 @@ Enumerations are created using the `$enumdef` operator. The `$enumdef` operator 
 defining one or more constants:
 
     $namespace.register("mynamespace", function() {
-        this.MyEnum = $enumdef({
+        this.declareEnum("State", {
             open: 0,
             closed: 1,
             disconnected: 2,
@@ -65,7 +69,7 @@ Enumerations are required when some code can define a closed set of values that 
 For example, some code may have a class with a method accepting a limited number of HTTP verbs:
 
     $namespace.register("mynamspace", function() {
-        this.HttpVerb = $enumdef({
+        this.declareEnum("HttpVerb", {
             get: 0,
             post: 1,
             put : 2
@@ -73,7 +77,7 @@ For example, some code may have a class with a method accepting a limited number
 
         var scope = this;
 
-        this.MyClass = $def({
+        this.declareClass("MyClass", {
             members: {
                 // The @verb argument will only support verbs of the HttpVerb enumeration
                 doRequest: function(verb, url, args) {
@@ -109,27 +113,29 @@ The `enum` property represents a set of common operations for enum values.
 
 Sometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:
 
-    var state = State.open;
+    var state = this.State.open;
 
 jOOPL provides support for *flags* (combination of more than an enumeration values) using bit-wise operators like `OR` and `AND` in order to create enumeration 
 values containing more than an enumeration value.
 
 For example, taking this enumeration as example:
 
-    var States = $def({
-        open: 0,
-        closed: 1,
-        working: 2
+    $namespace.register("joopl.enumerations", function() {
+        this.declareEnum("States", {
+            open: 0,
+            closed: 1,
+            working: 2
+        });
     });
 
 Some code may need to express that something is `open` but it is also `working`. This is achieved by using the `OR` operator:
 
-    var openAndWorking = State.open.enum.or(State.working);
+    var openAndWorking = this.State.open.enum.or(State.working);
 
 And, finally, if some other code needs to evaluate that the enumeration value includes `open` (see `EnumValue.`{{#crossLink "EnumValue/hasFlag:method"}}{{/crossLink}}
 method for further details):
 
-    if(openAndWorking.enum.hasFlag(State.open)) {
+    if(openAndWorking.enum.hasFlag(this.State.open)) {
         // Do stuff if it is open already
     }
 

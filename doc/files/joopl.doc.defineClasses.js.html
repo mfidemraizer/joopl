@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jOOPL: joopl.doc.defineClasses.js - { joopl };</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+   <!-- <script src="../assets/../api.js"></script>
+    <script src="../assets/js/api-filter.js"></script>
+    <script src="../assets/js/api-list.js"></script>
+    <script src="../assets/js/api-search.js"></script>
+    <script src="../assets/js/apidocs.js"></script>-->
+</head>
+<body class="yui3-skin-sam">
+    <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 9999" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+<div id="doc">
+    <div id="hd" class="yui3-g header" style="display: none">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 2.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div id="sidebar-container" class="yui3-u-1-4">
+            
+                <img id="project-logo" src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&amp;DownloadId=652315&amp;Build=20425" title="{ joopl };" onclick="window.location='../index.html'"/>
+            
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">> Object-oriented programming</h2>
+    <ol id="oop-hints">
+        <li><a href="../classes/$namespace.html#method_register" target="_self">Registering namespaces how-to</a></li>
+        <li><a href="../classes/$namespace.html#method_using" target="_self">Importing namespaces</a></li>
+        <li><a href="../classes/$namespace.html#namespace-global" target="_self">$global namespace</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-define" target="_self">Define a class how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-constructors" target="_self">Class constructors</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-properties" target="_self">Class properties</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-methods" target="_self">Class methods</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-events" target="_self">Custom events how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-instances" target="_self">Creating class instances how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-inheritance" target="_self">Class inheritance how-to</a></li>
+        <li><a href="../classes/define%20classes%20with%20joopl.html#class-polymorphism" target="_self">Class polymorphism how-to</a></li>
+        <li><a href="../classes/Declaring%20enumerations%20with%20jOOPL.html#index" target="_self">Enumerations</a></li>
+        <li><a href="../classes/joopl.Attribute.html#index" target="_self">Custom metadata: attributes</a></li>
+    </ol>
+
+    <h2 class="off-left">> Hot topics</h2>
+    <ol id="oop-hints">
+        <li><a href="../classes/Exception%20throwing%20best%20practices.html" target="_self">Throwing exceptions best practice</a></li>
+    </ol>
+
+    <h2 class="off-left">> API reference</h2>
+    <ol id="class-list"> 
+        <li><a href="../classes/joopl.attribute.html" target="_self"><strong>joopl.Attribute</strong></a></li>
+        <li><a href="../classes/joopl.enum.html" target="_self"><strong>joopl.Enum</strong></a></li>
+        <li><a href="../classes/joopl.enumvalue.html" target="_self"><strong>joopl.EnumValue</strong></a></li>
+        <li><a href="../classes/joopl.type.html" target="_self"><strong>joopl.Type</strong></a></li>
+        <li><a href="../classes/joopl.exception.html" target="_self"><strong>joopl.Exception</strong></a></li>
+        <li><a href="../classes/joopl.argumentexception.html" target="_self"><strong>joopl.ArgumentException</strong></a></li>
+        <li><a href="../classes/joopl.notimplementedexception.html" target="_self"><strong>joopl.ArgumentException</strong></a></li>
+    </ol>
+
+    <h2 class="off-left">> Quick links</h2>
+    <ol id="quick-links">
+        <li><a href="https://groups.google.com/forum/#!forum/joopl" target="_blank">jOOPL Google Group</a></li>
+        <li><a href="https://github.com/mfidemraizer/joopl" target="_blank">jOOPL on GitHub</a></li>
+        <li><a href="http://cdn.jsdelivr.net/joopl/2.3.0/joopl.min.js" target="_blank"><strong>Download minified jOOPL 2.3.0 (CDN)</strong></a></li>
+        <li><a href="https://github.com/mfidemraizer/joopl/issues" target="_blank">Issue tracker</a></li>
+    </ol>
+
+    <div id="api-tabview" class="tabview" style="display: none">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Declaring enumerations with jOOPL.html">Declaring enumerations with jOOPL</a></li>
+            
+                <li><a href="../classes/Define classes with jOOPL.html">Define classes with jOOPL</a></li>
+            
+                <li><a href="../classes/Exception throwing best practices.html">Exception throwing best practices</a></li>
+            
+                <li><a href="../classes/joopl.$namespace.html">joopl.$namespace</a></li>
+            
+                <li><a href="../classes/joopl.ArgumentException.html">joopl.ArgumentException</a></li>
+            
+                <li><a href="../classes/joopl.Attribute.html">joopl.Attribute</a></li>
+            
+                <li><a href="../classes/joopl.Enum.html">joopl.Enum</a></li>
+            
+                <li><a href="../classes/joopl.EnumValue.html">joopl.EnumValue</a></li>
+            
+                <li><a href="../classes/joopl.Environment.html">joopl.Environment</a></li>
+            
+                <li><a href="../classes/joopl.Exception.html">joopl.Exception</a></li>
+            
+                <li><a href="../classes/joopl.NotImplementedException.html">joopl.NotImplementedException</a></li>
+            
+                <li><a href="../classes/joopl.Object.html">joopl.Object</a></li>
+            
+                <li><a href="../classes/joopl.Type.html">joopl.Type</a></li>
+            
+                <li><a href="../classes/Namespace.html">Namespace</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: joopl.doc.defineClasses.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+ /**
+    ## &lt;a id=&quot;index&quot;&gt;&lt;/a&gt; Index
+
+    * 1.0\. [Defining a class](#class-define)
+        * 1.1\. [Fields](#class-fields)
+        * 1.2\. [ctors](#class-ctors)
+        * 1.3\. [Properties](#class-properties)
+        * 1.4\. [Methods/Functions](#class-methods)
+        * 1.5\. [Events](#class-events)
+    * 2.0\. [Creating instances of classes - the &#x60;new&#x60; operator](#class-instances)
+    * 3.0\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)
+        * 3.1\. [Class inheritance](#class-inheritance)
+        * 3.2\. [Inheritance with polymorphism](#class-polymorphism)
+            * 3.2.1\. [The &#x60;this.base&#x60; keyword](#class-base)
+            * 3.2.2\. [The derived class ctor calls the parent&#x27;s class ctor](#class-basector)
+            * 3.2.3\. [A base class member calls the most specialized implementation](#class-basecallsderived)
+        * 3.3\. [The isTypeOf operator](#class-istypeof)
+
+    {{#crossLink &quot;Attribute&quot;}}**See also class attributes for declarative and metadata class programming**{{/crossLink}}
+
+    &lt;h3 id=&quot;class-define&quot;&gt;1. Defining a class&lt;/h3&gt; 
+    ([Back to index](#index))
+
+    Since jOOPL 2.4, classes are always declared in a given namespace. Each namespace has a &#x60;declareClass(...)&#x60; function that will declare a class based
+    on given arguments as an object map. Basic parameters are:
+
+    - **ctor** *(optional)*. The ctor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.
+    - **members** *(optional)*. An object containing the methods and properties for the whole class.
+
+    A basic class may look like the next code listing:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                // ctor 
+                ctor: function() {
+                    this._.name = null;
+                },
+                members: {
+                    get name() {
+                        return this._.name;
+                    }
+
+                    set name(value) {
+                        this._.name = value;
+                    }
+
+                    sayYourName: function() {
+                        alert(&quot;Hey, &quot; + this.name)
+                    }
+                }
+            });
+        });
+
+    
+    &lt;h4 id=&quot;class-fields&quot;&gt;1.1 Class fields&lt;/h4&gt; 
+    ([Back to index](#index))
+
+    A class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).
+
+    Any class constructor, property or method has a reserved variable called &#x60;_&#x60; accessible through &#x60;this._&#x60; on which class fields can be declared and
+    manipulated. For example, &#x60;this._.myName = &quot;Matias&quot;;&#x60; will declare a class field called &#x60;myName&#x60; with a default value &#x60;Matías&#x60;.
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                ctor: function() {
+                    // This is a class field:
+                    this._.value = &quot;A string for the class field&quot;;
+                }
+            });
+        });
+
+    &lt;h4 id=&quot;class-constructors&quot;&gt;1.2 Constructors&lt;/h4&gt;
+    ([Back to index](#index))
+
+    In classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing 
+    the whole class.
+
+    For example, class constructors are the place to define class fields:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                // constructor 
+                ctor: function() {
+                    this._.myName = &quot;Matias&quot;;
+                }
+            });
+        });
+
+    In instance, the class constructor has access to the already declared methods and properties:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                // constructor 
+                ctor: function() {
+                    this._.myName = &quot;Matias&quot;;
+
+                    // The &quot;someMethod()&quot; method can be called from the constructor!
+                    this.initialize();
+                }
+
+                members: {
+                    initialize: function() {
+                        alert(&quot;hello world called from the constructor!&quot;)
+                    }
+                }
+            });
+        });
+
+    ##### See also
+
+    - [Call parent class constructor](#class-basector)
+
+    &lt;h4 id=&quot;class-properties&quot;&gt;1.3 Properties&lt;/h4&gt;
+    ([Back to index](#index))
+
+    Any class can declare properties. Apparently, a property looks like a variable by its usage, but it differs from variables on
+    how they are declared.
+
+    Properties are the best way to encapsulate the access to private resources held by the class like class fields or calculated values. 
+
+    A property is composed by two possible parts (it can have both or only one of them)
+    
+    - **Getter**. It is a block like a function defining how a value is obtained.
+    - **Setter**. It is a block like a function defining how to set a value.
+
+    For example, without properties, an object would look like the next code listing:
+
+        var myObject = {
+            name: &quot;Matias&quot;,
+            age: 28
+        };
+
+    And once the &#x60;myObject&#x60; variable holds the new object, both &#x60;name&#x60; and &#x60;age&#x60; can be altered:
+
+        myObject.name = &quot;John&quot;;
+        myObject.age = 33;
+
+    But what happens if there is a need to constraint the &#x60;name&#x60; and &#x60;age&#x60; variables? A primitive solution would be:
+
+        var possibleName = &quot;John&quot;;
+        var possibleAge = 33;
+
+        if(possibleName != &quot;John&quot;) {
+            myObject.name = possibleName;
+        } else {
+            throw Error(&quot;Sorry, John, I do not like you!&quot;)
+        }
+
+        if(possibleAge &gt; 30) {
+            myObject.age = possibleAge;
+        } else {
+            throw Error(&quot;You are too young! Please try again in some years...&quot;);
+        }
+
+    This is how the above code would be implemented using properties:
+
+        var myObject = {
+            // Some regular variables
+            _name: null,
+            _age: null,
+
+            // A getter for the _name variable:
+            get name() { 
+                return this._name; 
+            },
+            // A setter for the _name variable. The setter defines the validation logic!
+            set name(value) { 
+                if(value != &quot;John&quot;) {
+                    this._name = value; 
+                } else {
+                    throw Error(&quot;Sorry, John, I do not like you!&quot;)
+                }
+            },
+
+            // A getter for the _name variable:
+            get age() { 
+                return this._age;
+            },
+            // A setter for the _name variable. The setter also defines the validation logic here!
+            set age(value) {
+                if(value &gt; 30) {
+                    myObject.age = value;
+                } else {
+                    throw Error(&quot;You are too young! Please try again in some years...&quot;);
+                }
+            }
+        }
+
+    Now, if some code tries to assign &quot;John&quot; or an age lesser than 30, the properties setters will throw the error, but this time
+    the validation logic is encapsulated:
+
+        myObject.name = &quot;John&quot; // ERROR
+        myObject.name = &quot;Matias&quot; // OK
+
+        myObject.age = 28 // ERROR
+        myObject.age = 33 // OK
+
+    jOOPL fully supports ECMA-Script 5 properties like the described before:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                ctor: function() {
+                    // Define a class field for later provide access to it through a property getter and setter
+                    this._.name = null;
+                },
+                members: {
+                    // Gets the value held by the this._.name class field:
+                    get name() {
+                        return this._.name;
+                    },
+
+                    // Sets a new value to the this._.name class field:
+                    set name(value) {
+                        this._.name = value;
+                    }
+                }
+            });
+        });
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.A();
+
+            // Set the &#x27;name&#x27; property value
+            a.name = &quot;Matias&quot;;
+
+            // Gets the name property value
+            alert(a.name); // Alerts &quot;Matias&quot;
+        });
+    
+    &lt;h4 id=&quot;class-methods&quot;&gt;1.4  Methods/Functions&lt;/h4&gt;
+    ([Back to index](#index))
+
+    Methods (*also known as functions*) are the behavior of classes. They are the actions that can be performed by the class. Examples
+    of methods can be:
+
+    - do
+    - create
+    - notify
+    - write
+    - build
+    - ...
+
+    Class methods are defined as regular JavaScript functions and as part of the &#x60;members&#x60; in a class definition:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                members: {
+                    do: function() {
+                        return &quot;do what?&quot;;
+                    }
+                }
+            });
+        });
+
+    ##### See also
+
+    - [Polymorphism](#class-polymorphism)
+
+    &lt;h4 id=&quot;class-events&quot;&gt;1.5 Events&lt;/h4&gt; 
+    ([Back to index](#index))
+
+    ##### Events glossary
+
+    - **Event**. It is an observable action. Classes defining them or others can subscribe to events and react to them.
+    - **Event handler**. It is a function assigned to the event which is called when the event happens.
+
+    Events are an out-of-the-box feature that enables any class to create observable objects.
+
+    An observable object is a one emitting notifications when something happens within it. For example, an event may be:
+
+    + When some button is clicked.
+    + An asynchronous operation completed.
+    + An item was added to a list.
+
+    Events are class members like properties and methods, but they are special in terms of how they are declared. For example, 
+    if a class needs to implement an event to notify to others that it said &quot;hello world&quot;, an event &quot;saying&quot; would be declared this way:
+
+        $namespace.register(&quot;test&quot;, function() {
+           this.declareClass(&quot;A&quot;, {
+                members: {
+                    events: [&quot;saying&quot;]
+                }
+            });
+        });
+
+    The above code declares an event &quot;saying&quot;. Events are declared as an array of identifiers (names) as value of the &#x60;events&#x60; special member. Once
+    an event is declared, the next step is triggering/raising/firing it somewhere in the whole class:
+        
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                members: {
+                    events: [&quot;saying&quot;],
+
+                    helloWorld: function() {
+                        // This is triggering the event. jOOPL has created an special function called
+                        // &#x27;saying&#x27; which can receive an object of arguments so the object suscribed to
+                        // the class event will receive the whole argument &#x27;text&#x27;
+                        this.saying.raise({ args: { text: &quot;yes, the object is about to say &#x27;hello world&#x27;!&quot;} });
+
+                        // The event &#x27;saying&#x27; notified that the class A was about saying something
+                        // and, finally, now it says &quot;hello world!&quot; using an alert.
+                        alert(&quot;hello world!&quot;)
+                    }
+                }
+            });
+        });
+
+    Finally, the last step is listening for the &#x60;saying&#x60; event. For that matter, an instance of A is created and the code will set an event handler in order
+    to do an action when the &#x60;A&#x60; class instance says something:
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.A();
+
+            instance.saying.addEventListener(function(args) {
+                // The &#x60;args&#x60; input argument will hold the text set when the event was triggered
+                alert(&quot;The instance said: &quot; + args.text);
+            });
+        });
+
+    Once an event handler added to an event, it is possible to *unsuscribe* from it calling &#x60;removeEventListener(...)&#x60;.
+
+    For example:
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.A();
+
+            var handler = function(args) {
+            }
+
+            // This adds an event handler to the event
+            instance.saying.addEventListener(handler);
+
+            // Setting the same handler again removes it from the event.
+            instance.saying.removeEventListener(handler);
+        });
+    
+    &lt;h3 id=&quot;class-instances&quot;&gt;2. Creating instances of classes&lt;/h3&gt;
+    ([Back to index](#index))
+
+    Once a class is defined using the namespace&#x27;s &#x60;declareClass(...)&#x60; function, an instance of the class must be created in order to use it. 
+
+    In jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard
+    &#x60;new&#x60; operator:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;A&quot;, {
+                members: {
+                    someMethod: function() {
+                        alert(&quot;hello world&quot;);
+                    }
+                }
+            });
+        });
+
+        $namespace.using(&quot;test&quot;, function() {
+            // Creating an instance of A:
+            var instance = new this.A();
+
+            // Now the instance variable - a reference to an object of type A - 
+            // has its instance methods available to be called:
+            instance.someMethod();
+        });
+
+    &lt;h3 id=&quot;class-oop&quot;&gt;3. Object-oriented programming on JavaScript using jOOPL&lt;/h3&gt; 
+    ([Back to index](#index))
+    
+    Defining classes and creating instances of it using the namespace&#x27;s &#x60;declareClass(...)&#x60; function and &#x60;new&#x60; operator respectively are just the most basic features of jOOPL.
+
+    jOOPL introduces an state-of-the-art and powerful class inheritance and polymoprhism enabling JavaScript language to 
+    work with true object-oriented programming:
+
+    - **Inheritance**. Classes can inherit from others in order to share their behaviors, properties and events.
+    - **Polymorphism**. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.
+    - **Encapsulation**. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.
+    
+    &lt;h4 id=&quot;class-inheritance&quot;&gt;3.1 Class inheritance&lt;/h4&gt;
+    ([Back to index](#index))
+
+    Inheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.
+
+    The namespace&#x27;s &#x60;declareClass(...)&#x60; function supports an additional and optional parameter called &#x60;inherits&#x60; which specifies that the declaring class inherits another class.
+
+    A class &#x60;A&#x60; may implement some methods and properties and a class &#x60;B&#x60; can inherit &#x60;A&#x60; and it will not need to implement them as all members from &#x60;A&#x60;
+    are already available as members of &#x60;B&#x60;:
+
+        $namespace.register(&quot;test&quot;, function() {
+            // Defining a class A having a method &quot;do()&quot;
+            this.declareClass(&quot;A&quot;, {
+                members: {
+                    do: function() {
+                        // Do some stuff
+                    }
+                }
+            });
+
+            // Class B inherits A
+            this.declareClass(&quot;B&quot;, {
+                inherits: this.A
+            });
+        });
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.B();
+
+            // The B instance can invoke the do() function 
+            // inherited from A
+            instance.do();
+        });
+
+    jOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (*no multi-inheritance*), but any
+    class can inherit other. There is no limitation of how many levels of inheritance can implement an hierarchy. 
+
+    An important detail is that, if a class does not directly inherit a class (there is no &#x60;inherit&#x60; input parameter for namespace&#x27;s &#x60;declareClass(...)&#x60; function), it will 
+    implicitly inherit the top-most class &#x60;Object&#x60; implemented as a plain JavaScript prototype, which provides basic methods and properties that any class 
+    will contain. At the end of the day, **any class inherits Object**.
+
+    &lt;h4 id=&quot;class-polymorphism&quot;&gt;3.2 Inheritance with polymorphism &lt;/h4&gt;
+    ([Back to index](#index))
+
+    Polymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base
+    implementation found in the parent class. 
+
+    For example, there is a class called &#x60;Salutation&#x60; which implements a method/function &#x60;sayHello&#x60; and it returns **&quot;hello world&quot;**, and there is a derived class
+    &#x60;SpecializedSalutation&#x60; that inherits &#x60;Salutation&#x60; class, the whole derived class can override the &#x60;sayHello&#x60; method and make it say **&quot;Hello, world!&quot;**:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;Salutator&quot;, {
+                members: {
+                    sayHello: function() {
+                        return &quot;hello world&quot;
+                    }
+                }
+            });
+
+            this.declareClass(&quot;SpecializedSalutator&quot;, {
+                inherits: this.Salutator,
+                members: {
+                    // Overrides the parent class sayHello implementation
+                    sayHello: function() {
+                        return &quot;Hello, world!&quot;;
+                    }
+                }
+            });
+        });
+        
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.SpecializedSalutator();
+            var text = instance.sayHello();
+
+            // This will alert &quot;Hello, world!&quot; since the class has overriden the default implementation
+            // which was returning &quot;hello world&quot;
+            alert(text); 
+        });
+
+    &lt;h4 id=&quot;class-base&quot;&gt;3.2.1 The &#x60;this.base&#x60; keyword&lt;/h4&gt;
+    ([Back to index](#index))
+
+    Any method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the
+    overriden member.
+
+    The overriden members may or may not call the parent class member implementation using the &#x60;this.base&#x60; keyword. 
+
+    For example, there is a class &#x60;Calculator&#x60; having a method &#x60;add&#x60;, and a specialized calculator called &#x60;UnsignedCalculator&#x60; which makes any addition an absolute number result,
+    the code would look like this:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;Calculator&quot;, {
+                members: {
+                    add: function(num1, num2) {
+                        // It simply adds num2 to num1
+                        return num1 + num2;
+                    }
+                }
+            });
+
+            this.declareClass(&quot;UnsignedCalculator&quot;, {
+                members: {
+                    add: function(num1, num2) {
+                        // This is calling the &quot;add&quot;&#x27;s parent class implementation
+                        var result = this.base.add(num1, num2);
+
+                        // Now the result from calling the base implementation of this method
+                        // is converted to an unsigned number
+                        return Math.abs(result);
+                    }
+                }
+            });
+        });
+
+    &lt;h4 id=&quot;class-basector&quot;&gt;3.2.2 The derived class constructor calls the parent&#x27;s class constructor&lt;/h4&gt; 
+    ([Back to index](#index))
+
+    Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
+    hierarchy requires some construction-time initialization:
+
+        $namespace.register(&quot;test&quot;, function() {
+            // The top-most parent class Person defines basic data
+            // and provides getter and setter properties in order to
+            // get or set the whole contained data.
+            //
+            // The constructor receives as arguments the default data.
+            this.declareClass(&quot;Person&quot;, {
+                ctor: function(args) {
+                    this._.name = args.name;
+                    this._.secondName = args.secondName;
+                    this._.age = args.age;
+                },
+                members: {
+                    get name() {
+                        return this._.name;
+                    },
+                    set name(value) {
+                        this._.name = value;
+                    },
+
+                    get secondName() {
+                        return this._.secondName;
+                    },
+                    set secondName(value) {
+                        this._.secondName = value;
+                    }
+
+                    get age(){
+                        return this._.age;
+                    },
+                    set age(value) {
+                        this._.age = value;
+                    }
+                }
+            });
+
+            // The Employee class inherits Person and adds
+            // more data. The Employee constructor both defines
+            // new class fields and calls the Person&#x27;s ctor
+            // by invoking this.base.ctor(args), thus the base constructor
+            // will receive the expected arguments.
+            this.declareClass(&quot;Employee&quot;, {
+               inherits: this.Person,
+               ctor: function(args) {
+                    this.base.ctor(args);
+
+                    this._.companyName = args.companyName;
+                    this._.salary = args.salary;
+               } 
+            });
+        });
+
+        // Now this is creating an instance of Employee. As the Employee ctor
+        // calls its base Person class&#x27; ctor, it will be correctly initialized 
+        // with the data passed as ctor arguments:
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.Employee({
+                name: &quot;Matias&quot;,
+                secondName: &quot;Fidemraizer&quot;,
+                age: 28,
+                companyName: &quot;ACME&quot;,
+                salary: 99999
+            });
+        });
+
+        alert(instance.name); // Popups &quot;Matias&quot;
+        alert(instance.secondName); // Popups &quot;Fidemraizer&quot;
+        alert(instance.age); // Popups &quot;28&quot;
+        alert(instance.companyName); // Popups &quot;ACME&quot;
+        alert(instance.salary); // Popups &quot;99999&quot;
+
+    &lt;h4 id=&quot;class-basecallsderived&quot;&gt;3.2.3 A base class member calls the most specialized implementation&lt;/h4&gt; 
+    ([Back to index](#index))
+
+    Sometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.
+
+    For example, a parent class &#x60;Polygon&#x60; overrides the default JavaScript &#x60;toString()&#x60; method in order to calculate the polygon area and
+    return it as a string. That is, &#x60;Polygon&#x60; implements a &#x60;calcArea&#x60; method. Now &#x60;Square&#x60; inherits &#x60;Polygon&#x60; and overrides the &#x60;calcArea&#x60;
+    method and performs the whole area calculation. The &#x60;Square&#x60; class will now need to override the base &#x60;toString()&#x60; &#x60;Polygon&#x60;&#x27;s method in order to
+    show the area.
+
+    In jOOPL, the most derived or specialized member is accessed through the special class field &#x60;this._.$derived&#x60;. 
+
+    Here is a sample of the above explanation:
+
+        $namespace.register(&quot;test&quot;, function() {
+            this.declareClass(&quot;Polygon&quot;, {
+                members: {
+                    calcArea: function() {
+                        // A generic polygon will not know how to calculate the area. The
+                        // derived classes will do it!
+                    },
+
+                    toString: function() {
+                        // See how calcArea() from the most derived class is accessed:
+                        return &quot;The area of this polygon is: &#x27;&quot; + this._.derived.calcArea(); + &quot;&#x27;&quot;;
+                    }
+                }
+            });
+
+            this.declareClass(&quot;Square&quot;, {
+                inherits: Polygon,
+                ctor: function(args) {
+                    this._.x = args.x;
+                    this._.y = args.y;
+                },
+                members: {
+                    get x() {
+                        return this._.x;
+                    },
+                    get y() {
+                        return this._.y;
+                    },
+
+                    calcArea: function() {
+                        return this.x * this.y;
+                    }
+                }
+            });
+        });
+
+        $namespace.using(&quot;test&quot;, function() {
+            var instance = new this.Square(20, 30);
+            
+            // This will alert &quot;The area of this polygon is: &#x27;600&#x27;&quot;&quot;
+            alert(instance.toString());
+        });
+
+    &lt;h3 id=&quot;class-istypeof&quot;&gt;3.3 The isTypeOf operator&lt;/h3&gt; 
+    The &#x60;isTypeOf&#x60; operator is a function/method present in any instance of a class defined by jOOPL. 
+
+    It evaluates if an instance is of type of some given class. An interesting point is &#x60;isTypeOf&#x60; evaluates
+    either if the instance is of type of the most derived class or it can check if an instance is of type of
+    a given base class (polymorphism).
+
+    For example, if there is a class &#x60;A&#x60;, &#x60;B&#x60; and &#x60;C&#x60;, and &#x60;C&#x60; inherits &#x60;B&#x60; and &#x60;B&#x60; inherits &#x60;A&#x60;:
+
+        var instanceOfC = new this.C();
+
+        var isType = instanceOfC.isTypeOf(this.A); // Evals true!
+        isType = instanceOfC.isTypeOf(this.B); // Evals true!
+        isType = instanceOfC.isTypeOf(this.C); // Evals true!
+
+        var instanceOfA = new this.A();
+
+        isType = instanceOfA.isTypeOf(this.C); // Evals false - A is not C!
+        isType = instanceOfA.isTypeOf(this.B); // Evals false - A is not B!
+        isType = instanceOfA.isTypeOf(this.A); // Evals true!
+   
+    @class Define classes with jOOPL
+*/
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer id="page-footer">
+        &copy; 2013 <a href="http://www.linkedin.com/in/mfidemraizer/en" target="_blank">Matias Fidemraizer</a>. jOOPL is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0.</a>
+    </footer>
+    <script src="../assets/vendor/prettify/prettify-min.js"></script>
+    <script>prettyPrint();</script>
+    <script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>
