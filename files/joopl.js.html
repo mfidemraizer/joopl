@@ -96,13 +96,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/$namespace.html">$namespace</a></li>
+            
                 <li><a href="../classes/Declaring enumerations with jOOPL.html">Declaring enumerations with jOOPL</a></li>
             
                 <li><a href="../classes/Define classes with jOOPL.html">Define classes with jOOPL</a></li>
             
                 <li><a href="../classes/Exception throwing best practices.html">Exception throwing best practices</a></li>
-            
-                <li><a href="../classes/joopl.$namespace.html">joopl.$namespace</a></li>
             
                 <li><a href="../classes/joopl.ArgumentException.html">joopl.ArgumentException</a></li>
             
@@ -116,13 +116,13 @@
             
                 <li><a href="../classes/joopl.Exception.html">joopl.Exception</a></li>
             
+                <li><a href="../classes/joopl.Namespace.html">joopl.Namespace</a></li>
+            
                 <li><a href="../classes/joopl.NotImplementedException.html">joopl.NotImplementedException</a></li>
             
                 <li><a href="../classes/joopl.Object.html">joopl.Object</a></li>
             
                 <li><a href="../classes/joopl.Type.html">joopl.Type</a></li>
-            
-                <li><a href="../classes/Namespace.html">Namespace</a></li>
             
             </ul>
 
@@ -580,90 +580,7 @@ var $manifest = null;
 
     Object.freeze($manifest);
 
-    /**
-    The &#x60;$namespace&#x60; keyword represents an static object holding methods/functions to manage namespaces.
-
-    ### What is a namespace?
-    &lt;p&gt;A namespace is an identifier holding zero or more members like classes and enumerations. &lt;/p&gt;
-
-    &lt;p&gt;In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
-    into the same code library, but since each one belongs to a different namespace, this can happen with no issues:&lt;/p&gt;
-
-        MyNamespace.Class1
-        MyNamespace.MyOtherNamespace.Class1
-        MyNamespace.AnotherNamespace.Class1
-        YetAnotherNamespace.Class1
-
-    &lt;p&gt;Namespaces &lt;strong&gt;must be defined using the &lt;a href=&quot;#method_register&quot;&gt;$namespace.register&lt;/a&gt;&lt;/strong&gt; method.&lt;/p&gt;
-
-    &lt;p&gt;Once some code requires to use these classes, it can access the right class by using the full namespace path:&lt;/p&gt;
-
-        var instance = new $global.MyNamespace.Class1();
-        var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
-        var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
-        var instance4 = new $global.YetAnotherNamespace.Class1();
-
-    &lt;p&gt;This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
-    isolate each one.&lt;/p&gt;
-
-    &lt;h3 id=&quot;namespace-global&quot;&gt;The $global namespace&lt;/h3&gt;
-    &lt;p&gt;jOOPL has a top-most namespace called &#x60;$global&#x60;. Any namespace registered using the whole &#x60;$namespace.register(...)&#x60; method will be nested into the
-    &#x60;$global&#x60; namespace.&lt;/p&gt;
-    &lt;p&gt;As JavaScript top-most object is the &#x60;Window&#x60; object and any variable or function defined in the global scope belongs to &#x60;Window&#x60;, this can lead to
-    bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
-    defined by itself in the &#x60;$global&#x60; namespace in order to prevent issues with other libraries.&lt;/p&gt;
-
-    @class $namespace
-    */
     $namespace = {
-        /**
-        Registers a namespace. The whole method supports two scenarios:
-
-        - Register a namespace and later add members by accessing it with its full path (i.e. $global.your.namespace).
-        - Register a namespace and create a scoped function where the &#x60;this&#x60; keyword holds the registered namespace.
-
-        In both scenarios, jOOPL will check if the whole namespace path is already registered. If it is not the case, it will register the
-        namespace path, and if it was already registered, it just skips the namespace path registration.
-        
-        ####1. Simple register a namespace
-        The first use case of the &#x60;$namespace.register&#x60; method is just about registering a namespace and later access it with its full path:
-            
-            $namespace.register(&quot;joopl.samples&quot;, function() {
-                this.declareClass(&quot;SomeClass&quot;, {
-                    members: {
-                        someMethod: function() {}
-                    }
-                });
-            });
-
-            // Once registered, creating a new instance is as easy as just accessing the full namespace path
-            // plus the class name:
-            var instance = new $global.joopl.samples.SomeClass();
-
-        ####2. Register a namespace and add classes or other members inside a scoped function
-        The second use case of the &#x60;$namespace.register&#x60; is the most powerful one: both register the whole namespace and add members to the
-        it in the same operation and with a shorter syntax. 
-
-        &#x60;$namespace.register&#x60; supports a second parameter in addition to the namespace path called &#x60;scopedFunc&#x60;. It is a parameterless function that, when
-        executed,  the &#x60;this&#x60; keyword in the scope of the function (i.e. *the function body*) will be the childest registered namespace. For example:
-
-            $namespace.register(&quot;joopl.samples&quot;, function() {
-                // The this keyword now is the &#x27;samples&#x27; namespace! 
-                // That&#x27;s great because there is no need to access to the full namespace path
-                // to work on adding members to it!
-                this.declareClass(&quot;A&quot;, {
-                    members: {
-                        someMethod: function() {
-                            return &quot;hello world&quot;;
-                        }
-                    }
-                })
-            });
-
-       @method register
-       @param path {String} A namespace path. For example, &quot;joopl.sample&quot; will register &quot;joopl&quot; and its child &quot;sample&quot;. 
-       @param copedFunc {Function} A parameterless function representing the scope where the &#x60;this&#x60; keyword is the childest registered namespace (for example, registering &quot;joopl.sample&#x27;, the &#x60;this&#x60; keyword will be the *sample* namespace).
-        */
         register: function (path, scopedFunc) {
             var nsIdentifiers = typeof path == &quot;string&quot; ? path.split(&quot;.&quot;) : null;
 
@@ -700,70 +617,28 @@ var $manifest = null;
         },
 
         /** 
-        Aliases an existing namespace.
-        @method alias
-        @param namespace {Object} The namespace to alias
-        @param alias {String} The alias
-        @example
-            $namespace.register(&quot;joopl.samples&quot;);
-            $namespace.alias($global.joopl.samples, &quot;samples&quot;);
+            Aliases an existing namespace.
+
+            @method alias
+            @param namespace {Object} The namespace to alias
+            @param alias {String} The alias
+            @example
+                $namespace.register(&quot;joopl.samples&quot;);
+                $namespace.alias($global.joopl.samples, &quot;samples&quot;);
         */
         alias: function (namespace, alias) {
             $global[alias] = namespace;
         },
 
         /**
-        Imports the members of given namespace path.
+            Imports the members of given namespace path.
 
-        The &#x60;$namespace.using&#x60; method will not register a namespace if a given namespace path is not previously registered with &#x60;$namespace.register&#x60;.
+            The &#x60;$namespace.using&#x60; method will not register a namespace if a given namespace path is not previously registered with &#x60;$namespace.register&#x60;.
 
-
-        ####1. Importing all members from some given namespaces into a variable
-        If the &#x60;$namespace.using&#x60; method is called only giving the first input parameter &#x60;paths&#x60; (*an arrary of strings where each index is a namespace path*).
-
-        That is, if a namespace has been previously registered this way in some JavaScript file:
-            
-            $namespace.register(&quot;joopl.samples&quot;);
-            $namespace.register(&quot;jooopl.samples.ui&quot;);
-
-        ...&#x60;$namespace.using&#x60; would be used like this:
-
-            var importedMembers = $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;]);
-
-        The &#x60;importedMembers&#x60;variable will hold *all* imported classes, interfaces or anything within the &#x60;samples&#x60; and &#x60;ui&#x60; namespaces.
-
-        ####2. Importing all members in a scoped function
-        The second use case is importing the members from some given namespaces into a scoped function:
-
-            $namespace.register(&quot;joopl.samples&quot;, function() {
-                this.declareClass(&quot;ClassA&quot;, {
-                    members: {
-                        someMethod: function() {
-                        }
-                    }
-                })
-            });
-
-
-
-            // Somewhere in the same or other file...
-            $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function() {
-                // The &quot;this&quot; keyword contains an object with all imported members from the both namespaces
-                var instance = new this.ClassA();
-            });
-
-        In addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument
-        and the &#x60;this&#x60; keyword will hold the &#x60;$global&#x60; object:
-
-            $namespace.using([&quot;joopl.samples&quot;, &quot;joopl.samples.ui&quot;], function(scope) {
-                // The scope input argument will hold the imported members
-                var instance = new scope.ClassA();
-            });
-
-        @method using
-        @param paths {Array} An array of strings of the namespaces to import
-        @param scopedFunc {Function} A function to create a namespace scope (optional)
-        @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
+            @method using
+            @param paths {Array} An array of strings of the namespaces to import
+            @param scopedFunc {Function} A function to create a namespace scope (optional)
+            @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
         */
         using: function (paths, scopedFunc, scopeIsNs) {
             if (paths === undefined) {

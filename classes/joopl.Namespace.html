@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: Declaring enumerations with jOOPL - { joopl };</title>
+    <title>jOOPL: joopl.Namespace - { joopl };</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -139,7 +139,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: Declaring enumerations with jOOPL</h1>
+                        <h1>Now on: joopl.Namespace</h1>
 <div class="box meta">
     
 
@@ -153,163 +153,66 @@
 
 
 <div class="box intro">
-    <h2 id="index">Index</h2>
-
-<p>If you are looking for code samples, <a href="../test/enum.test.html" target="_self">please see enumeration tests' and their source code.</a></p>
-
-<ul>
-<li>1.0. <a href="#enum-definition">What is an enumeration?</a></li>
-<li>2.0. <a href="#enum-goal">What is the goal of enumerations</a></li>
-<li>3.0. <a href="#enum-howto">Enumerations how-to</a>
-<ul><li>3.1. <a href="#enum-usage">When and how to use enumerations</a></li>
-<li>3.2. <a href="#enum-values">Enumeration values</a>
-<ul><li>3.2.1. <a href="#enum-flags">Enumeration flags</a></li></ul></li></ul></li>
-</ul>
-
-<h3 id="enum-definition">1.0 What is an enumeration?</h3>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>An enumeration is an <em>special class</em> of constants. </p>
-
-<h3 id="enum-goal">2.0 What is the goal of enumerations?</h3>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>In regular JavaScript, when some code needs to identify states uses integers (<code>Number</code>):</p>
-
-<pre class="code prettyprint"><code>// "1" would mean that something is open (for example, an HTTP connection)
-if(someVar == 1) {
-    // Do stuff
-}
-</code></pre>
-
-<p>jOOPL introduces true enumerations and the above code could be turned into:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.enumerations", function() {
-    this.declareEnum("HttpState", {
-        closed: 0,
-        open: 1
-    });
-
-    var someVar = this.HttpState.open;
-
-    if(someVar == this.HttpState.open) {
-        // Do stuff
-    }
-});
-</code></pre>
-
-<p>The above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may
-increase code readibility, since developers will not need to check documentation in order to know what <code>0</code> or <code>1</code> states
-mean.</p>
-
-<h3 id="enum-howto">3. Enumerations how-to</h3>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>Enumerations are created using the <code>$enumdef</code> operator. The <code>$enumdef</code> operator is a ctor accepting an object
-defining one or more constants:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("mynamespace", function() {
-    this.declareEnum("State", {
-        open: 0,
-        closed: 1,
-        disconnected: 2,
-        working: 3
-    });
-});
-</code></pre>
-
-<p>The given constants <strong>must be always numeric</strong> and the enumeration must contain only numeric properties.</p>
-
-<h4 id="enum-usage">3.1 When and how to use enumerations</h4>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>Enumerations are required when some code can define a closed set of values that may not change overtime.</p>
-
-<p>For example, some code may have a class with a method accepting a limited number of HTTP verbs:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("mynamspace", function() {
-    this.declareEnum("HttpVerb", {
-        get: 0,
-        post: 1,
-        put : 2
-    });
-
-    var scope = this;
-
-    this.declareClass("MyClass", {
-        members: {
-            // The @verb argument will only support verbs of the HttpVerb enumeration
-            doRequest: function(verb, url, args) {
-                switch(verb) {
-                    case scope.HttpVerb.get: 
-                        // Perform the HTTP GET request
-                        break;
-
-                    case scope.HttpVerb.post:
-                        // Perform the HTTP POST request
-                        break;
-
-                    default: 
-                        throw Error("Only HTTP POST and GET are supported!");
-                }
-
-            }
-        }
-    });
-});
-</code></pre>
-
-<h4 id="enum-values">3.2 Enumeration values</h4>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>An enumeration value is an instance of standard ECMA-Script <code>Number</code> object (the primitive <code>Number</code> type wrapper). jOOPL inherits <code>Number</code> and
-any enumeration value has also a reserved property <code>enum</code> ( see EnumValue to explore available methods and properties of
-an enumeration value).</p>
-
-<p>The <code>enum</code> property represents a set of common operations for enum values.</p>
-
-<h5 id="enum-flags">3.2.1 Enumeration flags</h5>
-
-<p><a href="#index">Back to index</a></p>
-
-<p>Sometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:</p>
-
-<pre class="code prettyprint"><code>var state = this.State.open;
-</code></pre>
-
-<p>jOOPL provides support for <em>flags</em> (combination of more than an enumeration values) using bit-wise operators like <code>OR</code> and <code>AND</code> in order to create enumeration 
-values containing more than an enumeration value.</p>
-
-<p>For example, taking this enumeration as example:</p>
-
-<pre class="code prettyprint"><code>$namespace.register("joopl.enumerations", function() {
-    this.declareEnum("States", {
-        open: 0,
-        closed: 1,
-        working: 2
-    });
-});
-</code></pre>
-
-<p>Some code may need to express that something is <code>open</code> but it is also <code>working</code>. This is achieved by using the <code>OR</code> operator:</p>
-
-<pre class="code prettyprint"><code>var openAndWorking = this.State.open.enum.or(State.working);
-</code></pre>
-
-<p>And, finally, if some other code needs to evaluate that the enumeration value includes <code>open</code> (see <code>EnumValue.</code>EnumValue/hasFlag:method
-method for further details):</p>
-
-<pre class="code prettyprint"><code>if(openAndWorking.enum.hasFlag(this.State.open)) {
-    // Do stuff if it is open already
-}
-</code></pre>
+    <p>Represents a namespace which can declare classes and enumerations, and provides metadata.</p>
 </div>
 
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_joopl.Namespace" class="method item">
+    <h3 class="name"><code>joopl.Namespace</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/joopl.js.html#l30"><code>joopl.js:30</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
 
 
             

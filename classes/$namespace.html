@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: Namespace - { joopl };</title>
+    <title>jOOPL: $namespace - { joopl };</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -96,13 +96,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/$namespace.html">$namespace</a></li>
+            
                 <li><a href="../classes/Declaring enumerations with jOOPL.html">Declaring enumerations with jOOPL</a></li>
             
                 <li><a href="../classes/Define classes with jOOPL.html">Define classes with jOOPL</a></li>
             
                 <li><a href="../classes/Exception throwing best practices.html">Exception throwing best practices</a></li>
-            
-                <li><a href="../classes/joopl.$namespace.html">joopl.$namespace</a></li>
             
                 <li><a href="../classes/joopl.ArgumentException.html">joopl.ArgumentException</a></li>
             
@@ -116,13 +116,13 @@
             
                 <li><a href="../classes/joopl.Exception.html">joopl.Exception</a></li>
             
+                <li><a href="../classes/joopl.Namespace.html">joopl.Namespace</a></li>
+            
                 <li><a href="../classes/joopl.NotImplementedException.html">joopl.NotImplementedException</a></li>
             
                 <li><a href="../classes/joopl.Object.html">joopl.Object</a></li>
             
                 <li><a href="../classes/joopl.Type.html">joopl.Type</a></li>
-            
-                <li><a href="../classes/Namespace.html">Namespace</a></li>
             
             </ul>
 
@@ -139,7 +139,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: Namespace</h1>
+                        <h1>Now on: $namespace</h1>
 <div class="box meta">
     
 
@@ -153,97 +153,115 @@
 
 
 <div class="box intro">
-    <p>Represents a namespace which can declare classes and enumerations, and provides metadata.</p>
+    <p>The <code>$namespace</code> keyword represents an static object holding methods/functions to manage namespaces.</p>
+
+<p><em>If you are looking for code samples, <a href="../test/namespace.test.html" target="_blank">opening <code>$namespace</code> tests</a> and browsing their source code could be a good idea!</em></p>
+
+<h3>What is a namespace?</h3>
+
+<p>A namespace is an identifier holding zero or more members like classes and enumerations. </p>
+
+<p>In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
+into the same code library, but since each one belongs to a different namespace, this can happen with no issues:</p>
+
+<pre class="code prettyprint"><code>MyNamespace.Class1
+MyNamespace.MyOtherNamespace.Class1
+MyNamespace.AnotherNamespace.Class1
+YetAnotherNamespace.Class1
+</code></pre>
+
+<p>Namespaces <strong>must be defined using the <a href="#method_register">$namespace.register</a></strong> method.</p>
+
+<p>Once some code requires to use these classes, it can access the right class by using the full namespace path:</p>
+
+<pre class="code prettyprint"><code>var instance = new $global.MyNamespace.Class1();
+var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
+var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
+var instance4 = new $global.YetAnotherNamespace.Class1();
+</code></pre>
+
+<p>This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
+isolate each one.</p>
+
+<h3>How to register a namespace</h3>
+
+<p>The second use case of the <code>$namespace.register</code> is the most powerful one: both register the whole namespace and add members to the
+it in the same operation and with a shorter syntax. </p>
+
+<p><code>$namespace.register</code> supports a second parameter in addition to the namespace path called <code>scopedFunc</code>. It is a parameterless function that, when
+executed,  the <code>this</code> keyword in the scope of the function (i.e. <em>the function body</em>) will be the childest registered namespace. For example:</p>
+
+<pre class="code prettyprint"><code>$namespace.register("joopl.samples", function() {
+    // The this keyword now is the 'samples' namespace! 
+    // That's great because there is no need to access to the full namespace path
+    // to work on adding members to it!
+    this.declareClass("A", {
+        members: {
+            someMethod: function() {
+                return "hello world";
+            }
+        }
+    })
+});
+</code></pre>
+
+<h3 id="namespace-global">The $global namespace</h3>
+
+<p>jOOPL has a top-most namespace called <code>$global</code>. Any namespace registered using the whole <code>$namespace.register(...)</code> method will be nested into the
+<code>$global</code> namespace.</p>
+
+<p>As JavaScript top-most object is the <code>Window</code> object and any variable or function defined in the global scope belongs to <code>Window</code>, this can lead to
+bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
+defined by itself in the <code>$global</code> namespace in order to prevent issues with other libraries.</p>
+
+<h3>Importing one or more namespaces</h3>
+
+<h4>1. Importing all members from some given namespaces into a variable</h4>
+
+<p>If the <code>$namespace.using</code> method is called only giving the first input parameter <code>paths</code> (<em>an arrary of strings where each index is a namespace path</em>).</p>
+
+<p>That is, if a namespace has been previously registered this way in some JavaScript file:
+    $namespace.register("joopl.samples");
+    $namespace.register("jooopl.samples.ui");</p>
+
+<p>...<code>$namespace.using</code> would be used like this:</p>
+
+<p>var importedMembers = $namespace.using(["joopl.samples", "joopl.samples.ui"]);</p>
+
+<p>The <code>importedMembers</code> variable will hold <em>all</em> imported classes or enumerations within the <code>samples</code> and <code>ui</code> namespaces.</p>
+
+<h4>2. Importing all members in a scoped function</h4>
+
+<p>The second use case is importing members from some given namespaces into a scoped function:</p>
+
+<pre class="code prettyprint"><code>$namespace.register("joopl.samples", function() {
+    this.declareClass("ClassA", {
+        members: {
+            someMethod: function() {
+            }
+        }
+    });
+});
+
+// Somewhere in the same or other file...
+$namespace.using(["joopl.samples", "joopl.samples.ui"], function() {
+    // The "this" keyword contains an object with all imported members from the both namespaces
+    var instance = new this.ClassA();
+});
+</code></pre>
+
+<p>In addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument
+and the <code>this</code> keyword will hold the <code>$global</code> namespace object:</p>
+
+<pre class="code prettyprint"><code>$namespace.using(["joopl.samples", "joopl.samples.ui"], function(scope) {
+    // The scope input argument will hold the imported members
+    var instance = new scope.ClassA();
+});
+</code></pre>
 </div>
 
 
-    <div class="constructor">
-        <h2>Constructor</h2>
-        <div id="method_Namespace" class="method item">
-    <h3 class="name"><code>Namespace</code></h3>
 
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l30"><code>joopl.js:30</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-    </div>
-
-
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties">
-                        
-                            <li class="index-item property">
-                                <a href="#property_fullName">fullName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_name">name</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_parent">parent</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -256,8 +274,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_declareClass" class="method item">
-    <h3 class="name"><code>declareClass</code></h3>
+                    <div id="method_register" class="method item">
+    <h3 class="name"><code>register</code></h3>
 
     
         <div class="args">
@@ -265,13 +283,13 @@
             
                 <li class="arg">
                     
-                        <code>className</code>
+                        <code>path</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>classDef</code>
+                        <code>scopedFunc</code>
                     
                 </li>
             
@@ -304,7 +322,7 @@
             
         
         
-        <a href="../files/joopl.js.html#l86"><code>joopl.js:86</code></a>
+        <a href="../files/joopl.doc.namespaces.js.html#l99"><code>joopl.doc.namespaces.js:99</code></a>
         
         </p>
 
@@ -315,7 +333,7 @@
     </div>
 
     <div class="description">
-        <p>Declares a class inside the namespace (see <a href="define classes with joopl.html" target="_self">how to define classes</a>)</p>
+        <p>Registers a namespace.</p>
     </div>
 
     
@@ -326,14 +344,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">className</code>
+                        <code class="param-name">path</code>
                         <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A class name (f.e. "MyClass", "Person", "Order", "Product"...)</p>
+                        <p>A namespace path. For example, "joopl.sample" will register "joopl" and its child "sample".</p>
                     </div>
 
                     
@@ -341,14 +359,145 @@
             
                 <li class="param">
                     
-                        <code class="param-name">classDef</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">scopedFunc</code>
+                        <span class="type">Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A class definition</p>
+                        <p>A parameterless function representing the scope where the <code>this</code> keyword is the childest registered namespace (for example, registering "joopl.sample', the <code>this</code> keyword will be the <em>sample</em> namespace).</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_using" class="method item">
+    <h3 class="name"><code>using</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>paths</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>scopedFunc</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>scopeIsNs</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/joopl.doc.namespaces.js.html#l107"><code>joopl.doc.namespaces.js:107</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Imports the members of given namespace path. </p>
+
+<p>The <code>$namespace.using</code> method will not register a namespace if a given namespace path is not previously registered with <code>$namespace.register</code>.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">paths</code>
+                        <span class="type">Array | String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An array of strings of the namespaces to import, or just a string with a single namespace path.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">scopedFunc</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A function to create a namespace scope (optional)</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">scopeIsNs</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)</p>
                     </div>
 
                     
@@ -368,144 +517,6 @@
         
 
         
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_fullName" class="property item">
-    <h3 class="name"><code>fullName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l54"><code>joopl.js:54</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets namespace full namespace path</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_name" class="property item">
-    <h3 class="name"><code>name</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l38"><code>joopl.js:38</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets namespace name</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_parent" class="property item">
-    <h3 class="name"><code>parent</code></h3>
-    <span class="type"><a href="..\classes\Namespace.html" class="crosslink">Namespace</a></span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l70"><code>joopl.js:70</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the parent namespace object</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
-        
 
         
 
@@ -518,8 +529,6 @@
         
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
