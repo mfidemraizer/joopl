@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace joopl.DependencyBuilder
 {
@@ -99,7 +99,7 @@ namespace joopl.DependencyBuilder
                     }
                     else if (scopeNamespaces.Count > 0)
                     {
-                        if (tokens[tokenIndex].Value == "$extends")
+                        if (tokens[tokenIndex].Value == "inherits")
                         {
                             string memberName = null;
                             bool withNs = false;
@@ -329,11 +329,11 @@ namespace joopl.DependencyBuilder
 
                         tokenIndex += 4;
                     }
-                    else if (new[] { "$def", "$enumdef" }.Any(token => token == tokens[tokenIndex].Value))
+                    else if (new[] { "declareClass", "declareEnum" }.Any(token => token == tokens[tokenIndex].Value))
                     {
-                        if (ns != null && new Regex("^([A-Z][A-Za-z0-9]+)$").IsMatch(tokens[tokenIndex - 2].Value))
+                        if (ns != null && new Regex("^([A-Z][A-Za-z0-9]+)$").IsMatch(tokens[tokenIndex + 2].Value))
                         {
-                            ns.Members.Add(new Type { Parent = ns, FileName = relativeFilePath, Name = tokens[tokenIndex - 2].Value });
+                            ns.Members.Add(new Type { Parent = ns, FileName = relativeFilePath, Name = tokens[tokenIndex + 2].Value });
                         }
 
                         tokenIndex++;
