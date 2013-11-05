@@ -767,7 +767,7 @@
         {
             "file": "joopl.js",
             "line": 1431,
-            "description": "Gets an inner exception (optional) which provides for information about the sorrounding one",
+            "description": "Gets an inner exception (optional) which provides information about the sorrounding one",
             "itemtype": "property",
             "name": "innerException",
             "type": "Exception",
@@ -791,8 +791,8 @@
             "line": 1453,
             "description": "Gets underlying `Error` instance",
             "itemtype": "property",
-            "name": "stackTrace",
-            "type": "Array",
+            "name": "error",
+            "type": "Error",
             "readonly": "",
             "class": "joopl.Exception",
             "namespace": "joopl"
