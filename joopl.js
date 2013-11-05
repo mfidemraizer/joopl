@@ -1429,7 +1429,7 @@ var $manifest = null;
                 },
 
                 /**
-                    Gets an inner exception (optional) which provides for information about the sorrounding one
+                    Gets an inner exception (optional) which provides information about the sorrounding one
 
                     @property innerException
                     @type Exception
@@ -1453,8 +1453,8 @@ var $manifest = null;
                 /**
                     Gets underlying `Error` instance  
 
-                    @property stackTrace
-                    @type Array
+                    @property error
+                    @type Error
                     @readonly
                 */
                 get error() {
