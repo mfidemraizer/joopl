@@ -4,7 +4,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "$namespace",
         "Declaring enumerations with jOOPL",
         "Define classes with jOOPL",
-        "Exception throwing best practices",
+        "Exception handling best practices",
         "joopl.ArgumentException",
         "joopl.Attribute",
         "joopl.Enum",

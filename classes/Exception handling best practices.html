@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: joopl.ArgumentException - { joopl };</title>
+    <title>jOOPL: Exception handling best practices - { joopl };</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -261,14 +261,10 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: joopl.ArgumentException</h1>
+                        <h1>Now on: Exception handling best practices</h1>
 <div class="box meta">
     
 
-    
-        <div class="extends">
-            Extends <a href="..\classes\joopl.Exception.html" class="crosslink">joopl.Exception</a>
-        </div>
     
 
     
@@ -279,428 +275,96 @@
 
 
 <div class="box intro">
-    <p>Represents an exception that occurs when some method argument is missing or invalid</p>
+    <h2>In JavaScript, any object is <em>throwable</em> as exception</h2>
 
-<p><a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to "Exception handling best practices"</a></p>
-</div>
+<p>JavaScript, as any other modern language, supports exceptions and exception handling. What makes JavaScript different to other languages and runtimes is it
+is able to throw any object as an exception:</p>
 
-
-    <div class="constructor">
-        <h2>Constructor</h2>
-        <div id="method_joopl.ArgumentException" class="method item">
-    <h3 class="name"><code>joopl.ArgumentException</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>argName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>reason</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l1483"><code>joopl.js:1483</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">argName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The affected argument name</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">reason</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional) A reason text explaining what was wrong with the affected argument</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>throw new Error(new $global.joopl.ArgumentException({ argName: "someArgument"}));
+<pre class="code prettyprint"><code>throw "hello world";
+throw { text: "hello world" };
+throw Error("hello world");
+throw 1;
+throw false;
 </code></pre>
-            </div>
+
+<p>Obviously no one is looking to throw a text <code>as is</code> but throwing useful objects with data in order to allow proper exception handling.</p>
+
+<h2>Debuggers like Firebug don't like custom objects as exceptions</h2>
+
+<p>A big limitation when throwing any kind of object instead of throwing the built-in <code>Error</code> one (i.e. <code>throw Error("exception message")</code>) is that Web browser
+debuggers like <strong>Firebug</strong> will be able to output the exception in their debugging console but it will not mark where it happened at all and the console log will not be <em>clickable</em>
+turning exception debugging into a big issue.</p>
+
+<p>Firebug will only output an exception to the console tab as <em>clickable</em> in order to go to the code line where it was thrown if the thrown exception is a
+build-in <code>Error</code> object.</p>
+
+<p>In opposite to Firebug, Chrome and modern Internet Explorer JavaScript debuggers will log to console the exact line where the exception was thrown, either if 
+it is an <code>Error</code>, <code>Error</code>-derived custom exception type or just an object.</p>
+
+<h2>jOOPL's approach to exception handling</h2>
+
+<p>In jOOPL there is a design decision and it is that exceptions will not be never inheriting <code>Error</code> prototype nor internal exceptions throw <code>Error</code> instances.</p>
+
+<p>For now <code>Error</code> object has different behavior depending on the browser vendor and version, and there are known issues when playing with custom error types.</p>
+
+<p>jOOPL introduces a build-in <code>Exception</code> class available in the out-of-the-box <code>joopl</code> namespace that combines the best of exception handling when using <code>Error</code> object
+instances and true exception handling like one found in other software development platforms, languages and technologies. </p>
+
+<p><code>Exception</code> class can be inherited with jOOPL inheritance approach.</p>
+
+<p>When either <code>Exception</code> or derived classes of itself are thrown using the <code>throw new</code> standard JavaScript syntax, jOOPL will extract useful debugging information and it will add this 
+to the <code>Exception</code> instance (line number, stack trace, ...). </p>
+
+<p>In addition, <code>Exception</code> and its derived classes have a default <code>toString</code> override which outputs not only the exception message but also the stack trace! See next picture for a sample:</p>
+
+<p><img src="../assets/img/exception_output_sample.png" alt="Exception output sample" /></p>
+
+<h2>Handling exceptions by type</h2>
+
+<p>Exceptions may be caught using <code>try/catch</code> statements and they can be filtered by type by using the standard <code>instanceof</code> operator:</p>
+
+<pre class="code prettyprint"><code>try {
+    throw new $global.joopl.ArgumentException({ argName: "id", reason: "'id' is mandatory" });
+} catch(e) {
+    if(e instanceof $global.joopl.ArgumentException) {
+        // Do stuff here if thrown exception is an ArgumentException!
+    } else {
+        // Do other stuff if thrown exception is not an ArgumentException!
+    }
+}
+</code></pre>
+
+<h2 id="global-exception-handler">Global exception handler</h2>
+
+<p>Since 2.4.x version jOOPL includes a global exception event which can be handled by multiple event handlers:</p>
+
+<pre class="code prettyprint"><code>$namespace.using("joopl", function() {
+    this.Environment.current.exceptionThrown.addEventListener(function(e) {
+        // "e" contains a property "thrownException":
+        if(e.thrownException instanceof this.ArgumentException) {
+            // Do stuff if thrown exception is an ArgumentException
+        }
+    });
+
+    // This throw will be listened by the event handler added in the Environment class singleton "exceptionThrown" event!
+    throw new this.ArgumentException({ argName: "id" });
+});
+</code></pre>
+
+<p><em>Note: <code>Environment.exceptionThrown</code> event occurs when any exception is instantiated, even if it's not already thrown.</em></p>
+</div>
+
+
+
+            
+
+            
+
+            
         </div>
-    
-</div>
-
-    </div>
-
-
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                        
-                            <li class="index-item property">
-                                <a href="#property_argName">argName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_innerException">innerException</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_message">message</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited inherited">
-                                <a href="#property_stackTrace">stackTrace</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_toString" class="method item inherited">
-    <h3 class="name"><code>toString</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#method_toString">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/joopl.js.html#l1464"><code>joopl.js:1464</code></a>
-        
-        </p>
-
 
         
 
-        
-    </div>
-
-    <div class="description">
-        <p>Returns the exception message plus the stack trace as a concatenated string</p>
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    The exception message plus the stack trace as a concatenated string
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_argName" class="property item">
-    <h3 class="name"><code>argName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/joopl.js.html#l1510"><code>joopl.js:1510</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the affected argument name</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_innerException" class="property item inherited">
-    <h3 class="name"><code>innerException</code></h3>
-    <span class="type">Exception</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_innerException">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/joopl.js.html#l1431"><code>joopl.js:1431</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets an inner exception (optional) which provides for information about the sorrounding one</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_message" class="property item inherited">
-    <h3 class="name"><code>message</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_message">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/joopl.js.html#l1420"><code>joopl.js:1420</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the human-readable reason text for this exception</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_stackTrace" class="property item inherited">
-    <h3 class="name"><code>stackTrace</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="..\classes\joopl.Exception.html#property_stackTrace">
-                joopl.Exception
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/joopl.js.html#l1442"><code>joopl.js:1442</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the exception's stack trace as an array where each index is a code line</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
         
 
         
@@ -712,10 +376,6 @@
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
         
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
