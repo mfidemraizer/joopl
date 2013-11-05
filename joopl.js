@@ -1364,20 +1364,19 @@ var $manifest = null;
             }
         );
 
-        /**
-            Represents the base class for any exception 
-
-            @class Exception
-        */
         this.declareClass("Exception", {
 
             /**
+                Represents the base class for any exception 
+
+                <a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to "Exception handling best practices"</a>
+
                 @class Exception
                 @constructor
                 @param {string} message A human-readable reason text for the whole exception
                 @param {Exception} innerException An inner exception that is more specific to occured error
                 @example 
-                    throw new Error($global.joopl.Exception({ message: "Some", innerException: otherException }));
+                    throw new $global.joopl.Exception({ message: "Some", innerException: otherException });
             */
             ctor: function (args) {
                 this._.message = args.message;
@@ -1411,6 +1410,8 @@ var $manifest = null;
                     this._.stackTrace = stackTrace;
                 }
 
+                this._.error = error;
+
                 $global.joopl.Environment.current.notifyException(this._.derived);
             },
 
@@ -1438,10 +1439,34 @@ var $manifest = null;
                     return this._.innerException;
                 },
 
+                /**
+                    Gets the exception's stack trace as an array where each index is a code line  
+
+                    @property stackTrace
+                    @type Array
+                    @readonly
+                */
                 get stackTrace() {
                     return this._.stackTrace;
                 },
 
+                /**
+                    Gets underlying `Error` instance  
+
+                    @property stackTrace
+                    @type Array
+                    @readonly
+                */
+                get error() {
+                    return this._.error;
+                },
+
+                /**
+                    Returns the exception message plus the stack trace as a concatenated string
+
+                    @method toString
+                    @return {String} The exception message plus the stack trace as a concatenated string
+                */
                 toString: function () {
                     var text = "An exception of type '" + this.type.fullName + "' has been thrown with message '" + this.message + "'\n\n";
                     text += "Stack trace:\n_________________________\n\n";
@@ -1452,19 +1477,19 @@ var $manifest = null;
             }
         });
 
-        /**
-            Represents an exception that occurs when some method argument is missing or invalid
-
-            @class ArgumentException
-            @extends joopl.Exception
-        */
         this.declareClass("ArgumentException", {
             inherits: this.Exception,
 
             /**
+                Represents an exception that occurs when some method argument is missing or invalid
+
+                <a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to "Exception handling best practices"</a>
+
                 @class ArgumentException
+                @extends joopl.Exception
                 @constructor
                 @param {string} argName The affected argument name
+                @param {string} reason (optional) A reason text explaining what was wrong with the affected argument
                 @example
                     throw new Error(new $global.joopl.ArgumentException({ argName: "someArgument"}));
             */
@@ -1482,7 +1507,6 @@ var $manifest = null;
                 });
             },
             members: {
-
                 /**
                     Gets the affected argument name
 
@@ -1496,17 +1520,16 @@ var $manifest = null;
             }
         });
 
-        /**
-            Represents an exception that occurs when a class member is not implemented
-
-            @class NotImplementedException
-            @extends joopl.Exeption
-        */
         this.declareClass("NotImplementedException", {
             inherits: this.Exception,
 
             /**
+                Represents an exception that occurs when a class member is not implemented.
+
+                <a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to "Exception handling best practices"</a>
+
                 @class NotImplementedException
+                @extends joopl.Exception
                 @constructor
                 @param {string} memberName The affected member name which does not implement something
                 @example
