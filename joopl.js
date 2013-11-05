@@ -23,7 +23,7 @@ var $manifest = null;
 (function (undefined) {
     "use strict";
 
-    var version = "2.4.0";
+    var version = "2.4.1";
     var $enumdef = null;
     var $def = null;
 
@@ -134,6 +134,28 @@ var $manifest = null;
     Object.freeze(Namespace);
 
     $global = new Namespace({ name: "$global", fullName: "$global", parent: null });
+
+    var BrowserUtil = {
+        get isIE() {
+            if (!window) {
+                return false;
+            }
+
+            var div = document.createElement("div");
+            div.innerHTML = "<!--[if IE]><i></i><![endif]-->";
+
+            return div.getElementsByTagName("i").length == 1 || navigator.userAgent.toLowerCase().indexOf("trident") > 0;
+        },
+
+        get isWebkit() {
+            var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+            var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+
+            return isChrome || isSafari;
+        }
+    };
+
+    Object.freeze(BrowserUtil);
 
     // An object containing a set of core features used by jOOPL
     var TypeUtil = {
@@ -268,11 +290,6 @@ var $manifest = null;
                 );
             }
 
-            if (callctor) {
-                instance.ctor.call(instance, args);
-            }
-
-
             Object.defineProperty(
                 instance._,
                 "derived", {
@@ -282,6 +299,10 @@ var $manifest = null;
                     enumerable: false
                 }
             );
+
+            if (callctor) {
+                instance.ctor.call(instance, args);
+            }
 
             return instance;
         },
@@ -1362,7 +1383,35 @@ var $manifest = null;
                 this._.message = args.message;
                 this._.innerException = args.innerException;
 
-                $global.joopl.Environment.current.notifyException(this);
+                var error = Error(args.message);
+                var stackTrace = null;
+
+                if (BrowserUtil.isIE) {
+                    try {
+                        throw error;
+                    } catch (e) {
+                        error = e;
+                    }
+                }
+
+                var stackTrace = error.stack.split("\n");
+                var found = false;
+                var index = BrowserUtil.isIE || BrowserUtil.isWebkit ? 0 : -1;
+                var stackRegex = BrowserUtil.isIE || BrowserUtil.isWebkit ? /(joopl[.A-Za-z0-9]+\.js[:0-9]+\)$)|(at Error)/ : /joopl[.A-Za-z0-9]+\.js[:0-9]+$/;
+
+                while (!found && index < stackTrace.length) {
+                    if (!stackRegex.test(stackTrace[++index])) {
+                        found = true;
+                    }
+                }
+
+                if (found) {
+                    stackTrace.splice(0, index);
+
+                    this._.stackTrace = stackTrace;
+                }
+
+                $global.joopl.Environment.current.notifyException(this._.derived);
             },
 
             members:
@@ -1389,8 +1438,16 @@ var $manifest = null;
                     return this._.innerException;
                 },
 
+                get stackTrace() {
+                    return this._.stackTrace;
+                },
+
                 toString: function () {
-                    return "An exception of type '" + this.type.fullName + "' has been thrown with message '" + this.message + "'";
+                    var text = "An exception of type '" + this.type.fullName + "' has been thrown with message '" + this.message + "'\n\n";
+                    text += "Stack trace:\n_________________________\n\n";
+                    text += this.stackTrace.join("\n");
+
+                    return text;
                 }
             }
         });
