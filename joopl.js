@@ -23,7 +23,7 @@ var $manifest = null;
 (function (undefined) {
     "use strict";
 
-    var version = "2.4.1";
+    var version = "2.4.2";
     var $enumdef = null;
     var $def = null;
 
@@ -1039,6 +1039,7 @@ var $manifest = null;
         var EnumValue = $def("EnumValue", { name: "joopl" }, {
             ctor: function (args) {
                 this._.value = args.value;
+                this._.name = args.name;
             },
             members: {
                 /** 
@@ -1048,6 +1049,15 @@ var $manifest = null;
                     @type Number
                 */
                 get value() { return this._.value; },
+
+                /**
+                    Gets the enumeration value name
+
+                    @property name
+                    @type string
+                    @readOnly
+                */
+                get name() { return this._.name; },
 
                 /** 
                     Performs a bitwise OR with the given enumeration value
@@ -1203,7 +1213,7 @@ var $manifest = null;
                 }
 
                 enumValue = new Number(enumDef[propertyName]);
-                enumValue.enum = new EnumValue({ value: enumValue });
+                enumValue.enum = new EnumValue({ value: enumValue, name: propertyName });
 
                 Object.defineProperty(
                     enumerationType,
