@@ -48,6 +48,13 @@ namespace joopl.DependencyBuilder
             set;
         }
 
+        [DataMember(Name = "inherits")]
+        public Type Inherits
+        {
+            get;
+            set;
+        }
+
         [DataMember(Name = "fileName")]
         public string FileName
         {

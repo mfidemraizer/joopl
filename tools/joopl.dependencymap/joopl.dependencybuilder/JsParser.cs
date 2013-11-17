@@ -16,6 +16,7 @@
 // limitations under the License.
 using Jurassic;
 using Jurassic.Library;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,8 +27,10 @@ namespace joopl.DependencyBuilder
 {
     public class JsParser
     {
-        public JsParser()
+        static JsParser()
         {
+            _tokenCache = new Dictionary<string, IList<IDictionary<string, string>>>();
+
             _engine = new Lazy<ScriptEngine>
             (
                 () =>
@@ -40,44 +43,37 @@ namespace joopl.DependencyBuilder
                         engine.Evaluate(esprimaReader.ReadToEnd());
                     }
 
-                    engine.Evaluate("function parseCode(codeText) { return esprima.parse(codeText, { tokens: true }); }");
+                    engine.Evaluate("function parseCode(codeText) { return JSON.stringify(esprima.parse(codeText, { tokens: true }).tokens); }");
 
                     return engine;
                 }
             );
         }
 
-        private readonly Lazy<ScriptEngine> _engine;
+        private static readonly Lazy<ScriptEngine> _engine;
+        private static readonly Dictionary<string, IList<IDictionary<string, string>>> _tokenCache;
 
         private ScriptEngine Engine
         {
             get { return _engine.Value; }
         }
 
-        public dynamic ParseSyntax(string codeFilePath)
+        public Dictionary<string, IList<IDictionary<string, string>>> TokenCache
         {
-            PropertyNameAndValue underlyingSyntax = ((ObjectInstance)Engine.CallGlobalFunction("parseCode", File.ReadAllText(codeFilePath)))
-                                                         .Properties.Single(prop => prop.Name == "body");
-
-            return underlyingSyntax.Value;
+            get
+            {
+                return _tokenCache;
+            }
         }
 
-        public List<KeyValuePair<string, string>> ParseTokens(string codeFilePath)
+        public IList<IDictionary<string, string>> ParseTokens(string codeFilePath)
         {
-            PropertyNameAndValue underlyingTokens = ((ObjectInstance)Engine.CallGlobalFunction("parseCode", File.ReadAllText(codeFilePath)))
-                                                         .Properties.Single(prop => prop.Name == "tokens");
+            if (!TokenCache.ContainsKey(codeFilePath))
+            {
+                TokenCache.Add(codeFilePath, JsonConvert.DeserializeObject<IList<IDictionary<string, string>>>(((string)Engine.CallGlobalFunction("parseCode", File.ReadAllText(codeFilePath))).Replace("\"\"", "\"")));
+            }
 
-            return ((ArrayInstance)underlyingTokens.Value).Properties
-                                        .Where(prop => prop.Value.GetType() != typeof(int))
-                                        .Select
-                                        (
-                                            prop => new KeyValuePair<string, string>
-                                            (
-                                                (string)((ObjectInstance)prop.Value).Properties.Single(some => some.Name == "type").Value,
-                                                ((ObjectInstance)prop.Value).Properties.Single(some => some.Name == "value").Value.ToString().Trim('"')
-                                            )
-                                        )
-                                        .ToList();
+            return TokenCache[codeFilePath];
         }
     }
 }

@@ -28,8 +28,9 @@ namespace joopl.DependencyBuilder
 {
     public sealed class DependencyBuilder
     {
-        public List<FileManifest> BuildDependencyUsageMap(List<Namespace> dependencyMap, string baseDirectory, string[] excludeFiles = null)
+        public IDictionary<string, IList<string>> BuildDependencyUsageMap(List<Namespace> dependencyMap, string baseDirectory, string[] excludeFiles = null, string[] moduleFiles = null)
         {
+            IDictionary<string, IList<string>> result = new Dictionary<string, IList<string>>();
             IEnumerable<IDictionary<string, object>> thirdPartyDependencies = null;
 
             if (File.Exists(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")))
@@ -37,7 +38,7 @@ namespace joopl.DependencyBuilder
                 thirdPartyDependencies = JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine(baseDirectory, "ThirdPartyDependencies.json")));
             }
 
-            List<KeyValuePair<string, string>> tokens;
+            IList<IDictionary<string, string>> tokens;
             int tokenIndex = 0;
             string relativeFilePath = null;
 
@@ -65,11 +66,11 @@ namespace joopl.DependencyBuilder
 
                 while (tokenIndex < tokens.Count)
                 {
-                    if (tokens[tokenIndex].Value == "$namespace" && new[] { "register", "using" }.Any(token => token == tokens[tokenIndex + 2].Value))
+                    if (tokens[tokenIndex]["value"] == "$namespace" && new[] { "register", "using" }.Any(token => token == tokens[tokenIndex + 2]["value"]))
                     {
-                        if (tokens[tokenIndex + 2].Value == "using" && tokens[tokenIndex + 4].Value == "[")
+                        if (tokens[tokenIndex + 2]["value"] == "using" && tokens[tokenIndex + 4]["value"] == "[")
                         {
-                            IEnumerable<string> namespaceDeclaration = tokens.Skip(tokenIndex + 5).Select(token => token.Value);
+                            IEnumerable<string> namespaceDeclaration = tokens.Skip(tokenIndex + 5).Select(token => token["value"]);
                             int indexOfEnd = Array.IndexOf(namespaceDeclaration.ToArray(), "]");
                             List<string> remainingTokens = namespaceDeclaration.Take(indexOfEnd).ToList();
 
@@ -83,7 +84,7 @@ namespace joopl.DependencyBuilder
                         }
                         else
                         {
-                            scopeNamespaces.Add(tokens[tokenIndex + 4].Value);
+                            scopeNamespaces.Add(tokens[tokenIndex + 4]["value"]);
                         }
 
                         if (scopeNamespaces.Count > 0)
@@ -99,12 +100,12 @@ namespace joopl.DependencyBuilder
                     }
                     else if (scopeNamespaces.Count > 0)
                     {
-                        if (tokens[tokenIndex].Value == "inherits")
+                        if (tokens[tokenIndex]["value"] == "inherits")
                         {
                             string memberName = null;
                             bool withNs = false;
 
-                            if (tokens[tokenIndex + 2].Value == "$global")
+                            if (tokens[tokenIndex + 2]["value"] == "$global")
                             {
                                 withNs = true;
 
@@ -112,14 +113,14 @@ namespace joopl.DependencyBuilder
                                             (
                                                 string.Empty,
                                                 tokens.Skip(tokenIndex + 4)
-                                                    .TakeWhile(someToken => someToken.Value != "," && someToken.Value != ";")
-                                                    .Select(someToken => someToken.Value)
+                                                    .TakeWhile(someToken => someToken["value"] != "," && someToken["value"] != ";")
+                                                    .Select(someToken => someToken["value"])
                                                     .ToArray()
                                             );
                             }
                             else
                             {
-                                memberName = tokens[tokenIndex + 4].Value;
+                                memberName = tokens[tokenIndex + 4]["value"];
                             }
 
                             IEnumerable<Type> mappedMembers = dependencyMap.SelectMany(mappedNs => mappedNs.Members);
@@ -154,18 +155,26 @@ namespace joopl.DependencyBuilder
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
-                                    fileManifest.DependendsOn.Insert(0, scopedMember.FileName);
+                                    if (scopedMember.Inherits != null)
+                                    {
+                                        Stack<Type> hierarchy = GetHierarchy(dependencyMap, scopedMember);
+                                        fileManifest.DependendsOn.AddRange(hierarchy.Select(type => type.FileName));
+                                    }
+                                    else
+                                    {
+                                        fileManifest.DependendsOn.Add(scopedMember.FileName);
+                                    }
                                 }
                             }
                         }
-                        else if (thirdPartyDependencies != null && thirdPartyDependencies.Count() > 0 && tokens[tokenIndex].Value.StartsWith("use "))
+                        else if (thirdPartyDependencies != null && thirdPartyDependencies.Count() > 0 && tokens[tokenIndex]["value"].StartsWith("use "))
                         {
                             if (fileManifest.Libraries == null)
                             {
                                 fileManifest.Libraries = new List<string>();
                             }
 
-                            string dependencyName = tokens[tokenIndex].Value.Split(' ').Last();
+                            string dependencyName = tokens[tokenIndex]["value"].Split(' ').Last();
 
                             fileManifest.Libraries.Add((string)thirdPartyDependencies.Single(some => (string)some["name"] == dependencyName)["uri"]);
 
@@ -174,7 +183,7 @@ namespace joopl.DependencyBuilder
                         {
                             Type scopedMember = allTypes.SingleOrDefault
                             (
-                                type => scopeNamespaces.Any(ns => ns == type.Namespace) && type.Name == tokens[tokenIndex].Value
+                                type => scopeNamespaces.Any(ns => ns == type.Namespace) && type.Name == tokens[tokenIndex]["value"]
                             );
 
                             if (scopedMember == null)
@@ -184,11 +193,11 @@ namespace joopl.DependencyBuilder
                                 StringBuilder fullNs = new StringBuilder();
                                 bool end = false;
 
-                                while (!end && tokenSearchIndex >= 0 && !endOfSearchTokens.Contains(tokens[tokenSearchIndex].Value))
+                                while (!end && tokenSearchIndex >= 0 && !endOfSearchTokens.Contains(tokens[tokenSearchIndex]["value"]))
                                 {
-                                    if (tokens[tokenSearchIndex].Value != "$global")
+                                    if (tokens[tokenSearchIndex]["value"] != "$global")
                                     {
-                                        fullNs.Append(tokens[tokenSearchIndex].Value);
+                                        fullNs.Append(tokens[tokenSearchIndex]["value"]);
                                     }
 
                                     tokenSearchIndex--;
@@ -198,7 +207,7 @@ namespace joopl.DependencyBuilder
 
                                 scopedMember = allTypes.SingleOrDefault
                                 (
-                                    type => type.Namespace == foundNs && type.Name == tokens[tokenIndex].Value
+                                    type => type.Namespace == foundNs && type.Name == tokens[tokenIndex]["value"]
                                 );
                             }
 
@@ -210,7 +219,15 @@ namespace joopl.DependencyBuilder
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
-                                    fileManifest.DependendsOn.Add(scopedMember.FileName);
+                                    if (scopedMember.Inherits != null)
+                                    {
+                                        Stack<Type> hierarchy = GetHierarchy(dependencyMap, scopedMember);
+                                        fileManifest.DependendsOn.AddRange(hierarchy.Where(type => !fileManifest.DependendsOn.Any(f => f == type.FileName)).Select(type => type.FileName));
+                                    }
+                                    else
+                                    {
+                                        fileManifest.DependendsOn.Add(scopedMember.FileName);
+                                    }
                                 }
                             }
                         }
@@ -236,12 +253,46 @@ namespace joopl.DependencyBuilder
             {
                 if (manifest.DependendsOn != null)
                 {
-                    manifest.DependendsOn = GetDependencies(usageMap, manifest);
-                    manifest.DependendsOn.Reverse();
+                    manifest.DependendsOn.AddRange(((IEnumerable<string>)GetDependencies(usageMap, manifest)).Reverse());
+                    manifest.DependendsOn = manifest.DependendsOn.Distinct().ToList();
+
+                    if (moduleFiles != null && Array.IndexOf(moduleFiles, Path.GetFileName(manifest.FileName)) > -1 || moduleFiles == null)
+                    {
+                        result.Add(manifest.FileName, manifest.DependendsOn);
+                    }
                 }
             }
 
-            return usageMap;
+            return result;
+        }
+
+        private Stack<Type> GetHierarchy(List<Namespace> dependencyMap, Type type)
+        {
+            Stack<Type> types = new Stack<Type>();
+            bool hasBaseType = true;
+            Namespace foundNs = null;
+
+            while (hasBaseType)
+            {
+                foundNs = dependencyMap.SkipWhile(ns => !ns.Members.Any(member => member.Name == type.Name)).Take(1).SingleOrDefault();
+
+                if (foundNs != null)
+                {
+                    type = foundNs.Members.Single(member => member.Name == type.Name);
+                    types.Push(type);
+
+                    if ((hasBaseType = type.Inherits != null))
+                    {
+                        type = type.Inherits;
+                    }
+                }
+                else
+                {
+                    hasBaseType = false;
+                }
+            }
+
+            return types;
         }
 
         private List<string> GetDependencies(IEnumerable<FileManifest> usageMap, FileManifest parentManifest = null, List<string> dependencies = null)
@@ -284,7 +335,7 @@ namespace joopl.DependencyBuilder
 
         public List<Namespace> BuildDependencyMap(string baseDirectory, string[] excludeFiles = null)
         {
-            List<KeyValuePair<string, string>> tokens;
+            IList<IDictionary<string, string>> tokens;
             int tokenIndex = 0;
             string currentNs = null;
             Namespace ns = null;
@@ -295,6 +346,9 @@ namespace joopl.DependencyBuilder
             List<Namespace> namespaces = new List<Namespace>();
 
             JsParser jsParser = new JsParser();
+
+            string[] declarations = new[] { "declareClass", "declareEnum" };
+            Regex declarationRegEx = new Regex("^([A-Z][A-Za-z0-9]+)$");
 
             foreach (FileInfo file in files)
             {
@@ -308,9 +362,15 @@ namespace joopl.DependencyBuilder
 
                 while (tokenIndex < tokens.Count)
                 {
-                    if (tokens[tokenIndex].Value == "$namespace" && tokens[tokenIndex + 2].Value == "register")
+                    if (tokens[tokenIndex]["type"] == "Punctuator")
                     {
-                        currentNs = tokens[tokenIndex + 4].Value;
+                        tokenIndex++;
+                        continue;
+                    }
+
+                    if (tokens[tokenIndex]["value"] == "$namespace" && tokens[tokenIndex + 2]["value"] == "register")
+                    {
+                        currentNs = tokens[tokenIndex + 4]["value"];
 
                         if (namespaces.Count(some => some.Name == currentNs) == 0)
                         {
@@ -329,11 +389,51 @@ namespace joopl.DependencyBuilder
 
                         tokenIndex += 4;
                     }
-                    else if (new[] { "declareClass", "declareEnum" }.Any(token => token == tokens[tokenIndex].Value))
+                    else if (declarations.Any(token => token == tokens[tokenIndex]["value"]))
                     {
-                        if (ns != null && new Regex("^([A-Z][A-Za-z0-9]+)$").IsMatch(tokens[tokenIndex + 2].Value))
+                        if (ns != null && declarationRegEx.IsMatch(tokens[tokenIndex + 2]["value"]))
                         {
-                            ns.Members.Add(new Type { Parent = ns, FileName = relativeFilePath, Name = tokens[tokenIndex + 2].Value });
+                            ns.Members.Add(new Type { Parent = ns, FileName = relativeFilePath, Name = tokens[tokenIndex + 2]["value"] });
+                        }
+
+                        int searchTokenIndex = ++tokenIndex;
+                        bool hasInheritance = false;
+
+                        while (!hasInheritance && searchTokenIndex < tokens.Count && !declarations.Any(token => token == tokens[searchTokenIndex]["value"]))
+                        {
+                            if (tokens[searchTokenIndex]["value"] == "inherits")
+                            {
+                                hasInheritance = true;
+
+                                string memberName = null;
+
+                                if (tokens[searchTokenIndex + 2]["value"] == "$global")
+                                {
+                                    memberName = string.Join
+                                                (
+                                                    string.Empty,
+                                                    tokens.Skip(searchTokenIndex + 4)
+                                                        .TakeWhile(someToken => someToken["value"] != "," && someToken["value"] != ";")
+                                                        .Select(someToken => someToken["value"])
+                                                        .ToArray()
+                                                );
+                                }
+                                else
+                                {
+                                    memberName = currentNs + "." + tokens[searchTokenIndex + 4]["value"];
+                                }
+
+                                if (ns.Members.Count > 0)
+                                {
+                                    ns.Members[ns.Members.Count - 1].Inherits = new Type
+                                    {
+                                        Name = memberName.Substring(memberName.LastIndexOf('.') + 1),
+                                        Parent = new Namespace { Name = memberName.Substring(0, memberName.LastIndexOf('.')) }
+                                    };
+                                }
+                            }
+
+                            searchTokenIndex++;
                         }
 
                         tokenIndex++;

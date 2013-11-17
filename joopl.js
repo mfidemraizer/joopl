@@ -18,12 +18,12 @@
 // Keywords
 var $namespace = null; // Holds an object to manage namespaces
 var $global = null; // Represents the global scope.
-var $manifest = null;
+var $import = null;
 
 (function (undefined) {
     "use strict";
 
-    var version = "2.4.2";
+    var version = "2.5.0";
     var $enumdef = null;
     var $def = null;
 
@@ -416,45 +416,72 @@ var $manifest = null;
 
     Object.freeze(DependencyUtil);
 
-    $manifest = {
-        file: function (executingFileName, scopeFunc) {
+    $import = {
+        _dependencyMaps: {},
+
+        map: function(uri, dependencies) {
+            this._dependencyMaps[uri] = dependencies;
+        },
+
+        modules: function (moduleFileNames, scopeFunc) {
+            if(!(moduleFileNames instanceof Array)) {
+                throw new $global.joopl.ArgumentException({ argName: "moduleFileNames", reason: "This argument is mandatory" });
+            }
+
+            if(!(scopeFunc instanceof Function)) {
+                throw new $global.joopl.ArgumentException({ argName: "scopeFunc", reason: "This argument is mandatory" });
+            }
+
             var scopeMetadata = {
-                executingFileName: executingFileName
+                moduleFileNames: moduleFileNames
             };
 
-            var enableHeadJS = $global.__DependencyUsageMap !== undefined && window.head != undefined && window.head.js != undefined;
+            Object.freeze(scopeMetadata);
+
+            var enableHeadJS = Object.keys(this._dependencyMaps).length > 0 && window.head != undefined && window.head.js != undefined;
 
             scopeFunc = scopeFunc.bind(scopeMetadata);
 
             // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
             // of DependencyUsageMap dependencies
             if (enableHeadJS) {
+                var dependencyMaps = this._dependencyMaps;
+
+                var args = [];
                 var found = false;
                 var index = 0;
+                var dependencies = null;
 
-                while (!found && index < $global.__DependencyUsageMap.length) {
-                    if ($global.__DependencyUsageMap[index].fileName == executingFileName) {
-                        found = true;
-                    } else {
-                        index++;
+                for(var moduleIndex in moduleFileNames) {
+                    dependencies = dependencyMaps[moduleFileNames[moduleIndex]].map(function(fileName) {
+                        return "scripts/" + moduleFileNames[moduleIndex] + "/" + fileName;
+                    });
+
+                    if (dependencies  instanceof Array) {
+                        for(var dependencyIndex in dependencies) {
+                            args.push(dependencies[dependencyIndex]);
+                        }
                     }
+
+                    found = false;
+                    index = 0;
                 }
 
-                if (found) {
-                    var args = $global.__DependencyUsageMap[index].dependsOn.splice(0);
+                if(args.length > 0) {
                     args.push(function () {
                         scopeFunc();
                     });
 
                     head.js.apply(window, args);
                 }
+                
             } else {
                 scopeFunc();
             }
         }
     };
 
-    Object.freeze($manifest);
+    Object.freeze($import);
 
     $namespace = {
         register: function (path, scopedFunc) {

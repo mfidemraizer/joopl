@@ -6,3 +6,4 @@ C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dep
 C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Debug\Newtonsoft.Json.xml
 C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Debug\joopl.dependencybuilder.exe
 C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Debug\joopl.dependencybuilder.pdb
+C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Debug\joopl.dependencybuilder.csprojResolveAssemblyReference.cache

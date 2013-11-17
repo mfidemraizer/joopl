@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace joopl.DependencyBuilder
@@ -46,7 +47,22 @@ namespace joopl.DependencyBuilder
 
             string baseDirectory = args[Array.IndexOf(args, "-directories") + 1];
             string outputDir = args[Array.IndexOf(args, "-outputdir") + 1];
-            string[] excludeFiles = args[Array.IndexOf(args, "-excludefiles") + 1].Split(';');
+
+            int excludeFilesIndex = Array.IndexOf(args, "-excludefiles");
+            int modulesIndex = Array.IndexOf(args, "-moduleFiles");
+            
+            string[] excludeFiles = null;
+            string[] modules = null;
+
+            if (excludeFilesIndex > -1)
+            {
+                excludeFiles = args[excludeFilesIndex + 1].Split(';');
+            }
+
+            if (modulesIndex > -1)
+            {
+                modules = args[modulesIndex + 1].Split(';');
+            }
 
             DependencyBuilder builder = new DependencyBuilder();
 
@@ -54,26 +70,24 @@ namespace joopl.DependencyBuilder
             List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory, excludeFiles);
 
             Console.WriteLine("Building the usage map...");
-            List<FileManifest> dependencyUsageMap = builder.BuildDependencyUsageMap(dependencyMap, baseDirectory, excludeFiles);
+            IDictionary<string, IList<string>> dependencyUsageMap = builder.BuildDependencyUsageMap(dependencyMap, baseDirectory, excludeFiles, modules);
 
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Console.WriteLine("Saving DependencyMap.js to: '{0}'", Path.Combine(outputDir, "DependencyMap.js"));
+            Console.WriteLine("Saving DependencyUsageMap.js to: '{0}'", Path.Combine(outputDir, "dependencyUsageMap.js"));
+
+            string moduleName = Path.GetFileNameWithoutExtension(dependencyUsageMap.Single().Key);
 
             File.WriteAllText
             (
-                Path.Combine(outputDir, "DependencyMap.js"),
-                "\"use strict\";\n$global.__DependencyMap = " + JsonConvert.SerializeObject(dependencyMap, Formatting.Indented, settings) + ';'
-            );
-
-            Console.WriteLine("Saving DependencyUsageMap.js to: '{0}'", Path.Combine(outputDir, "DependencyMap.js"));
-
-            File.WriteAllText
-            (
-                Path.Combine(outputDir, "DependencyUsageMap.js"),
-                "\"use strict\";\n$global.__DependencyUsageMap = " + JsonConvert.SerializeObject(dependencyUsageMap, Formatting.Indented, settings) + ';'
+                Path.Combine(outputDir, "moduleinfo.js"),
+                string.Format
+                (
+                    "\"use strict\";\n$import.map(\n\t\"{0}\",\n\t{1});",
+                    moduleName,
+                    JsonConvert.SerializeObject(dependencyUsageMap.Single().Value, Formatting.Indented, settings))
             );
 
             Console.ResetColor();
