@@ -4,6 +4,6 @@
     <StartArguments>-directories "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test" -outputdir "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test" -excludefiles "joopl.toolbox.min.js%3besprima.js%3bbenchmark.js%3bqunit.min.js%3bqunit.js%3bjoopl.min.js"</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>-directories "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test\scripts\joopl.collections" -outputdir "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test\scripts\joopl.collections" -excludefiles "joopl.toolbox.min.js%3besprima.js%3bbenchmark.js%3bqunit.min.js%3bqunit.js%3bjoopl.min.js" -moduleFiles "joopl.collections.js"</StartArguments>
+    <StartArguments>-directories "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test" -outputdir "C:\Users\mfidemraizer\Documents\GitHub\joopl-toolbox\test" -excludefiles "joopl.toolbox.min.js%3besprima.js%3bbenchmark.js%3bqunit.min.js%3bqunit.js%3bjoopl.min.js"</StartArguments>
   </PropertyGroup>
 </Project>

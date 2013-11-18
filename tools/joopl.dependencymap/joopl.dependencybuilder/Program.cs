@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 
 namespace joopl.DependencyBuilder
 {
@@ -70,14 +69,14 @@ namespace joopl.DependencyBuilder
             Console.WriteLine("Detecting defined types...");
             List<Namespace> dependencyMap = builder.BuildDependencyMap(baseDirectory, excludeFiles);
 
-            Console.WriteLine("Building the usage map...");
+            Console.WriteLine("Building moduleinfo.js...");
             IDictionary<string, IList<string>> dependencyUsageMap = builder.BuildDependencyUsageMap(dependencyMap, baseDirectory, excludeFiles, modules);
 
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Console.WriteLine("Saving DependencyUsageMap.js to: '{0}'", Path.Combine(outputDir, "dependencyUsageMap.js"));
+            Console.WriteLine("Saving 'moduleinfo.js' to: '{0}'", Path.Combine(outputDir, "moduleinfo.js"));
 
             const string mapImportFormat = "\"use strict\";\n$import.map(\n\t\"{0}\",\n\t{1});";
 
