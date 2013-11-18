@@ -23,7 +23,7 @@ var $import = null;
 (function (undefined) {
     "use strict";
 
-    var version = "2.5.0";
+    var version = "2.4.2";
     var $enumdef = null;
     var $def = null;
 
@@ -453,9 +453,7 @@ var $import = null;
                 var dependencies = null;
 
                 for(var moduleIndex in moduleFileNames) {
-                    dependencies = dependencyMaps[moduleFileNames[moduleIndex]].map(function(fileName) {
-                        return "scripts/" + moduleFileNames[moduleIndex] + "/" + fileName;
-                    });
+                    dependencies = dependencyMaps[moduleFileNames[moduleIndex]];
 
                     if (dependencies  instanceof Array) {
                         for(var dependencyIndex in dependencies) {

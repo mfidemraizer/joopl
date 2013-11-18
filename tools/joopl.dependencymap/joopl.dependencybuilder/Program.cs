@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace joopl.DependencyBuilder
@@ -50,7 +51,7 @@ namespace joopl.DependencyBuilder
 
             int excludeFilesIndex = Array.IndexOf(args, "-excludefiles");
             int modulesIndex = Array.IndexOf(args, "-moduleFiles");
-            
+
             string[] excludeFiles = null;
             string[] modules = null;
 
@@ -78,17 +79,32 @@ namespace joopl.DependencyBuilder
 
             Console.WriteLine("Saving DependencyUsageMap.js to: '{0}'", Path.Combine(outputDir, "dependencyUsageMap.js"));
 
-            string moduleName = Path.GetFileNameWithoutExtension(dependencyUsageMap.Single().Key);
+            const string mapImportFormat = "\"use strict\";\n$import.map(\n\t\"{0}\",\n\t{1});";
 
-            File.WriteAllText
-            (
-                Path.Combine(outputDir, "moduleinfo.js"),
-                string.Format
+            if (modulesIndex > -1)
+            {
+                File.WriteAllText
                 (
-                    "\"use strict\";\n$import.map(\n\t\"{0}\",\n\t{1});",
-                    moduleName,
-                    JsonConvert.SerializeObject(dependencyUsageMap.Single().Value, Formatting.Indented, settings))
-            );
+                    Path.Combine(outputDir, "moduleinfo.js"),
+                    string.Format
+                    (
+                        mapImportFormat,
+                        Path.GetFileNameWithoutExtension(dependencyUsageMap.Single().Key),
+                        JsonConvert.SerializeObject(dependencyUsageMap.Single().Value, Formatting.Indented, settings)
+                    )
+                );
+            }
+            else
+            {
+                StringBuilder mapImports = new StringBuilder();
+
+                foreach (KeyValuePair<string, IList<string>> map in dependencyUsageMap)
+                {
+                    mapImports.AppendFormat(mapImportFormat + "\n", Path.GetFileNameWithoutExtension(map.Key), JsonConvert.SerializeObject(map.Value, Formatting.Indented, settings));
+                }
+
+                File.WriteAllText(Path.Combine(outputDir, "moduleinfo.js"), mapImports.ToString());
+            }
 
             Console.ResetColor();
         }

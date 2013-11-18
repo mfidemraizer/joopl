@@ -1,9 +1,0 @@
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\joopl.dependencybuilder.exe.config
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\joopl.dependencybuilder.exe
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\joopl.dependencybuilder.pdb
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\Jurassic.dll
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\Newtonsoft.Json.dll
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\bin\Release\Newtonsoft.Json.xml
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Release\joopl.dependencybuilder.exe
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Release\joopl.dependencybuilder.pdb
-C:\Users\mfidemraizer\Documents\GitHub\joopl\tools\joopl.dependencymap\joopl.dependencybuilder\obj\Release\joopl.dependencybuilder.csprojResolveAssemblyReference.cache
