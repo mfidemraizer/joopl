@@ -449,7 +449,7 @@ var $import = null;
 
                 var args = [];
                 var found = false;
-                var index = 0;
+                var index = 0;  
                 var dependencies = null;
 
                 for(var moduleIndex in moduleFileNames) {

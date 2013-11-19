@@ -215,7 +215,7 @@ namespace joopl.DependencyBuilder
                             {
                                 if (
                                     (scopedMember.FileName != "joopl.js" && scopedMember.FileName != "joopl.min.js")
-                                    && !scopedMember.FileName.Contains(file.Name)
+                                    //&& !scopedMember.FileName.Contains(file.Name)
                                     && fileManifest.DependendsOn.Count(fileName => fileName == scopedMember.FileName) == 0
                                 )
                                 {
@@ -348,7 +348,7 @@ namespace joopl.DependencyBuilder
             JsParser jsParser = new JsParser();
 
             string[] declarations = new[] { "declareClass", "declareEnum" };
-            Regex declarationRegEx = new Regex("^([A-Z][A-Za-z0-9]+)$");
+            Regex declarationRegEx = new Regex("^([A-Z][A-Za-z0-9]*)$");
 
             foreach (FileInfo file in files)
             {
