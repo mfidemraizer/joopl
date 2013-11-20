@@ -203,11 +203,13 @@ namespace joopl.DependencyBuilder
                                     tokenSearchIndex--;
                                 }
 
-                                string foundNs = fullNs.ToString().Trim('.');
+                                string foundNs = string.Join(".", fullNs.ToString().Trim('.').Split('.').Reverse().ToArray());
+                                string[] nsParts = foundNs.Split('.');
+                                foundNs = string.Join(".", nsParts.Take(nsParts.Length - 1).ToArray());
 
                                 scopedMember = allTypes.SingleOrDefault
                                 (
-                                    type => type.Namespace == foundNs && type.Name == tokens[tokenIndex]["value"]
+                                    type => type.Namespace == foundNs && type.Name == nsParts.Last()
                                 );
                             }
 
