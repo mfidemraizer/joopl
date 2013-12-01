@@ -419,8 +419,16 @@ var $import = null;
     $import = {
         _dependencyMaps: {},
 
+        mapMany: function(dependencyMaps) {
+            for(var uri in dependencyMaps) {
+                this.map(uri, dependencyMaps[uri]);
+            }
+        },
+
         map: function(uri, dependencies) {
-            this._dependencyMaps[uri] = dependencies;
+            if(!this._dependencyMaps.hasOwnProperty(uri)) {
+                this._dependencyMaps[uri] = dependencies;
+            }
         },
 
         modules: function (moduleFileNames, scopeFunc) {
@@ -479,7 +487,7 @@ var $import = null;
         }
     };
 
-    Object.freeze($import);
+    Object.preventExtensions($import);
 
     $namespace = {
         register: function (path, scopedFunc) {
