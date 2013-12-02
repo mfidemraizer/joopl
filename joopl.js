@@ -94,15 +94,19 @@ var $import = null;
             this,
             "declareClass", {
                 value: function (className, classDef) {
-                    Object.defineProperty(
-                        this,
-                        className, {
-                            value: $def(className, this, classDef),
-                            writable: false,
-                            configurable: false,
-                            enumerable: true
-                        }
-                    );
+                    if (!this.hasOwnProperty(className)) {
+                        Object.defineProperty(
+                            this,
+                            className, {
+                                value: $def(className, this, classDef),
+                                writable: false,
+                                configurable: false,
+                                enumerable: true
+                            }
+                        );
+                    } else {
+                        console.warn("Trying to define '%s' class while it is already declared on '%s' namespace", className, this.fullName);
+                    }
                 },
                 writable: false,
                 enumerable: true,
@@ -419,24 +423,24 @@ var $import = null;
     $import = {
         _dependencyMaps: {},
 
-        mapMany: function(dependencyMaps) {
-            for(var uri in dependencyMaps) {
+        mapMany: function (dependencyMaps) {
+            for (var uri in dependencyMaps) {
                 this.map(uri, dependencyMaps[uri]);
             }
         },
 
-        map: function(uri, dependencies) {
-            if(!this._dependencyMaps.hasOwnProperty(uri)) {
+        map: function (uri, dependencies) {
+            if (!this._dependencyMaps.hasOwnProperty(uri)) {
                 this._dependencyMaps[uri] = dependencies;
             }
         },
 
         modules: function (moduleFileNames, scopeFunc) {
-            if(!(moduleFileNames instanceof Array)) {
+            if (!(moduleFileNames instanceof Array)) {
                 throw new $global.joopl.ArgumentException({ argName: "moduleFileNames", reason: "This argument is mandatory" });
             }
 
-            if(!(scopeFunc instanceof Function)) {
+            if (!(scopeFunc instanceof Function)) {
                 throw new $global.joopl.ArgumentException({ argName: "scopeFunc", reason: "This argument is mandatory" });
             }
 
@@ -457,14 +461,14 @@ var $import = null;
 
                 var args = [];
                 var found = false;
-                var index = 0;  
+                var index = 0;
                 var dependencies = null;
 
-                for(var moduleIndex in moduleFileNames) {
+                for (var moduleIndex in moduleFileNames) {
                     dependencies = dependencyMaps[moduleFileNames[moduleIndex]];
 
-                    if (dependencies  instanceof Array) {
-                        for(var dependencyIndex in dependencies) {
+                    if (dependencies instanceof Array) {
+                        for (var dependencyIndex in dependencies) {
                             args.push(dependencies[dependencyIndex]);
                         }
                     }
@@ -473,14 +477,14 @@ var $import = null;
                     index = 0;
                 }
 
-                if(args.length > 0) {
+                if (args.length > 0) {
                     args.push(function () {
                         scopeFunc();
                     });
 
                     head.js.apply(window, args);
                 }
-                
+
             } else {
                 scopeFunc();
             }
