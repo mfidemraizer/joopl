@@ -436,12 +436,10 @@ var $import = null;
         },
 
         modules: function (moduleFileNames, scopeFunc) {
+            var hasScopeFunc = typeof scopeFunc != "undefined";
+
             if (!(moduleFileNames instanceof Array)) {
                 throw new $global.joopl.ArgumentException({ argName: "moduleFileNames", reason: "This argument is mandatory" });
-            }
-
-            if (!(scopeFunc instanceof Function)) {
-                throw new $global.joopl.ArgumentException({ argName: "scopeFunc", reason: "This argument is mandatory" });
             }
 
             var scopeMetadata = {
@@ -452,7 +450,9 @@ var $import = null;
 
             var enableHeadJS = Object.keys(this._dependencyMaps).length > 0 && window.head != undefined && window.head.js != undefined;
 
-            scopeFunc = scopeFunc.bind(scopeMetadata);
+            if (hasScopeFunc) {
+                scopeFunc = scopeFunc.bind(scopeMetadata);
+            }
 
             // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
             // of DependencyUsageMap dependencies
@@ -478,9 +478,11 @@ var $import = null;
                 }
 
                 if (args.length > 0) {
-                    args.push(function () {
-                        scopeFunc();
-                    });
+                    if (hasScopeFunc) {
+                        args.push(function () {
+                            scopeFunc();
+                        });
+                    }
 
                     head.js.apply(window, args);
                 }
