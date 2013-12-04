@@ -435,6 +435,36 @@
                     });
                 });
 
+                test("Try to create an event, create more than an instance of the class with the whole event and trigger it", function () {
+                    $namespace.register("eventtest", function () {
+                        this.declareClass("A", {
+                            members: {
+                                events: ["click"]
+                            }
+                        });
+                    });
+
+                    $namespace.using("eventtest", function () {
+                        var instance = new this.A();
+                        var instance2 = new this.A();
+
+                        var eventCount = 0;
+
+                        instance.click.addEventListener(function (args) {
+                            eventCount++;
+                        });
+                        
+                        instance2.click.addEventListener(function (args) {
+                            eventCount++;
+                        });
+
+                        // triggers the event!
+                        instance.click.raise({ args: { text: "hello world" } });
+
+                        equal(1, eventCount, "Event was handled once");
+                    });
+                });
+
                 test("Try to create an event, bind a handler, unbind it and trigger the event. No event handler should be bound.", function () {
                     $namespace.register("eventtest2", function () {
                         this.declareClass("A", {
