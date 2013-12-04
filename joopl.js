@@ -236,24 +236,29 @@ var $import = null;
             if (source.hasOwnProperty(name)) {
                 throw Error("The source object has already defined an event called '" + name + "'");
             }
-            var eventManager = new $global.joopl.EventManager({ source: source });
 
             Object.defineProperty(
                 source,
                 name,
                 {
                     get: function () {
-                        return eventManager[name];
+                        if (!this._.hasOwnProperty("eventManager")) {
+                            this._.eventManager = new $global.joopl.EventManager({ source: this });
+                        }
+
+                        if (!this._.eventManager.hasOwnProperty(name)) {
+                            this._.eventManager.register(name);
+                        }
+
+                        return this._.eventManager[name];
                     },
                     set: function (value) {
-                        eventManager[name] = value;
+                        this._.eventManager[name] = value;
                     },
                     configurable: false,
                     enumerable: true
                 }
-            );
-
-            eventManager.register(name);
+            );;
         },
 
         // Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the ctor of the whole class instance.
@@ -721,6 +726,10 @@ var $import = null;
                 } else if (propertyDescriptor.hasOwnProperty("value") || propertyDescriptor.hasOwnProperty("get") || propertyDescriptor.hasOwnProperty("set")) {
                     TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
                 }
+
+                var A = function () {
+
+                };
             }
         }
 
