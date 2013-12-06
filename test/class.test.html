@@ -17,9 +17,11 @@
         (function (undefined) {
             "use strict";
 
+            module("Class attributes");
+
             test("Define a new class with attributes. Check that the given attributes are present", function () {
-                $namespace.register("jooplattributetest", function () {
-                    this.declareClass("TestAttr", {
+                $namespace.register("jooplattributetest", function (ns) {
+                    ns.declareClass("TestAttr", {
                         inherits: $global.joopl.Attribute,
                         ctor: function (args) {
                             this.base.ctor(args);
@@ -29,7 +31,7 @@
                         }
                     });
 
-                    this.declareClass("A", {
+                    ns.declareClass("A", {
                         attributes: [new this.TestAttr()]
                     });
 
@@ -58,6 +60,8 @@
                     });
                 });
             });
+
+            module("Class declaration")
 
             test("Define a new class, instantiate it and test if its methods and properties are working", function () {
                 $namespace.register("classtest1", function () {
@@ -94,6 +98,8 @@
                     ok(instance.someMethod(), "A defined method returns the expected value!");
                 });
             });
+
+            module("Class inheritance");
 
             test("Define a new class, instantiate it and test if each instance do not share the class field reference", function () {
                 $namespace.register("classtest2", function () {
@@ -299,6 +305,8 @@
                     });
                 });
 
+                module("Class declaration behaviors");
+
                 test("Create an inmutable object", function () {
                     $namespace.register("inmutableobjecttest", function () {
                         this.declareClass("A", {
@@ -410,6 +418,8 @@
                         });
                     }, "The non-dynamic class instance cannot add methods once instantiated");
                 });
+
+                module("Class events");
 
                 test("Try to create an event and trigger it", function () {
                     $namespace.register("eventtest", function () {
