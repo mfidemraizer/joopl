@@ -124,15 +124,23 @@ if(typeof $namespace == "undefined") {
                 this,
                 "declareEnum", {
                     value: function (name, enumDef) {
-                        Object.defineProperty(
-                            this,
-                            name, {
-                                value: $enumdef(name, this, enumDef),
-                                writable: false,
-                                configurable: false,
-                                enumerable: true
-                            }
-                        );
+                        if (!this.hasOwnProperty(name)) {
+                            var builtDef = $enumdef(name, this, enumDef);
+
+                            Object.defineProperty(
+                                this,
+                                name, {
+                                    value: builtDef,
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+
+                            $namespace._classes[this.fullName + "." + name] = builtDef;
+                        } else {
+                            console.warn("Trying to define '%s' enumeration while it is already declared on '%s' namespace", name, this.fullName);
+                        }
                     },
                     writable: false,
                     enumerable: true,
