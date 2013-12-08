@@ -1,0 +1,22 @@
+{
+  "name": "joopl",
+  "version": "2.5.0",
+  "description": "jOOPL is simply powerful OOP for the JavaScript language, both in Web browsers and runtimes like NodeJS!"
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-yuidoc": "~0.5.0",
+    "colors": "~0.6.2",
+    "commander": "~2.1.0",
+    "esprima": "~1.0.4",
+    "js-beautify": "~1.4.2",
+    "q": "~0.9.7",
+    "underscore": "~1.5.2",
+    "walk": "~2.2.1",
+    "watchr": "~2.4.4",
+    "path": "~0.4.9"
+  }
+}

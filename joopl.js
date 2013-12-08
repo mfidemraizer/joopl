@@ -26,8 +26,6 @@ if(typeof $namespace == "undefined") {
         "use strict";
 
         var version = "2.5.0";
-        var $enumdef = null;
-        var $def = null;
 
         /** 
             Represents a namespace which can declare classes and enumerations, and provides metadata.
@@ -97,7 +95,7 @@ if(typeof $namespace == "undefined") {
                 "declareClass", {
                     value: function (className, classDef) {
                         if (!this.hasOwnProperty(className)) {
-                            var builtDef = $def(className, this, classDef);
+                            var builtDef = TypeUtil.declareClass(className, this, classDef);
 
                             Object.defineProperty(
                                 this,
@@ -125,7 +123,7 @@ if(typeof $namespace == "undefined") {
                 "declareEnum", {
                     value: function (name, enumDef) {
                         if (!this.hasOwnProperty(name)) {
-                            var builtDef = $enumdef(name, this, enumDef);
+                            var builtDef = TypeUtil.declareEnum(name, this, enumDef);
 
                             Object.defineProperty(
                                 this,
@@ -177,6 +175,207 @@ if(typeof $namespace == "undefined") {
 
         // An object containing a set of core features used by jOOPL
         var TypeUtil = {
+            declareClass: function (className, namespace, args) {
+                var classDef = null;
+
+                if (!args && this) {
+                    args = this;
+                }
+                else if (!args && !this) {
+                    args = {};
+                }
+
+                if (args.$inmutable === true && Object.freeze) {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, callctor === undefined);
+
+                        Object.freeze(this);
+                    };
+
+                } else if (args.dynamic === false && Object.preventExtensions) {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, callctor === undefined);
+
+                        Object.preventExtensions(this);
+                    };
+
+                } else {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, callctor === undefined);
+                    };
+                }
+
+                classDef.prototype = new $global.joopl.Object();
+
+                var ctor = null;
+
+                if (args.ctor) {
+                    ctor = args.ctor;
+                } else {
+                    ctor = function () { };
+                }
+
+                Object.defineProperty(
+                    classDef.prototype,
+                    "ctor", {
+                        value: ctor,
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    }
+                );
+
+                if (args.members) {
+                    var propertyDescriptor = null;
+
+                    for (var memberName in args.members) {
+                        propertyDescriptor = Object.getOwnPropertyDescriptor(args.members, memberName);
+
+                        if (typeof propertyDescriptor.value == "function") {
+                            if (classDef.prototype.hasOwnProperty(memberName)) {
+                                Object.defineProperty(
+                                    classDef.prototype,
+                                    memberName, {
+                                        value: args.members[memberName]
+                                    }
+                                );
+                            } else {
+                                Object.defineProperty(
+                                    classDef.prototype,
+                                    memberName, {
+                                        value: args.members[memberName],
+                                        writable: false,
+                                        configurable: true,
+                                        enumerable: true
+                                    }
+                                );
+                            }
+                        } else if (memberName == "events" && typeof propertyDescriptor.value == "object") {
+                            for (var eventIndex in propertyDescriptor.value) {
+                                TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
+                            }
+
+                        } else if (propertyDescriptor.hasOwnProperty("value") || propertyDescriptor.hasOwnProperty("get") || propertyDescriptor.hasOwnProperty("set")) {
+                            TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
+                        }
+
+                        var A = function () {
+
+                        };
+                    }
+                }
+
+
+                if (args.inherits) {
+                    TypeUtil.buildInheritance(classDef, args.inherits);
+
+                    Object.defineProperty(
+                        classDef.prototype,
+                        "base", {
+                            value: args.inherits,
+                            writable: false,
+                            configurable: false,
+                            enumerable: false
+                        }
+                    );
+                }
+
+                var hasMetadata = false;
+
+                if (Array.isArray(args.attributes)) {
+                    for (var attrIndex in args.attributes) {
+                        if (!args.attributes[attrIndex] && !(args.attributes[attrIndex].isTypeOf instanceof Function) && !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
+                            throw new $global.joopl.ArgumentException({
+                                argName: "attributes",
+                                reason: "A non-attribute type given as attribute"
+                            });
+                        }
+                    }
+
+                    hasMetadata = true;
+                }
+
+                if (typeof $global.joopl.Type == "function") {
+                    var typeDescriptor = {
+                        configurable: true,
+                        enumerable: true,
+                        writable: false,
+                        value: new $global.joopl.Type({ name: className, baseType: args.inherits ? args.inherits.type : null, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
+                    };
+
+                    Object.defineProperty(classDef, "type", typeDescriptor);
+                    Object.defineProperty(classDef.prototype, "type", typeDescriptor);
+                }
+
+                return classDef;
+            },
+
+            declareEnum: function (name, namespace, enumDef) {
+                if (typeof enumDef != "object") {
+                    throw new $global.joopl.ArgumentException({
+                        argName: "enumDef",
+                        reason: "No definition for the enumeration given"
+                    });
+                }
+
+                var enumerationType = function () {
+                };
+
+                enumerationType.prototype = new $global.joopl.Object();
+
+                var enumNames = [];
+                var enumValue;
+
+                for (var propertyName in enumDef) {
+                    if (typeof enumDef[propertyName] != "number") {
+                        throw new $global.joopl.ArgumentException({
+                            argName: "enumDef",
+                            reason: "An enumeration definition must contain numeric properties only"
+                        });
+                    }
+
+                    enumValue = new Number(enumDef[propertyName]);
+                    enumValue.enum = new $global.joopl.EnumValue({ value: enumValue, name: propertyName });
+
+                    Object.defineProperty(
+                        enumerationType,
+                        propertyName, {
+                            value: enumValue,
+                            configurable: false,
+                            enumerable: true,
+                            writable: false
+                        }
+                    );
+
+                    enumNames.push(propertyName);
+                }
+
+                Object.defineProperty(
+                    enumerationType,
+                    "valueNames",
+                    {
+                        value: enumNames,
+                        configurable: false,
+                        enumerable: true,
+                        writable: false
+                    }
+                );
+
+                Object.defineProperty(
+                    enumerationType,
+                    "type", {
+                        value: new $global.joopl.Type({ name: name, fullName: namespace.fullName + "." + name, namespace: namespace }),
+                        writable: false,
+                        configurable: false,
+                        enumerable: true
+                    }
+                );
+
+                Object.freeze(enumerationType);
+
+                return enumerationType;
+            },
+
             //  Creates a property on the given class definition based on a provided property descriptor.
             // @classDef: The class definition (it must be the ctor function!
             // @name: The property name
@@ -402,44 +601,6 @@ if(typeof $namespace == "undefined") {
 
         Object.freeze(TypeUtil);
 
-        var DependencyUtil = {
-            findFileInUsageMap: function (fileName) {
-                var usageMap = $global.__DependencyUsageMap;
-                var found = false;
-                var index = 0;
-
-                while (!found && index < usageMap.length) {
-                    if (usageMap[index].fileName == fileName) {
-                        found = true;
-                    } else {
-                        index++;
-                    }
-                }
-
-                if (found) {
-                    return usageMap[index];
-                } else {
-                    return null;
-                }
-            },
-
-            buildDependencyList: function (fileName) {
-                var map = $global.__DependencyMap;
-                var usageMap = $global.__DependencyUsageMap;
-
-                var fileManifest = this.findFileInUsageMap(fileName);
-
-                var dependencies = [];
-
-                for (var manifestIndex = 0; manifestIndex < fileManifest.dependsOn.length; manifestIndex++) {
-                    dependencies.add(fileManifest.dependsOn[manifestIndex]);
-                }
-
-            }
-        };
-
-        Object.freeze(DependencyUtil);
-
         $import = {
             _dependencyMaps: {},
             _loadedFiles: [],
@@ -459,21 +620,15 @@ if(typeof $namespace == "undefined") {
             modules: function (moduleFileNames, scopeFunc) {
                 var hasScopeFunc = typeof scopeFunc != "undefined";
 
+                if(typeof moduleFileNames == "string") {
+                    moduleFileNames = [moduleFileNames];
+                }
+
                 if (!(moduleFileNames instanceof Array)) {
                     throw new $global.joopl.ArgumentException({ argName: "moduleFileNames", reason: "This argument is mandatory" });
                 }
 
-                var scopeMetadata = {
-                    moduleFileNames: moduleFileNames
-                };
-
-                Object.freeze(scopeMetadata);
-
-                var enableHeadJS = Object.keys(this._dependencyMaps).length > 0 && window.head != undefined && window.head.js != undefined;
-
-                if (hasScopeFunc) {
-                    scopeFunc = scopeFunc.bind(scopeMetadata);
-                }
+                var enableHeadJS = Object.keys(this._dependencyMaps).length > 0 && typeof head != "undefined" && typeof window.head.js != "undefined";
 
                 // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
                 // of DependencyUsageMap dependencies
@@ -481,8 +636,6 @@ if(typeof $namespace == "undefined") {
                     var dependencyMaps = this._dependencyMaps;
 
                     var args = [];
-                    var found = false;
-                    var index = 0;
                     var dependencies = null;
                     var currentFile = null;
 
@@ -499,9 +652,6 @@ if(typeof $namespace == "undefined") {
                                 }
                             }
                         }
-
-                        found = false;
-                        index = 0;
                     }
 
                     if (args.length > 0) {
@@ -522,7 +672,7 @@ if(typeof $namespace == "undefined") {
             }
         };
 
-        Object.preventExtensions($import);
+        Object.freeze($import);
 
         $namespace = {
             _namespaces: {},
@@ -565,22 +715,8 @@ if(typeof $namespace == "undefined") {
                 // If the second parameter holds something if should be a 
                 // parameterless function, and this is creating a namespace scope.
                 if (typeof scopedFunc == "function") {
-                    $namespace.using(path, scopedFunc, true);
+                    this.using(path, scopedFunc, true);
                 }
-            },
-
-            /** 
-                Aliases an existing namespace.
-
-                @method alias
-                @param namespace {Object} The namespace to alias
-                @param alias {String} The alias
-                @example
-                    $namespace.register("joopl.samples");
-                    $namespace.alias($global.joopl.samples, "samples");
-            */
-            alias: function (namespace, alias) {
-                $global[alias] = namespace;
             },
 
             /**
@@ -594,20 +730,25 @@ if(typeof $namespace == "undefined") {
                 @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
             */
             using: function (paths, scopedFunc, scopeIsNs) {
-                if (paths === undefined) {
-                    throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
-                }
+                var pathsType = typeof paths;
 
-                if (typeof paths == "string") {
-                    if (paths.length == 0) {
-                        throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
-                    }
+                switch(pathsType) {
+                    case "undefined":
+                    default:
+                        throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path given" });
 
-                    paths = [paths];
+                    case "string":
+                        if (paths.length == 0) {
+                            throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path given" });
+                        }
+
+                        paths = [paths];
+
+                        break;
                 }
 
                 if (paths.length == 0) {
-                    throw new $global.joopl.ArgumentException({ argName: "namespace path", reason: "No namespace path has been provided" });
+                    throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path has been provided" });
                 }
 
                 var namespaces = [];
@@ -638,7 +779,7 @@ if(typeof $namespace == "undefined") {
                         }
                     }
 
-                    Object.preventExtensions(nsScope);
+                    Object.freeze(nsScope);
                 }
 
                 if (typeof scopedFunc == "function") {
@@ -661,144 +802,6 @@ if(typeof $namespace == "undefined") {
         };
 
         Object.freeze($namespace);
-
-
-        $def = function (className, namespace, args) {
-            var classDef = null;
-
-            if (!args && this) {
-                args = this;
-            }
-            else if (!args && !this) {
-                args = {};
-            }
-
-            if (args.$inmutable === true && Object.freeze) {
-                classDef = function (args, callctor) {
-                    TypeUtil.buildObject(this, args, callctor === undefined);
-
-                    Object.freeze(this);
-                };
-
-            } else if (args.dynamic === false && Object.preventExtensions) {
-                classDef = function (args, callctor) {
-                    TypeUtil.buildObject(this, args, callctor === undefined);
-
-                    Object.preventExtensions(this);
-                };
-
-            } else {
-                classDef = function (args, callctor) {
-                    TypeUtil.buildObject(this, args, callctor === undefined);
-                };
-            }
-
-            classDef.prototype = new $global.joopl.Object();
-
-            var ctor = null;
-
-            if (args.ctor) {
-                ctor = args.ctor;
-            } else {
-                ctor = function () { };
-            }
-
-            Object.defineProperty(
-                classDef.prototype,
-                "ctor", {
-                    value: ctor,
-                    writable: false,
-                    configurable: false,
-                    enumerable: false
-                }
-            );
-
-            if (args.members) {
-                var propertyDescriptor = null;
-
-                for (var memberName in args.members) {
-                    propertyDescriptor = Object.getOwnPropertyDescriptor(args.members, memberName);
-
-                    if (typeof propertyDescriptor.value == "function") {
-                        if (classDef.prototype.hasOwnProperty(memberName)) {
-                            Object.defineProperty(
-                                classDef.prototype,
-                                memberName, {
-                                    value: args.members[memberName]
-                                }
-                            );
-                        } else {
-                            Object.defineProperty(
-                                classDef.prototype,
-                                memberName, {
-                                    value: args.members[memberName],
-                                    writable: false,
-                                    configurable: true,
-                                    enumerable: true
-                                }
-                            );
-                        }
-                    } else if (memberName == "events" && typeof propertyDescriptor.value == "object") {
-                        for (var eventIndex in propertyDescriptor.value) {
-                            TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
-                        }
-
-                    } else if (propertyDescriptor.hasOwnProperty("value") || propertyDescriptor.hasOwnProperty("get") || propertyDescriptor.hasOwnProperty("set")) {
-                        TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
-                    }
-
-                    var A = function () {
-
-                    };
-                }
-            }
-
-
-            if (args.inherits) {
-                TypeUtil.buildInheritance(classDef, args.inherits);
-
-                Object.defineProperty(
-                    classDef.prototype,
-                    "base", {
-                        value: args.inherits,
-                        writable: false,
-                        configurable: false,
-                        enumerable: false
-                    }
-                );
-            }
-
-            var hasMetadata = false;
-
-            if (Array.isArray(args.attributes)) {
-                for (var attrIndex in args.attributes) {
-                    if (!args.attributes[attrIndex] && !(args.attributes[attrIndex].isTypeOf instanceof Function) && !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
-                        throw new $global.joopl.ArgumentException({
-                            argName: "attributes",
-                            reason: "A non-attribute type given as attribute"
-                        });
-                    }
-                }
-
-                hasMetadata = true;
-            }
-
-            if (typeof $global.joopl.Type == "function") {
-                var typeDescriptor = {
-                    configurable: true,
-                    enumerable: true,
-                    writable: false,
-                    value: new $global.joopl.Type({ name: className, baseType: args.inherits ? args.inherits.type : null, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
-                };
-
-                Object.defineProperty(classDef, "type", typeDescriptor);
-                Object.defineProperty(classDef.prototype, "type", typeDescriptor);
-            }
-
-            return classDef;
-        };
-
-        Object.freeze($def);
 
         $namespace.register("joopl", function () {
             /**
@@ -832,7 +835,8 @@ if(typeof $namespace == "undefined") {
 
                     @method isTypeOf
                     @param {class} type The whole type to compare with
-                    @example obj.isTypeOf(this.A)
+                    @example 
+                        obj.isTypeOf(this.A)
                     
                 */
                 isTypeOf: function (type) {
@@ -1103,7 +1107,7 @@ if(typeof $namespace == "undefined") {
                 @final
                 @since 2.3.0
             */
-            var EnumValue = $def("EnumValue", { name: "joopl" }, {
+            var EnumValue = this.declareClass("EnumValue", {
                 ctor: function (args) {
                     this._.value = args.value;
                     this._.name = args.name;
@@ -1139,7 +1143,7 @@ if(typeof $namespace == "undefined") {
                         var value = this.value | enumValue;
 
                         var result = new Number(value);
-                        result.enum = new EnumValue({ value: value });
+                        result.enum = new $global.joopl.EnumValue({ value: value });
 
                         Object.freeze(result);
 
@@ -1158,7 +1162,7 @@ if(typeof $namespace == "undefined") {
                         var value = this.value & enumValue;
 
                         var result = new Number(value);
-                        result.enum = new EnumValue({ value: value });
+                        result.enum = new $global.joopl.EnumValue({ value: value });
 
                         Object.freeze(result);
 
@@ -1188,7 +1192,7 @@ if(typeof $namespace == "undefined") {
                 @static
                 @since 2.3.0
             */
-            this.Enum = new ($def("Enum", this, {
+            this.Enum = new (TypeUtil.declareClass("Enum", this, {
                 members: {
                     /** 
                         Parses a text into a given enumeration value
@@ -1250,78 +1254,10 @@ if(typeof $namespace == "undefined") {
                             value += this.parseName(enumType, valueNamesArr[nameIndex])
                         }
 
-                        return new EnumValue({ value: value });
+                        return new $global.joopl.EnumValue({ value: value });
                     }
                 }
             }));
-
-            $enumdef = function (name, namespace, enumDef) {
-                if (typeof enumDef != "object") {
-                    throw new scope.ArgumentException({
-                        argName: "enumDef",
-                        reason: "No definition for the enumeration given"
-                    });
-                }
-
-                var enumerationType = function () {
-                };
-
-                enumerationType.prototype = new scope.Object();
-
-                var enumNames = [];
-                var enumValue;
-
-                for (var propertyName in enumDef) {
-                    if (typeof enumDef[propertyName] != "number") {
-                        throw new scope.ArgumentException({
-                            argName: "enumDef",
-                            reason: "An enumeration definition must contain numeric properties only"
-                        });
-                    }
-
-                    enumValue = new Number(enumDef[propertyName]);
-                    enumValue.enum = new EnumValue({ value: enumValue, name: propertyName });
-
-                    Object.defineProperty(
-                        enumerationType,
-                        propertyName, {
-                            value: enumValue,
-                            configurable: false,
-                            enumerable: true,
-                            writable: false
-                        }
-                    );
-
-                    enumNames.push(propertyName);
-                }
-
-                Object.defineProperty(
-                    enumerationType,
-                    "valueNames",
-                    {
-                        value: enumNames,
-                        configurable: false,
-                        enumerable: true,
-                        writable: false
-                    }
-                );
-
-                Object.defineProperty(
-                    enumerationType,
-                    "type", {
-                        value: new $global.joopl.Type({ name: name, fullName: namespace.fullName + "." + name, namespace: namespace }),
-                        writable: false,
-                        configurable: false,
-                        enumerable: true
-                    }
-                );
-
-                Object.freeze(enumerationType);
-
-                return enumerationType;
-            };
-
-            Object.freeze($enumdef);
 
             this.declareClass("Event", {
                 ctor: function (args) {
@@ -1351,7 +1287,10 @@ if(typeof $namespace == "undefined") {
                     raise: function (args) {
                         if (this.handlers.length > 0) {
                             for (var delegateIndex in this.handlers) {
-                                this.handlers[delegateIndex].bind(args ? (args.$this ? args.$this : this.source) : this.source)(args ? (args.args ? args.args : null) : null);
+                                this.handlers[delegateIndex].call(
+                                    args ? (args.$this ? args.$this : this.source) : this.source, 
+                                    args ? (args.args ? args.args : null) : null
+                                );
                             }
                         }
                     }
