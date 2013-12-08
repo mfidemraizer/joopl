@@ -25,8 +25,6 @@ if(typeof $namespace == "undefined") {
     (function (undefined) {
         "use strict";
 
-        var version = "2.5.0";
-
         /** 
             Represents a namespace which can declare classes and enumerations, and provides metadata.
 
@@ -258,10 +256,6 @@ if(typeof $namespace == "undefined") {
                         } else if (propertyDescriptor.hasOwnProperty("value") || propertyDescriptor.hasOwnProperty("get") || propertyDescriptor.hasOwnProperty("set")) {
                             TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
                         }
-
-                        var A = function () {
-
-                        };
                     }
                 }
 
@@ -271,7 +265,7 @@ if(typeof $namespace == "undefined") {
 
                     Object.defineProperty(
                         classDef.prototype,
-                        "base", {
+                        "__base__", {
                             value: args.inherits,
                             writable: false,
                             configurable: false,
@@ -451,10 +445,10 @@ if(typeof $namespace == "undefined") {
                     name,
                     {
                         get: function () {
-                            if (!this._.hasOwnProperty("eventManager")) {
+                            if (!this._.hasOwnProperty("__eventManager__")) {
                                 Object.defineProperty(
                                     this._,
-                                    "eventManager", {
+                                    "__eventManager__", {
                                         value: new $global.joopl.EventManager({ source: this }),
                                         configurable: false,
                                         writable: false,
@@ -463,11 +457,11 @@ if(typeof $namespace == "undefined") {
                                 );
                             }
 
-                            if (!this._.eventManager.hasOwnProperty(name)) {
-                                this._.eventManager.register(name);
+                            if (!this._.__eventManager__.hasOwnProperty(name)) {
+                                this._.__eventManager__.register(name);
                             }
 
-                            return this._.eventManager[name];
+                            return this._.__eventManager__[name];
                         },
                         configurable: false,
                         enumerable: true
@@ -479,21 +473,34 @@ if(typeof $namespace == "undefined") {
             // @instance: The class instance
             // @args: The ctor arguments.
             buildObject: function (instance, args, callctor) {
-                if (typeof instance.base == "function") {
+                if (instance.__base__ instanceof Function) {
                     Object.defineProperty(
                         instance,
                         "base",
                         {
-                            value: new instance.base(args, false),
-                            writable: false,
+                            get: function() {
+                                if(instance.__base__ instanceof Function) {
+                                    Object.defineProperty(
+                                        instance,
+                                        "__base__", {
+                                            value: new instance.__base__(args, false),
+                                            configurable: false,
+                                            writable: false,
+                                            enumerable: false
+                                        }
+                                    );
+                                }
+
+                                return instance.__base__;
+                            },
                             configurable: false,
-                            enumerable: false
+                            enumerable: true
                         }
                     );
 
                     Object.defineProperty(
                         instance,
-                        "_", {
+                        "__fields__", {
                             value: instance.base._,
                             writable: false,
                             configurable: false,
@@ -501,10 +508,9 @@ if(typeof $namespace == "undefined") {
                         }
                     );
                 } else {
-
                     Object.defineProperty(
                         instance,
-                        "_", {
+                        "__fields__", {
                             value: {},
                             writable: false,
                             configurable: false,
@@ -515,7 +521,7 @@ if(typeof $namespace == "undefined") {
 
                 Object.defineProperty(
                     instance._,
-                    "derived", {
+                    "__derived__", {
                         value: instance,
                         writable: false,
                         configurable: true,
@@ -535,21 +541,6 @@ if(typeof $namespace == "undefined") {
             // @parent: The parent class.
             buildInheritance: function (derived, parent) {
                 if (parent != null) {
-                    // Adding all class fields to the derived class...
-                    for (var fieldName in parent.prototype._) {
-                        if (!derived.prototype._[fieldName]) {
-                            Object.defineProperty(
-                                derived.prototype._,
-                                fieldName, {
-                                    value: parent.prototype._[fieldName],
-                                    writable: true,
-                                    configurable: false,
-                                    enumerable: true
-                                }
-                            );
-                        }
-                    }
-
                     var propertyDescriptor = null;
 
                     // Adding both methods and properties to the derived class...
@@ -820,7 +811,6 @@ if(typeof $namespace == "undefined") {
             };
 
             this.Object.prototype = {
-
                 /**
                     Gets jOOPL library version (f.e. "2.4.0")
 
@@ -828,7 +818,17 @@ if(typeof $namespace == "undefined") {
                     @type string
                     @readonly
                 */
-                get joopl() { return version; },
+                get joopl() { 
+                    return "2.5.0"; 
+                },
+
+                get _() {
+                    return this.__fields__;
+                },
+
+                get derived() {
+                    return this._.__derived__;
+                },
 
                 /**
                     Determines if a given type is of type of current object
