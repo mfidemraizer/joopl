@@ -1,7 +1,7 @@
 {
   "name": "joopl",
   "version": "2.5.0",
-  "description": "jOOPL is simply powerful OOP for the JavaScript language, both in Web browsers and runtimes like NodeJS!"
+  "description": "jOOPL is simply powerful OOP for the JavaScript language, both in Web browsers and runtimes like NodeJS!",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.6.3",
