@@ -16,6 +16,9 @@ module.exports = function(grunt) {
         ]
       }
     },
+    qunit: {
+        all: ['./test/class.test.html']
+    },
     yuidoc: {
       compile: {
         name: '<%= pkg.name %>',
@@ -33,8 +36,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');        
+  grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'copy', 'yuidoc']);
+  grunt.registerTask('default', ['uglify', 'copy', 'qunit', 'yuidoc']);
 };

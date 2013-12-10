@@ -17,6 +17,8 @@
     "underscore": "~1.5.2",
     "walk": "~2.2.1",
     "watchr": "~2.4.4",
-    "path": "~0.4.9"
+    "path": "~0.4.9",
+    "grunt-contrib-qunit": "~0.3.0",
+    "grunt-node-qunit": "~2.0.2"
   }
 }
