@@ -17,7 +17,11 @@ module.exports = function(grunt) {
       }
     },
     qunit: {
-        all: ['./test/class.test.html']
+        all: ['./test/test.html'],
+        options: {
+            force: true,
+            timeout: 20000
+        }
     },
     yuidoc: {
       compile: {

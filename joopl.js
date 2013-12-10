@@ -107,7 +107,7 @@ if(typeof $namespace == "undefined") {
 
                             $namespace._classes[this.fullName + "." + className] = builtDef;
                         } else {
-                            console.warn("Trying to define '%s' class while it is already declared on '%s' namespace", className, this.fullName);
+                            console.warn("Trying to define '" + className + "' class while it is already declared on '" + this.fullName + "' namespace");
                         }
                     },
                     writable: false,
@@ -520,8 +520,8 @@ if(typeof $namespace == "undefined") {
                 }
 
                 Object.defineProperty(
-                    instance._,
-                    "__derived__", {
+                    instance,
+                    "derived", {
                         value: instance,
                         writable: false,
                         configurable: true,
@@ -824,10 +824,6 @@ if(typeof $namespace == "undefined") {
 
                 get _() {
                     return this.__fields__;
-                },
-
-                get derived() {
-                    return this._.__derived__;
                 },
 
                 /**
