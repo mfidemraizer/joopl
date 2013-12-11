@@ -4,7 +4,7 @@
     module("Class attributes");
 
     test("Define a new class with attributes. Check that the given attributes are present", function () {
-        $namespace.register("jooplattributetest", function (ns) {
+        $namespace.using("jooplattributetest", function (ns) {
             ns.declareClass("TestAttr", {
                 inherits: $global.joopl.Attribute,
                 ctor: function (args) {
@@ -16,17 +16,17 @@
             });
 
             ns.declareClass("A", {
-                attributes: [new this.TestAttr()]
+                attributes: [new ns.TestAttr()]
             });
 
-            ok(this.A.type.hasAttribute(this.TestAttr), "The test class must contain the attribute");
-            ok(this.A.type.getAttribute(this.TestAttr).testData == "hello world");
+            ok(ns.A.type.hasAttribute(ns.TestAttr), "The test class must contain the attribute");
+            ok(ns.A.type.getAttribute(ns.TestAttr).testData == "hello world");
         });
     });
 
     test("Define a new class with attributes. Adding instances that are not Attribute must fail", function () {
-        $namespace.register("jooplattributetest2", function () {
-            this.declareClass("TestAttr", {
+        $namespace.using("jooplattributetest2", function (ns) {
+            ns.declareClass("TestAttr", {
                 ctor: function (args) {
                     this.base.ctor(args);
                 },
@@ -35,11 +35,9 @@
                 }
             });
 
-            var that = this;
-
             throws(function () {
-                that.def("A", {
-                    attributes: [new that.TestAttr()]
+                ns.def("A", {
+                    attributes: [new ns.TestAttr()]
                 });
             });
         });
@@ -48,8 +46,8 @@
     module("Class declaration");
 
     test("Define a new class, instantiate it and test if its methods and properties are working", function () {
-        $namespace.register("classtest1", function () {
-            this.declareClass("A", {
+        $namespace.using("classtest1", function (ns) {
+            ns.declareClass("A", {
                 ctor: function () {
                     this._.value = null;
                 },
@@ -73,8 +71,8 @@
             });
         });
 
-        $namespace.using("classtest1", function () {
-            var instance = new this.A();
+        $namespace.using("classtest1", function (ns) {
+            var instance = new ns.A();
             instance.value = "hello world";
 
             ok(instance.value == "hello world", "Some read-write property accessor holds the expected value!");
@@ -86,8 +84,8 @@
     module("Class inheritance");
 
     test("Define a new class, instantiate it and test if each instance do not share the class field reference", function () {
-        $namespace.register("classtest2", function () {
-            this.declareClass("A", {
+        $namespace.using("classtest2", function (ns) {
+            ns.declareClass("A", {
                 ctor: function () {
                     this._.value = [];
                 },
@@ -100,9 +98,9 @@
             });
         });
 
-        $namespace.using("classtest2", function () {
-            var instance = new this.A();
-            var instance2 = new this.A();
+        $namespace.using("classtest2", function (ns) {
+            var instance = new ns.A();
+            var instance2 = new ns.A();
 
             instance.value.push("hello world");
 
@@ -111,8 +109,8 @@
     });
 
     test("Create an inheritance and check that all members are present in the inherited class and they are also working as expected", function () {
-        $namespace.register("joopltest", function () {
-            this.declareClass("A", {
+        $namespace.using("joopltest", function (ns) {
+            ns.declareClass("A", {
                 ctor: function () {
                     this._.value = null;
                     this._.value2 = "read-only value";
@@ -138,8 +136,8 @@
             });
 
 
-            this.declareClass("B", {
-                inherits: this.A,
+            ns.declareClass("B", {
+                inherits: ns.A,
                 ctor: function () {
                     var b = null;
                     this.base.ctor();
@@ -151,14 +149,14 @@
                 }
             });
 
-            this.declareClass("C", {
+            ns.declareClass("C", {
                 ctor: function () {
                     this.base.ctor();
                 },
-                inherits: this.B
+                inherits: ns.B
             });
 
-            var instanceOfC = new this.C();
+            var instanceOfC = new ns.C();
             instanceOfC.value = "hello world";
 
             ok(instanceOfC.value == "hello world", "Read-write property from the super class is still accessible");
@@ -168,28 +166,28 @@
         });
 
         test("Create an inheritance  (B inherits A, C inherits B) and check that the most specialized class in the hierarchy is still of type of its base ones", function () {
-            $namespace.register("joopltest2", function () {
-                this.declareClass("A");
+            $namespace.using("joopltest2", function (ns) {
+                ns.declareClass("A");
 
-                this.declareClass("B", {
-                    inherits: this.A
+                ns.declareClass("B", {
+                    inherits: ns.A
                 });
 
-                this.declareClass("C", {
-                    inherits: this.B
+                ns.declareClass("C", {
+                    inherits: ns.B
                 });
 
-                var instanceOfC = new this.C();
+                var instanceOfC = new ns.C();
 
-                ok(instanceOfC.isTypeOf(this.C), "The instance of derived class is correctly detected as of type of its class (it is instance of C)");
-                ok(instanceOfC.isTypeOf(this.B), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of B)");
-                ok(instanceOfC.isTypeOf(this.A), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of A)");
+                ok(instanceOfC.isTypeOf(ns.C), "The instance of derived class is correctly detected as of type of its class (it is instance of C)");
+                ok(instanceOfC.isTypeOf(ns.B), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of B)");
+                ok(instanceOfC.isTypeOf(ns.A), "The instance of derived class is correctly detected as of type of one of its base classes (it is instance of A)");
             });
         });
 
         test("Create an inheritance with polymorphism and check that the polymorphic method and property are worked as expected", function () {
-            $namespace.register("classpolymorphismtest", function () {
-                this.declareClass("A", {
+            $namespace.using("classpolymorphismtest", function (ns) {
+                ns.declareClass("A", {
                     ctor: function () {
                         this._.value = "hello world";
                     },
@@ -204,8 +202,8 @@
                     }
                 });
 
-                this.declareClass("B", {
-                    inherits: this.A,
+                ns.declareClass("B", {
+                    inherits: ns.A,
                     ctor: function () {
                         this.base.ctor();
                     },
@@ -220,8 +218,8 @@
                     }
                 });
 
-                this.declareClass("C", {
-                    inherits: this.B,
+                ns.declareClass("C", {
+                    inherits: ns.B,
                     ctor: function () {
                         this.base.ctor();
                     },
@@ -237,8 +235,8 @@
                 });
             });
 
-            $namespace.using("classpolymorphismtest", function () {
-                var instanceOfC = new this.C();
+            $namespace.using("classpolymorphismtest", function (ns) {
+                var instanceOfC = new ns.C();
 
                 ok(instanceOfC.value == "hello world!!", "The polymorphic property has the expected value when it is accessed");
                 ok(instanceOfC.someMethod() == "hello world!!", "The polymorphic method has the expected value when it is accessed");
@@ -246,8 +244,8 @@
         });
 
         test("A base class has a polymorphic method. The base class will be inherited by others and the polymorphic method will be called in the base class like an abstract method", function () {
-            $namespace.register("classpolymorphismtest2", function () {
-                this.declareClass("A", {
+            $namespace.using("classpolymorphismtest2", function (ns) {
+                ns.declareClass("A", {
                     ctor: function () {
                     },
                     members: {
@@ -260,8 +258,8 @@
                     }
                 });
 
-                this.declareClass("B", {
-                    inherits: this.A,
+                ns.declareClass("B", {
+                    inherits: ns.A,
                     ctor: function () {
                         this.base.ctor();
                     },
@@ -269,8 +267,8 @@
                     }
                 });
 
-                this.declareClass("C", {
-                    inherits: this.B,
+                ns.declareClass("C", {
+                    inherits: ns.B,
                     ctor: function () {
                         this.base.ctor();
                     },
@@ -282,8 +280,8 @@
                 });
             });
 
-            $namespace.using("classpolymorphismtest2", function () {
-                var instanceOfC = new this.C();
+            $namespace.using("classpolymorphismtest2", function (ns) {
+                var instanceOfC = new ns.C();
 
                 ok(instanceOfC.someMethod() == "hello world", "The abstract method returns the expected value called from the base class");
             });
@@ -292,8 +290,8 @@
         module("Class declaration behaviors");
 
         test("Create an inmutable object", function () {
-            $namespace.register("inmutableobjecttest", function () {
-                this.declareClass("A", {
+            $namespace.using("inmutableobjecttest", function (ns) {
+                ns.declareClass("A", {
                     ctor: function () {
                         this._.classField = "hello world";
                     },
@@ -306,17 +304,17 @@
             });
 
             throws(function () {
-                $namespace.using("inmutableobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("inmutableobjecttest", function (ns) {
+                    var instance = new ns.A();
                     instance.some = "new property";
                 });
             }, "The inmutable class instance cannot add properties once instantiated");
 
             throws(function () {
-                $namespace.using("inmutableobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("inmutableobjecttest", function (ns) {
+                    var instance = new ns.A();
 
-                    $defineProperty(instance, "value", { configurable: true });
+                    TypeUtil.defineProperty(instance, "value", { configurable: true });
                 });
 
             }, "The inmutable class instance cannot redefine properties");
@@ -325,8 +323,8 @@
             throws(function () {
                 "use strict";
 
-                $namespace.using("inmutableobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("inmutableobjecttest", function (ns) {
+                    var instance = new ns.A();
 
                     delete instance.value;
 
@@ -337,24 +335,24 @@
 
             }, "The inmutable class instance cannot drop members");
             throws(function () {
-                $namespace.using("inmutableobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("inmutableobjecttest", function (ns) {
+                    var instance = new ns.A();
 
                     instance.someMethod = function () { };
                 });
             }, "The inmutable class cannot add methods once instantiated");
 
             throws(function () {
-                $namespace.using("inmutableobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("inmutableobjecttest", function (ns) {
+                    var instance = new ns.A();
                     instance.some = "new property";
                 });
             }, "The inmutable class instance cannot add properties once instantiated");
         });
 
         test("Create an non-dynamic object", function () {
-            $namespace.register("nondynamicobjecttest", function () {
-                this.declareClass("A", {
+            $namespace.using("nondynamicobjecttest", function (ns) {
+                ns.declareClass("A", {
                     ctor: function () {
                     },
                     members: {
@@ -366,16 +364,16 @@
             });
 
             throws(function () {
-                $namespace.using("nondynamicobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("nondynamicobjecttest", function (ns) {
+                    var instance = new ns.A();
                     instance.some = "new property";
                 });
             }, "The non-dynamic class instance cannot add properties once instantiated");
 
             throws(function () {
-                $namespace.using("nondynamicobjecttest", function () {
+                $namespace.using("nondynamicobjecttest", function (ns) {
                     var instance = new this.A();
-                    $defineProperty(instance, "value", { configurable: true });
+                    TypeUtil.defineProperty(instance, "value", { configurable: true });
                 });
 
             }, "The non-dynamic class instance cannot redefine properties");
@@ -384,8 +382,8 @@
             throws(function () {
                 "use strict";
 
-                $namespace.using("nondynamicobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("nondynamicobjecttest", function (ns) {
+                    var instance = new ns.A();
                     delete instance.value;
 
                     if (instance.value == "hello world") {
@@ -396,8 +394,8 @@
             }, "The non-dynamic class instance cannot drop members");
 
             throws(function () {
-                $namespace.using("nondynamicobjecttest", function () {
-                    var instance = new this.A();
+                $namespace.using("nondynamicobjecttest", function (ns) {
+                    var instance = new ns.A();
                     instance.someMethod = function () { };
                 });
             }, "The non-dynamic class instance cannot add methods once instantiated");
@@ -406,16 +404,16 @@
         module("Events");
 
         test("Try to create an event and trigger it", function () {
-            $namespace.register("eventtest1", function () {
-                this.declareClass("A", {
+            $namespace.using("eventtest1", function (ns) {
+                ns.declareClass("A", {
                     members: {
                         events: ["click"]
                     }
                 });
             });
 
-            $namespace.using("eventtest1", function () {
-                var instance = new this.A();
+            $namespace.using("eventtest1", function (ns) {
+                var instance = new ns.A();
                 var context = {};
 
                 // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 
@@ -430,17 +428,17 @@
         });
 
         test("Try to create an event, create more than an instance of the class with the whole event and trigger it", function () {
-            $namespace.register("eventtest2", function () {
-                this.declareClass("A", {
+            $namespace.using("eventtest2", function (ns) {
+                ns.declareClass("A", {
                     members: {
                         events: ["click"]
                     }
                 });
             });
 
-            $namespace.using("eventtest2", function () {
-                var instance = new this.A();
-                var instance2 = new this.A();
+            $namespace.using("eventtest2", function (ns) {
+                var instance = new ns.A();
+                var instance2 = new ns.A();
 
                 var eventCount = 0;
 
@@ -460,16 +458,16 @@
         });
 
         test("Try to create an event, bind a handler, unbind it and trigger the event. No event handler should be bound.", function () {
-            $namespace.register("eventtest3", function () {
-                this.declareClass("A", {
+            $namespace.using("eventtest3", function (ns) {
+                ns.declareClass("A", {
                     members: {
                         events: ["click"]
                     }
                 });
             });
 
-            $namespace.using("eventtest3", function () {
-                var instance = new this.A();
+            $namespace.using("eventtest3", function (ns) {
+                var instance = new ns.A();
                 var context = {};
 
                 var handled = false;
@@ -490,12 +488,14 @@
         });
 
         test("Try to create an event, create the handler in some method and trigger it", function () {
-            $namespace.register("eventtest4", function () {
-                this.declareClass("A", {
+            $namespace.using("eventtest4", function (ns) {
+                ns.declareClass("A", {
                     ctor: function () {
                         this.bindEvents();
                     },
                     members: {
+                        events: ["saidHello"],
+                        
                         bindEvents: function () {
                             this.saidHello.addEventListener(function (args) {
                                 ok(args.text == "hello world!", "The event args are the expected ones");
@@ -503,14 +503,13 @@
                         },
                         sayHello: function () {
                             this.saidHello.raise({ args: { text: "hello world!" } });
-                        },
-                        events: ["saidHello"]
+                        }
                     }
                 });
             });
 
-            $namespace.using("eventtest4", function () {
-                var instance = new this.A();
+            $namespace.using("eventtest4", function (ns) {
+                var instance = new ns.A();
                 var context = {};
 
                 instance.sayHello();
@@ -518,20 +517,20 @@
         });
 
         test("Try to create an event and trigger it with inheritance", function () {
-            $namespace.register("eventtest5", function () {
-                this.declareClass("A", {
+            $namespace.using("eventtest5", function (ns) {
+                ns.declareClass("A", {
                     members: {
                         events: ["click"]
                     }
                 });
 
-                this.declareClass("B", {
-                    inherits: this.A
+                ns.declareClass("B", {
+                    inherits: ns.A
                 });
             });
 
-            $namespace.using("eventtest5", function () {
-                var instance = new this.B();
+            $namespace.using("eventtest5", function (ns) {
+                var instance = new ns.B();
                 var context = {};
 
                 // Sets an event handler. Whenever a one is assigned to the event, a new handler is added. 

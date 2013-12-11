@@ -16,7 +16,7 @@
 // limitations under the License.
 
 
-if(typeof $namespace == "undefined") {
+if (typeof $namespace == "undefined") {
     // Keywords
     var $namespace = null; // Holds an object to manage namespaces
     var $global = null; // Represents the global namespace.
@@ -478,8 +478,8 @@ if(typeof $namespace == "undefined") {
                         instance,
                         "base",
                         {
-                            get: function() {
-                                if(instance.__base__ instanceof Function) {
+                            get: function () {
+                                if (instance.__base__ instanceof Function) {
                                     Object.defineProperty(
                                         instance,
                                         "__base__", {
@@ -611,7 +611,7 @@ if(typeof $namespace == "undefined") {
             modules: function (moduleFileNames, scopeFunc) {
                 var hasScopeFunc = typeof scopeFunc != "undefined";
 
-                if(typeof moduleFileNames == "string") {
+                if (typeof moduleFileNames == "string") {
                     moduleFileNames = [moduleFileNames];
                 }
 
@@ -637,7 +637,7 @@ if(typeof $namespace == "undefined") {
                             for (var dependencyIndex in dependencies) {
                                 currentFile = dependencies[dependencyIndex];
 
-                                if(this._loadedFiles.indexOf(currentFile) == -1) {
+                                if (this._loadedFiles.indexOf(currentFile) == -1) {
                                     this._loadedFiles.push(currentFile);
                                     args.push(currentFile);
                                 }
@@ -647,7 +647,7 @@ if(typeof $namespace == "undefined") {
 
                     if (args.length > 0) {
                         if (hasScopeFunc) {
-                            args.push(function() {
+                            args.push(function () {
                                 scopeFunc();
                             });
                         }
@@ -669,10 +669,11 @@ if(typeof $namespace == "undefined") {
             _namespaces: {},
             _classes: {},
 
-            register: function (path, scopedFunc) {
+            __register__: function (path, scopedFunc) {
+
                 var nsIdentifiers = typeof path == "string" ? path.split(".") : null;
 
-                if(!this._namespaces.hasOwnProperty(path)) {
+                if (!this._namespaces.hasOwnProperty(path)) {
                     // The parent namespace of everything is the reserved $global object!
                     var parentNs = $global;
                     var currentNs = null;
@@ -702,12 +703,6 @@ if(typeof $namespace == "undefined") {
                         parentNs = parentNs[currentNs];
                     }
                 }
-
-                // If the second parameter holds something if should be a 
-                // parameterless function, and this is creating a namespace scope.
-                if (typeof scopedFunc == "function") {
-                    this.using(path, scopedFunc, true);
-                }
             },
 
             /**
@@ -720,86 +715,42 @@ if(typeof $namespace == "undefined") {
                 @param scopedFunc {Function} A function to create a namespace scope (optional)
                 @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
             */
-            using: function (paths, scopedFunc, scopeIsNs) {
-                var pathsType = typeof paths;
+            using: function () {
+                var scopeNamespaces = [];
+                var that = this;
+                var scopeFunc = null;
+                var arg = null;
 
-                switch(pathsType) {
-                    case "undefined":
-                    default:
-                        throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path given" });
-
-                    case "string":
-                        if (paths.length == 0) {
-                            throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path given" });
+                for (var argIndex in arguments) {
+                    arg = arguments[argIndex];
+                    
+                    if (arg instanceof Function) {
+                        scopeFunc = arg;
+                    } else if (typeof arg == "string") {
+                        if (!that._namespaces.hasOwnProperty(arg)) {
+                            that.__register__(arg);
                         }
 
-                        paths = [paths];
-
-                        break;
-                }
-
-                if (paths.length == 0) {
-                    throw new $global.joopl.ArgumentException({ argName: "paths", reason: "No namespace path has been provided" });
-                }
-
-                var namespaces = [];
-                var namespacePath = null;
-                var nsScope = null;
-
-                if(!scopeIsNs) {
-                    nsScope = {};
-                    var currentClassDef = null;
-
-                    for (var pathIndex in paths) {
-                        namespacePath = paths[pathIndex];
-
-                        for(var classFullName in this._classes) {
-                            if(classFullName.indexOf(namespacePath) === 0) {
-                                currentClassDef = this._classes[classFullName];
-
-                                Object.defineProperty(
-                                    nsScope,
-                                    currentClassDef.type.name, {
-                                        value: currentClassDef,
-                                        writable: false,
-                                        configurable: false,
-                                        enumerable: true
-                                    }
-                                );
-                            }
-                        }
-                    }
-
-                    Object.freeze(nsScope);
-                }
-
-                if (typeof scopedFunc == "function") {
-                    if (scopeIsNs) {
-                        var ns = this._namespaces[paths[0]];
-                        scopedFunc.call(ns, ns);
+                        scopeNamespaces.push(that._namespaces[arg]);
                     } else {
-                        scopedFunc.call(nsScope, nsScope);
+                        throw new $global.joopl.ArgumentException({ argName: "paths", reason: "Some of given namespace paths is not a string literal" });
                     }
+                };
 
-                    return null;
-                } else {
-                    if(scopeIsNs) {
-                        return this._namespaces[paths[0]];
-                    } else {
-                        return nsScope;
-                    }
+                if (scopeFunc == null) {
+                    throw new $global.joopl.ArgumentException({ argName: "scopeFunc", reason: "No namespace scope function given" });
                 }
+
+                scopeFunc.apply(scopeNamespaces, scopeNamespaces);
             },
         };
 
         Object.freeze($namespace);
 
-        $namespace.register("joopl", function () {
+        $namespace.using("joopl", function (joopl) {
             /**
                 @namespace joopl
             */
-
-            var scope = this;
 
             /** 
                 Represents the base type of any class defined by jOOPL
@@ -807,10 +758,10 @@ if(typeof $namespace == "undefined") {
                 @class Object
                 @constructor
             */
-            this.Object = function () {
+            joopl.Object = function () {
             };
 
-            this.Object.prototype = {
+            joopl.Object.prototype = {
                 /**
                     Gets jOOPL library version (f.e. "2.4.0")
 
@@ -818,8 +769,8 @@ if(typeof $namespace == "undefined") {
                     @type string
                     @readonly
                 */
-                get joopl() { 
-                    return "2.5.0"; 
+                get joopl() {
+                    return "2.5.0";
                 },
 
                 get _() {
@@ -861,7 +812,7 @@ if(typeof $namespace == "undefined") {
                 @final
                 @since 2.3.0
             */
-            this.declareClass("Type", {
+            joopl.declareClass("Type", {
                 ctor: function (args) {
                     this._.attributes = args.attributes;
                     this._.name = args.name;
@@ -1089,7 +1040,7 @@ if(typeof $namespace == "undefined") {
                 @class Attribute
                 @since 2.3.0
             */
-            this.declareClass("Attribute", {
+            joopl.declareClass("Attribute", {
                 members: {
                 }
             });
@@ -1103,7 +1054,7 @@ if(typeof $namespace == "undefined") {
                 @final
                 @since 2.3.0
             */
-            var EnumValue = this.declareClass("EnumValue", {
+            var EnumValue = joopl.declareClass("EnumValue", {
                 ctor: function (args) {
                     this._.value = args.value;
                     this._.name = args.name;
@@ -1188,7 +1139,7 @@ if(typeof $namespace == "undefined") {
                 @static
                 @since 2.3.0
             */
-            this.Enum = new (TypeUtil.declareClass("Enum", this, {
+            joopl.Enum = new (TypeUtil.declareClass("Enum", this, {
                 members: {
                     /** 
                         Parses a text into a given enumeration value
@@ -1255,7 +1206,7 @@ if(typeof $namespace == "undefined") {
                 }
             }));
 
-            this.declareClass("Event", {
+            joopl.declareClass("Event", {
                 ctor: function (args) {
                     this._.handlers = [];
                     this._.source = args.source;
@@ -1284,7 +1235,7 @@ if(typeof $namespace == "undefined") {
                         if (this.handlers.length > 0) {
                             for (var delegateIndex in this.handlers) {
                                 this.handlers[delegateIndex].call(
-                                    args ? (args.$this ? args.$this : this.source) : this.source, 
+                                    args ? (args.$this ? args.$this : this.source) : this.source,
                                     args ? (args.args ? args.args : null) : null
                                 );
                             }
@@ -1293,7 +1244,7 @@ if(typeof $namespace == "undefined") {
                 }
             });
 
-            this.declareClass("EventManager", {
+            joopl.declareClass("EventManager", {
                 ctor: function (args) {
                     this._.source = args.source;
                 },
@@ -1326,7 +1277,7 @@ if(typeof $namespace == "undefined") {
                 @class Environment
                 @final
             */
-            this.declareClass("Environment", {
+            joopl.declareClass("Environment", {
                 members: {
                     /**
                         Occurs when any exception of any type is thrown within current application
@@ -1367,16 +1318,16 @@ if(typeof $namespace == "undefined") {
                 @static
             */
             Object.defineProperty(
-                this.Environment,
+                joopl.Environment,
                 "current", {
-                    value: new this.Environment(),
+                    value: new joopl.Environment(),
                     writable: false,
                     configurable: false,
                     enumerable: true
                 }
             );
 
-            this.declareClass("Exception", {
+            joopl.declareClass("Exception", {
 
                 /**
                     Represents the base class for any exception 
@@ -1395,7 +1346,6 @@ if(typeof $namespace == "undefined") {
                     this._.innerException = args.innerException;
 
                     var error = Error(args.message);
-                    var stackTrace = null;
 
                     if (BrowserUtil.isIE) {
                         try {
@@ -1489,8 +1439,8 @@ if(typeof $namespace == "undefined") {
                 }
             });
 
-            this.declareClass("ArgumentException", {
-                inherits: this.Exception,
+            joopl.declareClass("ArgumentException", {
+                inherits: joopl.Exception,
 
                 /**
                     Represents an exception that occurs when some method argument is missing or invalid
@@ -1532,8 +1482,8 @@ if(typeof $namespace == "undefined") {
                 }
             });
 
-            this.declareClass("NotImplementedException", {
-                inherits: this.Exception,
+            joopl.declareClass("NotImplementedException", {
+                inherits: joopl.Exception,
 
                 /**
                     Represents an exception that occurs when a class member is not implemented.

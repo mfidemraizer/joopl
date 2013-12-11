@@ -1,7 +1,7 @@
 (function(){
-	$namespace.register("joopl.analyzer.ns1", function() {
-		this.declareClass("B", {
-			inherits: this.A,
+    $namespace.using("joopl.analyzer.ns1", function (ns1) {
+        ns1.declareClass("B", {
+            inherits: ns1.A,
 			members: {
 				do1: function() {
 					return "A: do 1";
