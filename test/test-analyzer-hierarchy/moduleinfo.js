@@ -11,6 +11,13 @@ $import.mapMany(
 		"./SomeClass.js", "./ns1/A.js",
 		"./ns1/B.js"
 	],
+	"joopl.analyzer.ns6.SomeClass": [
+		"./SomeClassUsesTestEnum.js",
+		"./SomeEnum.js"
+	],
+	"joopl.analyzer.ns5.TestEnum": [
+		"./SomeEnum.js"
+	],
 	"threeclasstest1.A": [
 		"./ThreeClassesDifferentNamespace.js"
 	],
