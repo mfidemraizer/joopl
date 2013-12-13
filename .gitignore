@@ -1,4 +1,5 @@
 bin/
 doc/
 node_modules/*
+node_modules/joopl-analyzer/node_modules/*
 !/node_modules/joopl-analyzer

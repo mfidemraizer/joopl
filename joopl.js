@@ -15,7 +15,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 if (typeof $namespace == "undefined") {
     // Keywords
     var $namespace = null; // Holds an object to manage namespaces
@@ -721,10 +720,10 @@ if (typeof $namespace == "undefined") {
                 var scopeFunc = null;
                 var arg = null;
 
-                for (var argIndex in arguments) {
+                for(var argIndex = 0; argIndex < arguments.length; argIndex++) {
                     arg = arguments[argIndex];
-                    
-                    if (arg instanceof Function) {
+
+                    if (typeof arg == "function") {
                         scopeFunc = arg;
                     } else if (typeof arg == "string") {
                         if (!that._namespaces.hasOwnProperty(arg)) {
