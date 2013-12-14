@@ -16,6 +16,9 @@ module.exports = function(grunt) {
             timeout: 20000
         }
     },
+    nodeunit: {
+      all: ["./node_modules/joopl-analyzer/test/test.js"]
+    },
     yuidoc: {
       compile: {
         name: '<%= pkg.name %>',
@@ -33,8 +36,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');      
   grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');  
+  grunt.loadNpmTasks('grunt-contrib-nodeunit'); 
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');   
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'qunit', 'yuidoc']);
+  grunt.registerTask('default', ['uglify', 'qunit', 'nodeunit', 'yuidoc']);
 };
