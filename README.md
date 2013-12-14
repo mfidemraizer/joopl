@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mfidemraizer/joopl.png?branch=main)](https://travis-ci.org/mfidemraizer/joopl)
 joopl
 =====
 
