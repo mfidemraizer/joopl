@@ -16,6 +16,11 @@ module.exports = function(grunt) {
             timeout: 20000
         }
     },
+    jooplanalyzer: {
+      all: {
+        baseDirectory: "./node_modules/joopl-analyzer/test/test-hierarchy"
+      }
+    },
     nodeunit: {
       all: ["./node_modules/joopl-analyzer/test/test.js"]
     },
@@ -38,7 +43,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-nodeunit'); 
   grunt.loadNpmTasks('grunt-contrib-yuidoc');   
+  //grunt.loadNpmTasks("grunt-joopl-analyzer");
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'qunit', 'nodeunit', 'yuidoc']);
+  grunt.registerTask('default', ['uglify', 'qunit', 'nodeunit'/*, 'jooplanalyzer'*/, 'yuidoc']);
 };
