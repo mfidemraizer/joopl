@@ -9,6 +9,27 @@ module.exports = function(grunt) {
         dest: 'bin/<%= pkg.name %>.min.js'
       }
     },
+    copy: {
+      main: {
+        files: [
+          { 
+            flatten: true,
+            src: ['node_modules/grunt/**'], 
+            dest: 'node_modules/joopl-analyzer/' 
+          },
+          { 
+            flatten: true,
+            src: ['node_modules/grunt-joopl-analyzer/**'], 
+            dest: 'node_modules/joopl-analyzer/' 
+          },
+          { 
+            flatten: true,
+            src: ['node_modules/grunt-contrib-nodeunit/**'], 
+            dest: 'node_modules/joopl-analyzer/' 
+          }
+        ]
+      }
+    },
     qunit: {
         all: ['./test/test.html'],
         options: {
@@ -16,13 +37,13 @@ module.exports = function(grunt) {
             timeout: 20000
         }
     },
-    jooplanalyzer: {
-      all: {
-        baseDirectory: "./node_modules/joopl-analyzer/test/test-hierarchy"
-      }
-    },
-    nodeunit: {
-      all: ["./node_modules/joopl-analyzer/test/test.js"]
+    run_grunt: {
+        options: {
+            minimumFiles: 1
+        },
+        simple_target: {
+            src: ['node_modules/joopl-analyzer/Gruntfile.js']
+        }
     },
     yuidoc: {
       compile: {
@@ -39,12 +60,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');      
+  grunt.loadNpmTasks('grunt-contrib-uglify'); 
+  grunt.loadNpmTasks('grunt-contrib-copy');       
   grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit'); 
+  grunt.loadNpmTasks("grunt-run-grunt");
   grunt.loadNpmTasks('grunt-contrib-yuidoc');   
-  //grunt.loadNpmTasks("grunt-joopl-analyzer");
 
-  // Default task(s).
-  grunt.registerTask('default', ['uglify', 'qunit', 'nodeunit'/*, 'jooplanalyzer'*/, 'yuidoc']);
-};
+  grunt.registerTask('default', ['uglify', 'copy', 'qunit', 'run_grunt', 'yuidoc']);
+}
