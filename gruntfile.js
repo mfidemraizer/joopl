@@ -42,7 +42,7 @@ module.exports = function(grunt) {
             minimumFiles: 1
         },
         simple_target: {
-            src: ['node_modules/joopl-analyzer/Gruntfile.js']
+            src: ['node_modules/joopl-analyzer/gruntfile.js']
         }
     },
     yuidoc: {
