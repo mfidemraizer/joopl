@@ -4,8 +4,8 @@
     ## What is a *namespace*?
 
     A namespace is a container which may have zero or more members. Valid namespace members are:
-        - Classes
-        - Enumerations
+    - Classes
+    - Enumerations
 
     Namespaces are a simple but yet powerful way of distinguishing two ore more classes or enumerations with the same identifier. 
 

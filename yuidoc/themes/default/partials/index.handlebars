@@ -1,5 +1,8 @@
     <div class="apidocs">
         <div id="docs-main" class="content">
+            <a href="https://travis-ci.org/mfidemraizer/joopl" target="_blank">
+                <img src="https://travis-ci.org/mfidemraizer/joopl.png?branch=main" alt="Build Status" />
+            </a>
             <h2>Welcome to the official jOOPL site!</h2>
 
             <h3>Useful links</h3>
@@ -53,8 +56,8 @@
             <p>The next code listing creates a namespace called <i>samples</i>. A class <i>ClassA</i> in the namespace (the <i>this</i> keyword
             represents the registered namespace) implements a method to say "hello world!" and, finally, an instance of the whole class is created in order to call the method to say <i>hello world!</i>:</p>
             <pre>
-$namespace.register("samples", function() {
-    this.declareClass("A", {
+$namespace.using("samples", function(samples) {
+    samples.declareClass("A", {
         members: {
             helloWorld: function() {
                 alert("hello world!");
@@ -62,7 +65,7 @@ $namespace.register("samples", function() {
         }
     });
 
-    var instanceOfClassA = new this.ClassA();
+    var instanceOfClassA = new samples.ClassA();
     instanceOfClassA.helloWorld();
 });
             </pre>

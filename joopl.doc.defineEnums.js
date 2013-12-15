@@ -118,8 +118,8 @@ values containing more than an enumeration value.
 
 For example, taking this enumeration as example:
 
-    $namespace.using("joopl.enumerations", function(mynamspace) {
-        mynamspace.declareEnum("States", {
+    $namespace.using("joopl.enumerations", function(enumerations) {
+        enumerations.declareEnum("States", {
             open: 0,
             closed: 1,
             working: 2
@@ -128,7 +128,7 @@ For example, taking this enumeration as example:
 
 Some code may need to express that something is `open` but it is also `working`. This is achieved by using the `OR` operator:
 
-    var openAndWorking = this.State.open.enum.or(State.working);
+    var openAndWorking = enumerations.State.open.enum.or(State.working);
 
 And, finally, if some other code needs to evaluate that the enumeration value includes `open` (see `EnumValue.`{{#crossLink "EnumValue/hasFlag:method"}}{{/crossLink}}
 method for further details):

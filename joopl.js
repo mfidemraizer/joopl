@@ -704,16 +704,6 @@ if (typeof $namespace == "undefined") {
                 }
             },
 
-            /**
-                Imports the members of given namespace path.
-
-                The `$namespace.using` method will not register a namespace if a given namespace path is not previously registered with `$namespace.register`.
-
-                @method using
-                @param paths {Array} An array of strings of the namespaces to import
-                @param scopedFunc {Function} A function to create a namespace scope (optional)
-                @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
-            */
             using: function () {
                 var scopeNamespaces = [];
                 var that = this;
@@ -881,7 +871,7 @@ if (typeof $namespace == "undefined") {
                         @param {joopl.Attribute} An attribute class definition (rather than an instance!)
                         @return {joopl.Attribute} The attribute instance or `null` if the type does not have the given attribute type
                         @example 
-                            this.MyClass.type.getAttribute(this.MyAttribute);
+                            myNamespace.MyClass.type.getAttribute(this.MyAttribute);
                     */
                     getAttribute: function (attributeType) {
                         var found = false;
@@ -941,24 +931,24 @@ if (typeof $namespace == "undefined") {
                 
                 The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:
 
-                    $namespace.register("myNamespace", function() {
-                        this.declareClass("RequiresAuthenticationAttribute", {
-                            inherits: $global.joopl.Attribute
+                    $namespace.using("joopl", "myNamespace", function(joopl, myNamespace) {
+                        myNamespace.declareClass("RequiresAuthenticationAttribute", {
+                            inherits: joopl.Attribute
                         });
                     });
 
                 Later on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:
 
-                    $namespace.register("myNamespace", function() {
-                        this.declareClass("MyClass", {
-                            attributes: [new this.RequiresAuthenticationAttribute()]
+                    $namespace.using("myNamespace", function(myNamespace) {
+                        myNamespace.declareClass("MyClass", {
+                            attributes: [new myNamespace.RequiresAuthenticationAttribute()]
                         });
                     });
 
                 Finally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:
 
-                    $namespace.using("myNamespace", function() {
-                        if(this.MyClass.type.hasAttribute(this.RequiresAuthenticationAttribute)) {
+                    $namespace.using("myNamespace", function(myNamespace) {
+                        if(myNamespace.MyClass.type.hasAttribute(myNamespace.RequiresAuthenticationAttribute)) {
                             // Do some stuff if MyClass has the whole attribute
                         } else {
                             throw Error("Sorry, this code will not execute classes if they do not require authentication...");
@@ -970,9 +960,9 @@ if (typeof $namespace == "undefined") {
 
                 For example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?
 
-                    $namespace.register("myNamespace", function() {
-                        this.declareClass("DefaultPropertyAttribute", {
-                            inherits: $global.joopl.Attribute,
+                    $namespace.using("joopl", "myNamespace", function(joopl, myNamespace) {
+                        myNamespace.declareClass("DefaultPropertyAttribute", {
+                            inherits: oopl.Attribute,
                             ctor: function(args) {
                                 this._.defaultPropertyName = args.defaultPropertyName;
                             },
@@ -981,8 +971,8 @@ if (typeof $namespace == "undefined") {
                             }
                         });
 
-                        this.declareClass("Person", {
-                            attributes: [new this.DefaultPropertyAttribute("nickname")],
+                        myNamespace.declareClass("Person", {
+                            attributes: [new myNamespace.DefaultPropertyAttribute("nickname")],
                             ctor: function() {
                                 this._.firstName = null;
                                 this._.surname = null;
@@ -1004,20 +994,20 @@ if (typeof $namespace == "undefined") {
                 
                 Now, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:
 
-                    $namespace.using("myNamespace", function() {
+                    $namespace.using("myNamespace", function(myNamespace) {
                         
                         // The first step is creating a regular instance of Person
-                        var person = new this.Person();
+                        var person = new myNamespace.Person();
                         person.firstName = "Matias";
                         person.surname = "Fidemraizer";
                         person.nickname = "mfidemraizer";
 
                         // Secondly, this is checking if the Person class has the whole attribute
-                        if(Person.type.hasAttribute(this.DefaultPropertyAttribute)) {
+                        if(Person.type.hasAttribute(myNamespace.DefaultPropertyAttribute)) {
                             // Yes, it has the attribute!
                             //
                             // Then, the attribute instance is retrieved from the type information
-                            var defaultProperty = Person.type.getAttribute(this.DefaultPropertyAttribute);
+                            var defaultProperty = Person.type.getAttribute(myNamespace.DefaultPropertyAttribute);
 
                             // Once the attribute is retrieved, the code can access the "defaultPropertyName" instance property
                             // of the DefaultPropertyAttribute
@@ -1083,7 +1073,7 @@ if (typeof $namespace == "undefined") {
                         @param enumValue {Number} An enumeration value
                         @return {Number} The flag of two or more enumeration values
                         @example 
-                            var flag = State.open.enum.or(State.closed); // This is State.open | State.closed
+                            var flag = myNamespace.State.open.enum.or(State.closed); // This is State.open | State.closed
                     */
                     or: function (enumValue) {
                         var value = this.value | enumValue;
@@ -1102,7 +1092,8 @@ if (typeof $namespace == "undefined") {
                         @method and
                         @param enumValue {Number} An enumeration value
                         @return {Number} The flag of two or more enumeration values
-                        @example var flag = State.open.enum.and(State.closed); // This is State.open & State.closed
+                        @example 
+                            var flag = myNamespace.State.open.enum.and(myNamespace.State.closed); // This is State.open & State.closed
                     */
                     and: function (enumValue) {
                         var value = this.value & enumValue;
@@ -1122,8 +1113,8 @@ if (typeof $namespace == "undefined") {
                         @param enumValue {Number} An enumeration value
                         @return {Boolean} A boolean specifying if the given enumeration value was found in the flag.
                         @example 
-                            var flag = State.open.enum.or(State.closed);
-                            var hasOpen = flag.enum.hasFlag(State.open);
+                            var flag = myNamespace.State.open.enum.or(myNamespace.State.closed);
+                            var hasOpen = flag.enum.hasFlag(myNamespace.State.open);
                     */
                     hasFlag: function (enumValue) {
                         return (this.value & enumValue) === Number(enumValue);
@@ -1148,13 +1139,13 @@ if (typeof $namespace == "undefined") {
                         @param valueName {string} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
                         @static
                         @example
-                            $namespace.using("joopl", function() {
-                                this.declareEnum("State", {
+                            $namespace.using("joopl", function(joopl) {
+                                joopl.declareEnum("State", {
                                     open: 1,
                                     closed: 2
                                 });
 
-                                var open = this.Enum.parseName(State, "open")
+                                var open = joopl.Enum.parseName(State, "open")
                             });
                     */
                     parseName: function (enumType, valueName) {
@@ -1176,13 +1167,13 @@ if (typeof $namespace == "undefined") {
                         @param valueNames {String} A comma-separated list of a mask of given enumeration type (i.e. "open, closed, working").
                         @static
                         @example
-                            $namespace.using("joopl", function() {
-                                this.declareEnum("State", {
+                            $namespace.using("joopl", function(joopl) {
+                                joopl.declareEnum("State", {
                                     open: 1,
                                     closed: 2
                                 });
 
-                                this.Enum.parseNames(State, "open, closed")
+                                joopl.Enum.parseNames(State, "open, closed")
                             });
                     */
                     parseNames: function (enumType, valueNames) {
@@ -1452,7 +1443,7 @@ if (typeof $namespace == "undefined") {
                     @param {string} argName The affected argument name
                     @param {string} reason (optional) A reason text explaining what was wrong with the affected argument
                     @example
-                        throw new Error(new $global.joopl.ArgumentException({ argName: "someArgument"}));
+                        throw new $global.joopl.ArgumentException({ argName: "someArgument"});
                 */
                 ctor: function (args) {
                     this._.argName = args.argName;
@@ -1494,7 +1485,7 @@ if (typeof $namespace == "undefined") {
                     @constructor
                     @param {string} memberName The affected member name which does not implement something
                     @example
-                        throw new Error(new $global.joopl.NotImplementedException({ memberName: "someMethod"}));
+                        throw new $global.joopl.NotImplementedException({ memberName: "someMethod"});
                 */
                 ctor: function (args) {
                     this.base.ctor(
