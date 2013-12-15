@@ -23,6 +23,6 @@
     "nodeunit": "~0.8.2"
   },
   "scripts": {
-    "test": "grunt qunit"
+    "test": "grunt"
   }
 }
