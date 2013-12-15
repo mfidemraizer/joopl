@@ -27,15 +27,15 @@ In regular JavaScript, when some code needs to identify states uses integers (`N
 
 jOOPL introduces true enumerations and the above code could be turned into:
 
-    $namespace.register("joopl.enumerations", function() {
-        this.declareEnum("HttpState", {
+    $namespace.using("joopl.enumerations", function(enumerations) {
+        enumerations.declareEnum("HttpState", {
             closed: 0,
             open: 1
         });
 
-        var someVar = this.HttpState.open;
+        var someVar = enumerations.HttpState.open;
 
-        if(someVar == this.HttpState.open) {
+        if(someVar == enumerations.HttpState.open) {
             // Do stuff
         }
     });
@@ -50,8 +50,8 @@ mean.
 Enumerations are created using the `$enumdef` operator. The `$enumdef` operator is a ctor accepting an object
 defining one or more constants:
 
-    $namespace.register("mynamespace", function() {
-        this.declareEnum("State", {
+    $namespace.using("mynamespace", function(mynamespace) {
+        mynamespace.declareEnum("State", {
             open: 0,
             closed: 1,
             disconnected: 2,
@@ -68,25 +68,23 @@ Enumerations are required when some code can define a closed set of values that 
 
 For example, some code may have a class with a method accepting a limited number of HTTP verbs:
 
-    $namespace.register("mynamspace", function() {
-        this.declareEnum("HttpVerb", {
+    $namespace.using("mynamspace", function(mynamspace) {
+        mynamspace.declareEnum("HttpVerb", {
             get: 0,
             post: 1,
             put : 2
         });
 
-        var scope = this;
-
-        this.declareClass("MyClass", {
+        mynamspace.declareClass("MyClass", {
             members: {
                 // The @verb argument will only support verbs of the HttpVerb enumeration
                 doRequest: function(verb, url, args) {
                     switch(verb) {
-                        case scope.HttpVerb.get: 
+                        case mynamspace.HttpVerb.get: 
                             // Perform the HTTP GET request
                             break;
 
-                        case scope.HttpVerb.post:
+                        case mynamspace.HttpVerb.post:
                             // Perform the HTTP POST request
                             break;
 
@@ -113,15 +111,15 @@ The `enum` property represents a set of common operations for enum values.
 
 Sometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:
 
-    var state = this.State.open;
+    var state = mynamspace.State.open;
 
 jOOPL provides support for *flags* (combination of more than an enumeration values) using bit-wise operators like `OR` and `AND` in order to create enumeration 
 values containing more than an enumeration value.
 
 For example, taking this enumeration as example:
 
-    $namespace.register("joopl.enumerations", function() {
-        this.declareEnum("States", {
+    $namespace.using("joopl.enumerations", function(mynamspace) {
+        mynamspace.declareEnum("States", {
             open: 0,
             closed: 1,
             working: 2

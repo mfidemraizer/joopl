@@ -1,116 +1,93 @@
 /**
     The `$namespace` keyword represents an static object holding methods/functions to manage namespaces.
 
-    *If you are looking for code samples, <a href="../test/namespace.test.html" target="_blank">opening `$namespace` tests</a> and browsing their source code could be a good idea!*
+    ## What is a *namespace*?
 
-    ### What is a namespace?
-    <p>A namespace is an identifier holding zero or more members like classes and enumerations. </p>
+    A namespace is a container which may have zero or more members. Valid namespace members are:
+        - Classes
+        - Enumerations
 
-    <p>In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live 
-    into the same code library, but since each one belongs to a different namespace, this can happen with no issues:</p>
+    Namespaces are a simple but yet powerful way of distinguishing two ore more classes or enumerations with the same identifier. 
 
-        MyNamespace.Class1
-        MyNamespace.MyOtherNamespace.Class1
-        MyNamespace.AnotherNamespace.Class1
-        YetAnotherNamespace.Class1
+    For example, maybe a library should need to define two classes called 'SomeClass'. If both 'SomeClass' classes are imported in the same scope, which one
+    would be the available one? Usually the last imported one, because it was the latest to be defined...
 
-    <p>Namespaces <strong>must be defined using the <a href="#method_register">$namespace.register</a></strong> method.</p>
+    Avoiding situation described above is as easy as just use namespacing. If both 'SomeClass' classes would be defined in different namespaces, and both
+    can be referenced with their namespace plus their own class name, there is no more naming collisions! See example bellow:
 
-    <p>Once some code requires to use these classes, it can access the right class by using the full namespace path:</p>
+        namespaceA.SomeClass
+        namespaceB.SomeClass
+        
+        // They are both called with the same identifier, but 
+        // in different namespaces, thus
+        // they are different classes!
+        new namespaceA.SomeClass(); 
+        new namespaceB.SomeClass(); 
 
-        var instance = new $global.MyNamespace.Class1();
-        var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();
-        var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();
-        var instance4 = new $global.YetAnotherNamespace.Class1();
+    ## jOOPL namespacing
 
-    <p>This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces
-    isolate each one.</p>
+    jOOPL has built-in namespacing. Namespaces can be created and/or imported by calling `$namespace.using` method/function:
 
-    ### How to register a namespace
-    The second use case of the `$namespace.register` is the most powerful one: both register the whole namespace and add members to the
-    it in the same operation and with a shorter syntax. 
-
-    `$namespace.register` supports a second parameter in addition to the namespace path called `scopedFunc`. It is a parameterless function that, when
-    executed,  the `this` keyword in the scope of the function (i.e. *the function body*) will be the childest registered namespace. For example:
-
-        $namespace.register("joopl.samples", function() {
-            // The this keyword now is the 'samples' namespace! 
-            // That's great because there is no need to access to the full namespace path
-            // to work on adding members to it!
-            this.declareClass("A", {
-                members: {
-                    someMethod: function() {
-                        return "hello world";
-                    }
-                }
-            })
+        // This registers and imports "mynamespace" namespace and 
+        // puts a reference to the whole namespace as an argument of the 
+        // callback function found as second argument of $namespace.using
+        $namespace.using("mynamespace", function(mynamespace) {
+            
         });
 
-    <h3 id="namespace-global">The $global namespace</h3>
-    <p>jOOPL has a top-most namespace called `$global`. Any namespace registered using the whole `$namespace.register(...)` method will be nested into the
-    `$global` namespace.</p>
-    <p>As JavaScript top-most object is the `Window` object and any variable or function defined in the global scope belongs to `Window`, this can lead to
-    bad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member
-    defined by itself in the `$global` namespace in order to prevent issues with other libraries.</p>
+    Also, jOOPL supports importing/registering more than a namespace at once:
 
-    ###Importing one or more namespaces
-    ####1. Importing all members from some given namespaces into a variable
-    If the `$namespace.using` method is called only giving the first input parameter `paths` (*an arrary of strings where each index is a namespace path*).
-
-    That is, if a namespace has been previously registered this way in some JavaScript file:
-        $namespace.register("joopl.samples");
-        $namespace.register("jooopl.samples.ui");
-
-    ...`$namespace.using` would be used like this:
-
-    var importedMembers = $namespace.using(["joopl.samples", "joopl.samples.ui"]);
-
-    The `importedMembers` variable will hold *all* imported classes or enumerations within the `samples` and `ui` namespaces.
-
-    ####2. Importing all members in a scoped function
-    The second use case is importing members from some given namespaces into a scoped function:
-
-        $namespace.register("joopl.samples", function() {
-            this.declareClass("ClassA", {
-                members: {
-                    someMethod: function() {
-                    }
-                }
-            });
+        $namespace.using("mynamespace", "mynamespace2", "mynamespace3", function(mynamespace, mynamespace2, mynamespace3) {
+    
         });
 
-        // Somewhere in the same or other file...
-        $namespace.using(["joopl.samples", "joopl.samples.ui"], function() {
-            // The "this" keyword contains an object with all imported members from the both namespaces
-            var instance = new this.ClassA();
+    `$namespace.using` can import an unlimited number of namespaces. Each one is imported in the corresponding callback function argument and by order. That is, 
+    jOOPL will not care about function argument name, _but a right naming scheme will enforce code readability_.
+
+    As described before, `$namespace.using` requires a mandatory callback function known as **namespace scope**.  In fact, it can be given as first, second or any
+    argument of $namespace.using - order is not important, but again, _providing it as the last argument will enforce readability!_ -:
+
+        $namespace.using(function(mynamespace) { }, "mynamespace");
+        $namespace.using("mynamespace", function(mynamespace, mynamespace2) {}, "mynamespace2");
+        $namespace.using("mynamespace", "mynamespace2", function(mynamespace, mynamespace2) { });
+
+    ### Nested namespaces
+
+    Nested namespaces are possible and also recommended. Nesting namespaces allows a right segmentation of classes exposed by a software library.
+
+    For example, next code listing would import/register a nested namespace:
+
+        $namespace.using("mynamespace.nestedNamespace", function(nestedNamespace) {
+    
         });
 
-    In addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument
-    and the `this` keyword will hold the `$global` namespace object:
+    It is about creating dot-separated paths. 
 
-        $namespace.using(["joopl.samples", "joopl.samples.ui"], function(scope) {
-            // The scope input argument will hold the imported members
-            var instance = new scope.ClassA();
+    When importing nested namespaces, classes from parent namespaces **are not imported**. An explicit *using* is required:
+
+        $namespace.using("mynamespace", "mynamespace.nestedNamespace", function(mynamespace, nestedNamespace) {
+    
         });
+
+    ### Global namespace access
+
+    Once a namespace has been used somewhere, it is also available using a global path, or in other words a namespace and its members can be accessed directly:
+
+        $global.mynamespace.MyClass
+
+    Sometimes this is useful: when some code requires a single class from some namespace and it is enough rather than creating a namespace scope.
 
     @class $namespace
 */
 
 /**
-   Registers a namespace.
-
-   @method register
-   @param path {String} A namespace path. For example, "joopl.sample" will register "joopl" and its child "sample". 
-   @param scopedFunc {Function} A parameterless function representing the scope where the `this` keyword is the childest registered namespace (for example, registering "joopl.sample', the `this` keyword will be the *sample* namespace).
-*/
-
-/**
-    Imports the members of given namespace path. 
-
-    The `$namespace.using` method will not register a namespace if a given namespace path is not previously registered with `$namespace.register`.
+    Imports the members of a set of given namespace paths. If some or all paths do no exist, they will get automatically registered.
 
     @method using
-    @param paths {Array|string} An array of strings of the namespaces to import, or just a string with a single namespace path.
-    @param scopedFunc {Function} A function to create a namespace scope (optional)
-    @param scopeIsNs {boolean} USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)
+    @param paths {string} A comma-separated list of string literals, where each one is a namespace path.
+    @param scopedFunc {Function} A function to create a namespace scope. It must have as many arguments as imported namespaces.
+    @example
+        $namespace.using("path1", "path1.ns1", function(path1, ns1) {
+    
+        });
 */

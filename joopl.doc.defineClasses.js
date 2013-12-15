@@ -30,8 +30,8 @@
 
     A basic class may look like the next code listing:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 // ctor 
                 ctor: function() {
                     this._.name = null;
@@ -61,8 +61,8 @@
     Any class constructor, property or method has a reserved variable called `_` accessible through `this._` on which class fields can be declared and
     manipulated. For example, `this._.myName = "Matias";` will declare a class field called `myName` with a default value `Matías`.
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 ctor: function() {
                     // This is a class field:
                     this._.value = "A string for the class field";
@@ -78,8 +78,8 @@
 
     For example, class constructors are the place to define class fields:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 // constructor 
                 ctor: function() {
                     this._.myName = "Matias";
@@ -89,8 +89,8 @@
 
     In instance, the class constructor has access to the already declared methods and properties:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 // constructor 
                 ctor: function() {
                     this._.myName = "Matias";
@@ -198,8 +198,8 @@
 
     jOOPL fully supports ECMA-Script 5 properties like the described before:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 ctor: function() {
                     // Define a class field for later provide access to it through a property getter and setter
                     this._.name = null;
@@ -218,8 +218,8 @@
             });
         });
 
-        $namespace.using("test", function() {
-            var instance = new this.A();
+        $namespace.using("test", function(test) {
+            var instance = new test.A();
 
             // Set the 'name' property value
             a.name = "Matias";
@@ -243,8 +243,8 @@
 
     Class methods are defined as regular JavaScript functions and as part of the `members` in a class definition:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 members: {
                     do: function() {
                         return "do what?";
@@ -276,8 +276,8 @@
     Events are class members like properties and methods, but they are special in terms of how they are declared. For example, 
     if a class needs to implement an event to notify to others that it said "hello world", an event "saying" would be declared this way:
 
-        $namespace.register("test", function() {
-           this.declareClass("A", {
+        $namespace.using("test", function(test) {
+           test.declareClass("A", {
                 members: {
                     events: ["saying"]
                 }
@@ -287,8 +287,8 @@
     The above code declares an event "saying". Events are declared as an array of identifiers (names) as value of the `events` special member. Once
     an event is declared, the next step is triggering/raising/firing it somewhere in the whole class:
         
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 members: {
                     events: ["saying"],
 
@@ -309,8 +309,8 @@
     Finally, the last step is listening for the `saying` event. For that matter, an instance of A is created and the code will set an event handler in order
     to do an action when the `A` class instance says something:
 
-        $namespace.using("test", function() {
-            var instance = new this.A();
+        $namespace.using("test", function(test) {
+            var instance = new test.A();
 
             instance.saying.addEventListener(function(args) {
                 // The `args` input argument will hold the text set when the event was triggered
@@ -322,8 +322,8 @@
 
     For example:
 
-        $namespace.using("test", function() {
-            var instance = new this.A();
+        $namespace.using("test", function(test) {
+            var instance = new test.A();
 
             var handler = function(args) {
             }
@@ -344,14 +344,14 @@
 
     For example, declaring a class like follows:
 
-        $namespace.register("joopl.sample", function() {
-            this.declareClass("A");
+        $namespace.using("joopl.sample", function(test) {
+            test.declareClass("A");
             
             // Getting class name from type property of A class
-            var className = this.A.type.name;
+            var className = test.A.type.name;
 
             // Gettings class name from type property of A instance
-            var instance = new this.A();
+            var instance = new test.A();
             className = instance.type.name;
         });
 
@@ -365,8 +365,8 @@
     In jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard
     `new` operator:
 
-        $namespace.register("test", function() {
-            this.declareClass("A", {
+        $namespace.using("test", function(test) {
+            test.declareClass("A", {
                 members: {
                     someMethod: function() {
                         alert("hello world");
@@ -375,9 +375,9 @@
             });
         });
 
-        $namespace.using("test", function() {
+        $namespace.using("test", function(test) {
             // Creating an instance of A:
-            var instance = new this.A();
+            var instance = new test.A();
 
             // Now the instance variable - a reference to an object of type A - 
             // has its instance methods available to be called:
@@ -406,9 +406,9 @@
     A class `A` may implement some methods and properties and a class `B` can inherit `A` and it will not need to implement them as all members from `A`
     are already available as members of `B`:
 
-        $namespace.register("test", function() {
+        $namespace.using("test", function(test) {
             // Defining a class A having a method "do()"
-            this.declareClass("A", {
+            test.declareClass("A", {
                 members: {
                     do: function() {
                         // Do some stuff
@@ -417,13 +417,13 @@
             });
 
             // Class B inherits A
-            this.declareClass("B", {
-                inherits: this.A
+            test.declareClass("B", {
+                inherits: test.A
             });
         });
 
-        $namespace.using("test", function() {
-            var instance = new this.B();
+        $namespace.using("test", function(test) {
+            var instance = new test.B();
 
             // The B instance can invoke the do() function 
             // inherited from A
@@ -446,8 +446,8 @@
     For example, there is a class called `Salutation` which implements a method/function `sayHello` and it returns **"hello world"**, and there is a derived class
     `SpecializedSalutation` that inherits `Salutation` class, the whole derived class can override the `sayHello` method and make it say **"Hello, world!"**:
 
-        $namespace.register("test", function() {
-            this.declareClass("Salutator", {
+        $namespace.using("test", function(test) {
+            test.declareClass("Salutator", {
                 members: {
                     sayHello: function() {
                         return "hello world"
@@ -455,8 +455,8 @@
                 }
             });
 
-            this.declareClass("SpecializedSalutator", {
-                inherits: this.Salutator,
+            test.declareClass("SpecializedSalutator", {
+                inherits: test.Salutator,
                 members: {
                     // Overrides the parent class sayHello implementation
                     sayHello: function() {
@@ -466,8 +466,8 @@
             });
         });
         
-        $namespace.using("test", function() {
-            var instance = new this.SpecializedSalutator();
+        $namespace.using("test", function(test) {
+            var instance = new test.SpecializedSalutator();
             var text = instance.sayHello();
 
             // This will alert "Hello, world!" since the class has overriden the default implementation
@@ -486,8 +486,8 @@
     For example, there is a class `Calculator` having a method `add`, and a specialized calculator called `UnsignedCalculator` which makes any addition an absolute number result,
     the code would look like this:
 
-        $namespace.register("test", function() {
-            this.declareClass("Calculator", {
+        $namespace.using("test", function(test) {
+            test.declareClass("Calculator", {
                 members: {
                     add: function(num1, num2) {
                         // It simply adds num2 to num1
@@ -496,7 +496,7 @@
                 }
             });
 
-            this.declareClass("UnsignedCalculator", {
+            test.declareClass("UnsignedCalculator", {
                 members: {
                     add: function(num1, num2) {
                         // This is calling the "add"'s parent class implementation
@@ -516,7 +516,7 @@
     Even class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same
     hierarchy requires some construction-time initialization:
 
-        $namespace.register("test", function() {
+        $namespace.using("test", function(test) {
             // The top-most parent class Person defines basic data
             // and provides getter and setter properties in order to
             // get or set the whole contained data.
@@ -557,8 +557,8 @@
             // new class fields and calls the Person's ctor
             // by invoking this.base.ctor(args), thus the base constructor
             // will receive the expected arguments.
-            this.declareClass("Employee", {
-               inherits: this.Person,
+            test.declareClass("Employee", {
+               inherits: test.Person,
                ctor: function(args) {
                     this.base.ctor(args);
 
@@ -572,8 +572,8 @@
         // calls its base Person class' ctor, it will be correctly initialized 
         // with the data passed as ctor arguments:
 
-        $namespace.using("test", function() {
-            var instance = new this.Employee({
+        $namespace.using("test", function(test) {
+            var instance = new test.Employee({
                 name: "Matias",
                 secondName: "Fidemraizer",
                 age: 28,
@@ -602,8 +602,8 @@
 
     Here is a sample of the above explanation:
 
-        $namespace.register("test", function() {
-            this.declareClass("Polygon", {
+        $namespace.using("test", function(test) {
+            test.declareClass("Polygon", {
                 members: {
                     calcArea: function() {
                         // A generic polygon will not know how to calculate the area. The
@@ -612,13 +612,13 @@
 
                     toString: function() {
                         // See how calcArea() from the most derived class is accessed:
-                        return "The area of this polygon is: '" + this._.derived.calcArea(); + "'";
+                        return "The area of this polygon is: '" + this.derived.calcArea(); + "'";
                     }
                 }
             });
 
-            this.declareClass("Square", {
-                inherits: Polygon,
+            test.declareClass("Square", {
+                inherits: test.Polygon,
                 ctor: function(args) {
                     this._.x = args.x;
                     this._.y = args.y;
@@ -638,8 +638,8 @@
             });
         });
 
-        $namespace.using("test", function() {
-            var instance = new this.Square(20, 30);
+        $namespace.using("test", function(test) {
+            var instance = new test.Square(20, 30);
             
             // This will alert "The area of this polygon is: '600'""
             alert(instance.toString());
@@ -654,17 +654,17 @@
 
     For example, if there is a class `A`, `B` and `C`, and `C` inherits `B` and `B` inherits `A`:
 
-        var instanceOfC = new this.C();
+        var instanceOfC = new test.C();
 
-        var isType = instanceOfC.isTypeOf(this.A); // Evals true!
-        isType = instanceOfC.isTypeOf(this.B); // Evals true!
-        isType = instanceOfC.isTypeOf(this.C); // Evals true!
+        var isType = instanceOfC.isTypeOf(test.A); // Evals true!
+        isType = instanceOfC.isTypeOf(test.B); // Evals true!
+        isType = instanceOfC.isTypeOf(test.C); // Evals true!
 
-        var instanceOfA = new this.A();
+        var instanceOfA = new test.A();
 
-        isType = instanceOfA.isTypeOf(this.C); // Evals false - A is not C!
-        isType = instanceOfA.isTypeOf(this.B); // Evals false - A is not B!
-        isType = instanceOfA.isTypeOf(this.A); // Evals true!
+        isType = instanceOfA.isTypeOf(test.C); // Evals false - A is not C!
+        isType = instanceOfA.isTypeOf(test.B); // Evals false - A is not B!
+        isType = instanceOfA.isTypeOf(test.A); // Evals true!
    
     @class Define classes with jOOPL
 */
