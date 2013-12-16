@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mfidemraizer/joopl.png?branch=main)](https://travis-ci.org/mfidemraizer/joopl)
-joopl
-=====
+
+![jOOPL Logo](https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&DownloadId=652315&Build=20425)
 
 jOOPL is here to offer object-oriented programming and no more, just a tiny, simple and effective library that is going to support your JavaScript developments in the Web and anywhere. Visit http://mfidemraizer.github.io/joopl/ in order to get started and for the API reference.
 
