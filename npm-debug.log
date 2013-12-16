@@ -1,0 +1,51 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer' ]
+2 info using npm@1.2.15
+3 info using node@v0.10.2
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose read json C:\Users\mfidemraizer\AppData\Roaming\npm\package.json
+6 verbose read json C:\Users\mfidemraizer\AppData\Roaming\npm\package.json
+7 verbose cache add [ 'git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer',
+7 verbose cache add   null ]
+8 verbose cache add name=undefined spec="git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer" args=["git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer",null]
+9 verbose parsed url { protocol: 'git+https:',
+9 verbose parsed url   slashes: true,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: 'github.com',
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: 'github.com',
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: '/mfidemraizer/joopl/node_modules/joopl-analyzer',
+9 verbose parsed url   path: '/mfidemraizer/joopl/node_modules/joopl-analyzer',
+9 verbose parsed url   href: 'git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer' }
+10 silly lockFile 7fcc2e1b-oopl-node-modules-joopl-analyzer git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer
+11 verbose lock git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer C:\Users\mfidemraizer\AppData\Roaming\npm-cache\7fcc2e1b-oopl-node-modules-joopl-analyzer.lock
+12 verbose addRemoteGit [ 'https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer',
+12 verbose addRemoteGit   'master' ]
+13 silly exec git "clone" "--mirror" "https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer" "C:\\Users\\mfidemraizer\\AppData\\Roaming\\npm-cache\\_git-remotes\\https-github-com-mfidemraizer-joopl-node-modules-joopl-analyzer-a6407dcf"
+14 silly git,clone,--mirror,https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer,C:\Users\mfidemraizer\AppData\Roaming\npm-cache\_git-remotes\https-github-com-mfidemraizer-joopl-node-modules-joopl-analyzer-a6407dcf, spawning
+15 error git clone https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer undefined
+15 error git clone https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer undefined
+16 silly lockFile a6407dcf-oopl-node-modules-joopl-analyzer https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer
+17 error Error: spawn ENOENT
+17 error     at errnoException (child_process.js:948:11)
+17 error     at Process.ChildProcess._handle.onexit (child_process.js:739:34)
+18 error If you need help, you may report this log at:
+18 error     <http://github.com/isaacs/npm/issues>
+18 error or email it to:
+18 error     <npm-@googlegroups.com>
+19 error System Windows_NT 6.1.7601
+20 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "git+https://github.com/mfidemraizer/joopl/node_modules/joopl-analyzer"
+21 error cwd C:\Users\mfidemraizer\Documents\GitHub\joopl
+22 error node -v v0.10.2
+23 error npm -v 1.2.15
+24 error syscall spawn
+25 error code ENOENT
+26 error errno ENOENT
+27 verbose exit [ 1, true ]

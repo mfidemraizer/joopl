@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       build: {
-        src: '<%= pkg.name %>.js',
+        src: 'src/<%= pkg.name %>.js',
         dest: 'bin/<%= pkg.name %>.min.js'
       }
     },
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         version: '<%= pkg.version %>',
         url: '<%= pkg.homepage %>',
         options: {
-          paths: '.',
+          paths: './src',
           themedir: './yuidoc/themes/default',
           outdir: './doc'
         }

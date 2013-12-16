@@ -95,8 +95,10 @@ ol#class-list li {
 }
 
 #sidebar-container {
-    background-color: white;
-    box-shadow: 0 0 5px 5px #25A3D9;
+    background-color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 0 5px 5px rgba(37, 163, 217, 0.5) inset;
+    margin-right: 10px;
     padding: 10px 30px;
     width: 260px;
 }
@@ -292,10 +294,11 @@ th {
     padding: 0 15px 0 10px;
 }
 #bd {
+    margin: 0 auto;
+    overflow: hidden;
     padding: 7px 0 10px;
     position: relative;
-    width: 99%;
-    min-width: 1300px;
+    width: 1150px;
 }
 
 /* -- Table of Contents ----------------------------------------------------- */
@@ -883,3 +886,17 @@ kbd .cmd { font-family: Monaco, Helvetica; }
     font-weight: bold;
 }
 
+#main-content {
+    background-color: #FFFFFF;
+    border-radius: 0 !important;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 0 5px 5px rgba(37, 163, 217, 0.5) inset;
+    max-width: 800px;
+    padding-bottom: 2em;
+    padding-top: 2em;
+}
+
+.code {
+    max-width: 690px !important;
+    width: 690px !important;
+}

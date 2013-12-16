@@ -37,13 +37,13 @@
             {{#if projectLogo}}
                 <img id="project-logo" src="{{projectLogo}}" title="{{projectName}}" onclick="window.location='{{projectRoot}}index.html'"/>
             {{else}}
-                <img src="{{projectAssets}}/css/logo.png" title="{{projectName}}" />
+                <img src="{{projectAssets}}/css/logo.png" style="cursor: pointer" title="{{projectName}}" onclick="window.location='{{projectRoot}}index.html'"/>
             {{/if}}
             <div id="docs-sidebar" class="sidebar apidocs">
                 {{>sidebar}}
             </div>
         </div>
-        <div class="yui3-u-3-4">
+        <div id="main-content" class="yui3-u-3-4">
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
