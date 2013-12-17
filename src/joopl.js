@@ -607,15 +607,26 @@ if (typeof $namespace == "undefined") {
                 }
             },
 
-            modules: function (moduleFileNames, scopeFunc) {
-                var hasScopeFunc = typeof scopeFunc != "undefined";
+            modules: function () {
+                var scopeModules = [];
+                var that = this;
+                var scopeFunc = null;
+                var arg = null;
 
-                if (typeof moduleFileNames == "string") {
-                    moduleFileNames = [moduleFileNames];
-                }
+                for(var argIndex = 0; argIndex < arguments.length; argIndex++) {
+                    arg = arguments[argIndex];
 
-                if (!(moduleFileNames instanceof Array)) {
-                    throw new $global.joopl.ArgumentException({ argName: "moduleFileNames", reason: "This argument is mandatory" });
+                    if (typeof arg == "function") {
+                        scopeFunc = arg;
+                    } else if (typeof arg == "string") {
+                        scopeModules.push(arg);
+                    } else {
+                        throw new $global.joopl.ArgumentException({ argName: "paths", reason: "Some of given module names is not a string literal" });
+                    }
+                };
+
+                if (scopeFunc == null) {
+                    throw new $global.joopl.ArgumentException({ argName: "scopeFunc", reason: "No modules' scope function given" });
                 }
 
                 var enableHeadJS = Object.keys(this._dependencyMaps).length > 0 && typeof head != "undefined" && typeof window.head.js != "undefined";
@@ -629,8 +640,8 @@ if (typeof $namespace == "undefined") {
                     var dependencies = null;
                     var currentFile = null;
 
-                    for (var moduleIndex in moduleFileNames) {
-                        dependencies = dependencyMaps[moduleFileNames[moduleIndex]];
+                    for (var moduleIndex in scopeModules) {
+                        dependencies = dependencyMaps[scopeModules[moduleIndex]];
 
                         if (dependencies instanceof Array) {
                             for (var dependencyIndex in dependencies) {
