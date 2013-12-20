@@ -249,12 +249,6 @@
                     ctor: function () {
                     },
                     members: {
-                        someMethod: function () {
-                            return this.derived.abstractMethod();
-                        },
-
-                        abstractMethod: function () {
-                        }
                     }
                 });
 
@@ -264,6 +258,16 @@
                         this.base.ctor();
                     },
                     members: {
+                        get abstractProperty() {
+                            throw new $global.joopl.NotImplementedException({ memberName: "abstractProperty" });
+                        },
+
+                        someMethod: function () {
+                            return this.derived.abstractMethod() + this.derived.abstractProperty;
+                        },
+
+                        abstractMethod: function () {
+                        }
                     }
                 });
 
@@ -273,8 +277,13 @@
                         this.base.ctor();
                     },
                     members: {
+
                         abstractMethod: function () {
                             return "hello world";
+                        },
+
+                        get abstractProperty() {
+                            return " from property!";
                         }
                     }
                 });
@@ -283,7 +292,7 @@
             $namespace.using("classpolymorphismtest2", function (ns) {
                 var instanceOfC = new ns.C();
 
-                ok(instanceOfC.someMethod() == "hello world", "The abstract method returns the expected value called from the base class");
+                equal("hello world from property!", instanceOfC.someMethod(), "The abstract method returns the expected value called from the base class");
             });
         });
 
@@ -495,7 +504,7 @@
                     },
                     members: {
                         events: ["saidHello"],
-                        
+
                         bindEvents: function () {
                             this.saidHello.addEventListener(function (args) {
                                 ok(args.text == "hello world!", "The event args are the expected ones");

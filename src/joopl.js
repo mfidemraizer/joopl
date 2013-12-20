@@ -519,12 +519,12 @@ if (typeof $namespace == "undefined") {
                 }
 
                 Object.defineProperty(
-                    instance,
-                    "derived", {
+                    instance._,
+                    "__derived__", {
                         value: instance,
                         writable: false,
-                        configurable: true,
-                        enumerable: false
+                        enumerable: false,
+                        configurable: true
                     }
                 );
 
@@ -613,7 +613,7 @@ if (typeof $namespace == "undefined") {
                 var scopeFunc = null;
                 var arg = null;
 
-                for(var argIndex = 0; argIndex < arguments.length; argIndex++) {
+                for (var argIndex = 0; argIndex < arguments.length; argIndex++) {
                     arg = arguments[argIndex];
 
                     if (typeof arg == "function") {
@@ -721,7 +721,7 @@ if (typeof $namespace == "undefined") {
                 var scopeFunc = null;
                 var arg = null;
 
-                for(var argIndex = 0; argIndex < arguments.length; argIndex++) {
+                for (var argIndex = 0; argIndex < arguments.length; argIndex++) {
                     arg = arguments[argIndex];
 
                     if (typeof arg == "function") {
@@ -760,21 +760,30 @@ if (typeof $namespace == "undefined") {
             */
             joopl.Object = function () {
             };
-
-            joopl.Object.prototype = {
-                /**
-                    Gets jOOPL library version (f.e. "2.4.0")
-
-                    @property joopl
-                    @type string
-                    @readonly
-                */
-                get joopl() {
-                    return "2.5.0";
+            joopl.Object.prototype = {};
+            joopl.Object.prototype = Object.defineProperties(joopl.Object.prototype, {
+                joopl: {
+                    get: function () {
+                        return "2.5.1";
+                    },
+                    configurable: false,
+                    enumerable: true
                 },
 
-                get _() {
-                    return this.__fields__;
+                _: {
+                    get: function () {
+                        return this.__fields__;
+                    },
+                    configurable: false,
+                    enumerable: true
+                },
+
+                derived: {
+                    get: function () {
+                        return this._.__derived__;
+                    },
+                    configurable: false,
+                    enumerable: true
                 },
 
                 /**
@@ -786,24 +795,29 @@ if (typeof $namespace == "undefined") {
                         obj.isTypeOf(this.A)
                     
                 */
-                isTypeOf: function (type) {
-                    var allBases = [];
-                    var lastBase = this;
-                    var isMember = false;
+                isTypeOf: {
+                    value: function (type) {
+                        var allBases = [];
+                        var lastBase = this;
+                        var isMember = false;
 
-                    if (this instanceof type) {
-                        isMember = true;
-                    } else {
-                        while (!isMember && lastBase.base) {
-                            if (!(isMember = lastBase.base instanceof type)) {
-                                lastBase = lastBase.base;
+                        if (this instanceof type) {
+                            isMember = true;
+                        } else {
+                            while (!isMember && lastBase.base) {
+                                if (!(isMember = lastBase.base instanceof type)) {
+                                    lastBase = lastBase.base;
+                                }
                             }
                         }
-                    }
 
-                    return isMember;
+                        return isMember;
+                    },
+                    configurable: false,
+                    enumerable: true,
+                    writable: false
                 }
-            };
+            });
 
             /**
                 Represents type information and provides access to types' metadata.
