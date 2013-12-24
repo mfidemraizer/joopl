@@ -666,5 +666,5 @@
         isType = instanceOfA.isTypeOf(test.B); // Evals false - A is not B!
         isType = instanceOfA.isTypeOf(test.A); // Evals true!
    
-    @class Define classes with jOOPL
+    @class Classes
 */

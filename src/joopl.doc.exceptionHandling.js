@@ -12,18 +12,6 @@
 
     Obviously no one is looking to throw a text `as is` but throwing useful objects with data in order to allow proper exception handling.
 
-    ## Debuggers like Firebug don't like custom objects as exceptions
-
-    A big limitation when throwing any kind of object instead of throwing the built-in `Error` one (i.e. `throw Error("exception message")`) is that Web browser
-    debuggers like **Firebug** will be able to output the exception in their debugging console but it will not mark where it happened at all and the console log will not be *clickable*
-    turning exception debugging into a big issue.
-
-    Firebug will only output an exception to the console tab as *clickable* in order to go to the code line where it was thrown if the thrown exception is a
-    build-in `Error` object.
-
-    In opposite to Firebug, Chrome and modern Internet Explorer JavaScript debuggers will log to console the exact line where the exception was thrown, either if 
-    it is an `Error`, `Error`-derived custom exception type or just an object.
-
     ## jOOPL's approach to exception handling
 
     In jOOPL there is a design decision and it is that exceptions will not be never inheriting `Error` prototype nor internal exceptions throw `Error` instances.
@@ -61,16 +49,16 @@
 
     Since 2.4.x version jOOPL includes a global exception event which can be handled by multiple event handlers:
 
-        $namespace.using("joopl", function() {
-            this.Environment.current.exceptionThrown.addEventListener(function(e) {
+        $namespace.using("joopl", function(joopl) {
+            joopl.Environment.current.exceptionThrown.addEventListener(function(e) {
                 // "e" contains a property "thrownException":
-                if(e.thrownException instanceof this.ArgumentException) {
+                if(e.thrownException instanceof joopl.ArgumentException) {
                     // Do stuff if thrown exception is an ArgumentException
                 }
             });
 
             // This throw will be listened by the event handler added in the Environment class singleton "exceptionThrown" event!
-            throw new this.ArgumentException({ argName: "id" });
+            throw new joopl.ArgumentException({ argName: "id" });
         });
 
     *Note: `Environment.exceptionThrown` event occurs when any exception is instantiated, even if it's not already thrown.*

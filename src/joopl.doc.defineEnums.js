@@ -137,5 +137,5 @@ method for further details):
         // Do stuff if it is open already
     }
 
-    @class Declaring enumerations with jOOPL
+    @class Enumerations
 */

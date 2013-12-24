@@ -184,21 +184,21 @@ if (typeof $namespace == "undefined") {
 
                 if (args.$inmutable === true && Object.freeze) {
                     classDef = function (args, callctor) {
-                        TypeUtil.buildObject(this, args, callctor === undefined);
+                        TypeUtil.buildObject(this, args, typeof callctor == "undefined");
 
                         Object.freeze(this);
                     };
 
                 } else if (args.dynamic === false && Object.preventExtensions) {
                     classDef = function (args, callctor) {
-                        TypeUtil.buildObject(this, args, callctor === undefined);
+                        TypeUtil.buildObject(this, args, typeof callctor == "undefined");
 
                         Object.preventExtensions(this);
                     };
 
                 } else {
                     classDef = function (args, callctor) {
-                        TypeUtil.buildObject(this, args, callctor === undefined);
+                        TypeUtil.buildObject(this, args, typeof callctor == "undefined");
                     };
                 }
 
@@ -585,7 +585,7 @@ if (typeof $namespace == "undefined") {
             // Whether determines if some object reference has an associated value (object) and returns true/false.
             // @someRef: The object reference.
             hasValue: function (someRef) {
-                return someRef !== undefined && someRef != null;
+                return typeof someRef != "undefined" && someRef != null;
             }
         };
 
@@ -1062,7 +1062,7 @@ if (typeof $namespace == "undefined") {
             /**
                 Represents an enumeration value and provides access to common operations for the whole enumeration value.
 
-                See {{#crossLink "$enumdef"}}{{/crossLink}} to learn more about enumerations.
+                See {{#crossLink "Enumerations"}}{{/crossLink}} to learn more about enumerations.
 
                 @class EnumValue
                 @final
@@ -1221,15 +1221,51 @@ if (typeof $namespace == "undefined") {
                 }
             }));
 
+            /**
+                Represents a multi-cast event. 
+
+                An event is an observable object which notifies multiple objects listening event raises.
+
+                @class Event
+                @final
+                @constructor
+                @param {object} source The object who will be raising this event
+            */
             joopl.declareClass("Event", {
                 ctor: function (args) {
                     this._.handlers = [];
                     this._.source = args.source;
                 },
                 members: {
+
+                    /**
+                        Gets an array of event handlers listenting for event raise
+
+                        @property handlers
+                        @return Array
+                        @private
+                    */
                     get handlers() { return this._.handlers; },
+
+                    /**
+                        Gets the object who raises the event
+
+                        @property source
+                        @type Object
+                        @private
+                    */
                     get source() { return this._.source; },
 
+                    /**
+                        Adds and binds a function to this event that will be called whenever
+                        this event is raised.
+
+                        It supports unlimited event listeners and they will be called in order *FIFO*.
+
+                        @method addEventListener
+                        @param {function} handler A function reference which handles the event
+                        @return {void}
+                    */
                     addEventListener: function (handler) {
                         var index = this.handlers.indexOf(handler);
 
@@ -1238,6 +1274,15 @@ if (typeof $namespace == "undefined") {
                         }
                     },
 
+                    /**
+                        Removes and unbinds a function from this event.
+                        
+                        Given function handler should be the one that was previously added with `addEventListener`.
+
+                        @method addEventListener
+                        @param {function} handler A function reference which handles the event
+                        @return {void}
+                    */
                     removeEventListener: function (handler) {
                         var index = this.handlers.indexOf(handler);
 
@@ -1259,15 +1304,38 @@ if (typeof $namespace == "undefined") {
                 }
             });
 
+            /**
+                Represents an event manager for some class supporting events.
+
+                It is capable of registering events and managing their life-cycle.
+
+                @class EventManager
+                @final
+                @constructor 
+                @param {object} source The object who is associated with the event manager
+            */
             joopl.declareClass("EventManager", {
                 ctor: function (args) {
                     this._.source = args.source;
                 },
                 members: {
+                    /**
+                        Gets the object who is associated with the event manager
+
+                        @property source
+                        @type object
+                        @private
+                    */
                     get source() {
                         return this._.source;
                     },
 
+                    /**
+                        Registers an event in the event manager
+                        
+                        @method register
+                        @return void
+                    */
                     register: function (eventName) {
                         var delegates = [];
                         var that = this;
