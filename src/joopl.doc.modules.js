@@ -1,141 +1,111 @@
 /**
-    ## jOOPL Analyzer
+    <h2 id="index">1.0 Index of contents</h2>
+
+    - [2.0 Introduction to asynchronous dependency loading](#intro)
+    - [3.0 What is a module in jOOPL?](#modules)
+    - [4.0 Using `$import.mapMany`](#mapmany)
+    - [5.0 Using `$import.modules` to asynchronously-loading JavaScript resources](#load-modules)
 
     <hr />
 
-    <h3 id="index">1.0 Index of contents</h3>
+    <h2 id="intro">2.0 Introduction to asynchronous dependency loading</h2>
 
-    - [2.0 Introduction](#introduction)
-    - [3.0 How it works?](#how-it-works)
-    - [4.0 System requirements](#requirements)
-    - [5.0 Installing jOOPL Analyzer](#install)
-    - [6.0 Configuring jOOPL Analyzer](#configuration)
+    jOOPL introduces asynchronous dependency loading thanks to the new `$import` object. That is, now jOOPL can load JavaScript files on the client-side.
 
-    <hr />
+    This is a great advantage, since jOOPL can load many JavaScript files in parallel using modern Web browsers improvements on resource loading.
 
-    <h3 id="introduction">2.0 Introduction</h3>
-    <a href="#index">Back to index of contents</a>
+    For those who are not familarized with asynchronous dependency loading, it means that JavaScript files are not imported using `<script>` elements in the
+    HTML markup but they are loaded using AJAX under the hoods and parsed on the page asynchronously.
 
-    jOOPL Analyzer is a command-line tool which comprehensively analyzes source code deeply looking for namespaces, classes and enumerations, and automatically
-    creates a configuration that is used on run-time to load JavaScript file dependencies on the fly!
+    Asynchronous dependency loading configuration and the resource loading itself is managed by the new `$import` object in the global JavaScript scope.
 
-    For example, there are three source code files where each file defines a class A, B, C. Now C inherits B and B inherits A:
+    While `$import` is absolutely decoupled from how JavaScript resources are loaded, current implementation internally relies on a small but powerful
+    library called *HeadJS* (http://headjs.com) for this purpose.   
 
-    **A.js**
+    **For that reason, HeadJS should be added with a `<script>` tag on the HTML page always before `$import.modules` statements are executed.**
 
-        $namespace.using("test", function(test) {
-            test.declareClass("A", {
+    <h2 id="modules">3.0 What is a module in jOOPL?</h2>
+
+    Most trending definition of JavaScript module is the *module pattern*:
+
+        var module = {};
+
+        (function(module) {
+            module.SomeObject = function() {};
+
+            module.SomeObject.prototype = {
+                doSomething: function() {
+                    // Do some stuff
+                }
+            };
+        })(module);
+
+    In the above sample, a global scope variable called `module` is the input parameter of a self-invoked function which adds an object prototype to the
+    whole `module`. 
+
+    This ensures that objects are encloused by the `module` and they are not added to the JavaScript global scope (in browsers, this is the `Window` object).
+
+    In jOOPL, instead of implementing this concept of module, since it incorporates namespacing and classes or enumerations, there is no need for the regular
+    *module pattern*: 
+
+        $namespace.using("mynamespace.other", function(other) {
+            // Classes are never declared in the global scope but 
+            // as namespace object member! 
+            other.declareClass("Boo");
+        });
+
+    Actually, the definition of module in jOOPL is just an identifier which represents a group of JavaScript resources/files:
+
+    - **sampleModule** loads **fileA.js**, **fileB.js**, **fileN.js**...
+
+    While loaded files by a module could be also non-jOOPL-based code files, it is expected to be JavaScript code developed using jOOPL and this means that
+    as they will declare classes or enumerations inside namespaces, they will never introduce *garbage* in the global scope.
+
+    <h2 id="mapmany">4.0 Using `$import.mapMany`</h2>
     
-            });
-        });
+    In order to asynchronously load JavaScript resources, these should be configured before using the `$import.mapMany` function/method. 
 
-    **B.js**
-
-        $namespace.using("test", function(test) {
-            test.declareClass("B", {
-                inherits: test.A
-            });
-        });
-
-    **C.js**
-
-        $namespace.using("test", function(test) {
-            test.declareClass("C", {
-                inherits: test.B
-            });
-        });
-
-    Running jOOPL Analyzer command-line tool will result in a file containing this code listing:
+    This function/method takes an object as parameter, where the object properties are module names and each property
+    has an array of string, where these strings are absolute or relative paths to a JavaScript resource in order:
 
         $import.mapMany({
-            "test.A": ["A.js"],
-            "test.B": ["A.js", "B.js"],
-            "test.C": ["A.js", "B.js", "C.js"]
-        });
-
-    Note how jOOPL analyzer detects that class inheritance requires the file containing the base class declaration - *hopefully it is smart enough!* -.
-    
-    This is just a simple sample of jOOPL Analyzer dependency detection!
-
-    <h3 id="how-it-works">3.0 How it works?</h3>
-    <a href="#index">Back to index of contents</a>
-
-    JavaScript files must be located in some diretory, but they can be distributed in subdirectories without a nesting limit. 
-
-    jOOPL Analyzer is executed in the base directory where JavaScript files are located (i.e., usually Web sites have a `/scripts` directory) and looks for
-    namespaces, classes, enumerations and class instances across all files and identifies their physical dependencies. Once detection has ended, jOOPL Analyzer
-    creates a file called `moduleinfo.js` on the root of given base directory which will contain the whole phsyical file dependency configuration.
-
-    <h3 id="requirements">4.0 System requirements</h3>
-    <a href="#index">Back to index of contents</a>
-
-    jOOPL Analyzer is a NodeJS-based command-line tool. These are the minimum system requirements in order to work with jOOPL Analyzer:
-
-    - NodeJS-compatible operating system (Windows, Mac, Linux...). Look for compatibiliy on <a href="http://nodejs.org">NodeJS official site</a>.
-    - JavaScript code written using at least jOOPL 2.5.
-
-    <h3 id="install">5.0 Installing jOOPL Analyzer</h3>
-    <a href="#index">Back to index of contents</a>
-
-    Once NodeJS was installed in your operating system, next step is **globally** installing jOOPL Analyzer using NodeJS Package Manager (NPM):
-
-        npm install -g joopl-analyzer
-
-    Now jOOPL Analyzer will be installed in your local system.
-
-    <h3 id="configuration">6.0 Configuring jOOPL Analyzer</h3>
-    <a href="#index">Back to index of contents</a>
-
-    Command-line tool accepts configuration but there is no global configuration. Instead of a global configuration, there is an optional `joopl-analyzer.json` JSON
-    configuration file that should be located in the base directory where the analyzer should start dependency detection.
-
-    #### 6.1 Configuration scheme
-    <a href="#index">Back to index of contents</a>
-
-    The JSON configuration must be contained in a file called **joopl-analyzer.json** in the root directory of JavaScript files.
-
-    The whole file has the following configuration parameters:
-
-    - **fileExcludes**. It is an array of strings where each string is either a relative path to a file or directory that should be excluded from the analyzing process.
-    - **baseDirectoryOverrides**. Overrides base directory in the resulting **moduleinfo.js** file after JavaScript source code analysis. It is an array of objects, where each object has two properties
-    > - *startsWith*, which defines the directory to override (for example, "./scripts")
-    > - *replaceWith*, which defines the directory to replace from the source one.
-
-    ##### 6.1.1 About "baseDirectoryOverrides" configuration parameter
-    <a href="#index">Back to index of contents</a>
-
-    This parameter - *baseDirectoryOverrides* - is the ideal approach to change a local path to production one, even to a full HTTP URI:
-
-        {
-            "baseDirectoryOverrides": [
-                "startsWith": "./scripts",
-                "replaceWith": "http://cdn.mywebsite.com/scripts"
-            ]
-        }
-
-    ##### 6.1.2 Full configuration sample
-    <a href="#index">Back to index of contents</a>
-
-    **joopl-analyzer.json**
-
-        {
-    
-            "baseDirectoryOverrides": [
-                { 
-                    "startsWith": "./scripts/foo", 
-                    "replaceWith": "./scripts/boo" 
-                },
-                { 
-                    "startsWith": "./scripts/libs", 
-                    "replaceWith": "http://cdn.mysite.com/scripts/libs" 
-                }
+            // Some module called 'module1' depends on the following 3 files...
+            "module1": [
+                "/scripts/someFile.js",
+                "/scripts/someOtherFile.js",
+                "/scripts/yetAnotherFile.js"
             ],
 
-            "fileExcludes": [
-                "./scripts/jquery",
-                "./knockout.min.js"
+            "module2": [
+                "/scripts/oneFile.js",
+                "/scripts/foo.js"
             ]
-        }
+        });
 
-    @class joopl-analyzer
+    > **NOTE:** *Manually configuring JavaScript dependencies may be a waste of time when project has dozens or hundreds of JavaScript source code files. That is why*
+    > *jOOPL project has introduced **jOOPL Analyzer**, a command-line tool capable of reading source code files in order to automatically generate a massive*
+    > *`$import.mapMany` statement reflecting dependencies of all declared classes within a source code tree! [**Learn more here!!**](joopl-analyzer.html)*
+
+    `$import.mapMany` statements must be executed before `$import.modules` (see next chapter).
+
+    <h2 id="load-modules">5.0 Using `$import.modules` to asynchronously-loading JavaScript resources</h2>
+
+    Once JavaScript resources are configured using `$import.mapMany` statements, these resources are loaded by using `$import.modules` statement.
+
+    `$import.modules` function/method takes as arguments previously-configured module names and a callback function that will be called once JavaScript resources
+    have been loaded and parsed on the Web browser:
+
+        $import.modules("module1", "module2", function() {
+            // Do stuff here when both modules are already loaded!
+        }); 
+
+    If HeadJS is not included in the Web page before `$import.modules` statements, then its callback is still executed but JavaScript modules will not be loaded.
+
+    In the other hand, if everything worked as expected, for the time that callback is invoked, specified modules will be already loaded and accessible by callback's
+    JavaScript code.
+
+
+
+    @class $import
+    
 */

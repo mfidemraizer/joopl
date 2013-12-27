@@ -656,11 +656,9 @@ if (typeof $namespace == "undefined") {
                     }
 
                     if (args.length > 0) {
-                        if (hasScopeFunc) {
-                            args.push(function () {
-                                scopeFunc();
-                            });
-                        }
+                        args.push(function () {
+                            scopeFunc();
+                        });
 
                         head.js.apply(window, args);
                     } else {
