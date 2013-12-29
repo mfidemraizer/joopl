@@ -5,10 +5,13 @@
     - [3.0 What is a module in jOOPL?](#modules)
     - [4.0 Using `$import.mapMany`](#mapmany)
     - [5.0 Using `$import.modules` to asynchronously-loading JavaScript resources](#load-modules)
+    - [6.0 Samples](#samples)
 
     <hr />
 
     <h2 id="intro">2.0 Introduction to asynchronous dependency loading</h2>
+    
+    <a href="#index">Back to index of contents</a>
 
     jOOPL introduces asynchronous dependency loading thanks to the new `$import` object. That is, now jOOPL can load JavaScript files on the client-side.
 
@@ -25,6 +28,8 @@
     **For that reason, HeadJS should be added with a `<script>` tag on the HTML page always before `$import.modules` statements are executed.**
 
     <h2 id="modules">3.0 What is a module in jOOPL?</h2>
+    
+    <a href="#index">Back to index of contents</a>
 
     Most trending definition of JavaScript module is the *module pattern*:
 
@@ -63,6 +68,8 @@
 
     <h2 id="mapmany">4.0 Using `$import.mapMany`</h2>
     
+    <a href="#index">Back to index of contents</a>
+    
     In order to asynchronously load JavaScript resources, these should be configured before using the `$import.mapMany` function/method. 
 
     This function/method takes an object as parameter, where the object properties are module names and each property
@@ -89,6 +96,8 @@
     `$import.mapMany` statements must be executed before `$import.modules` (see next chapter).
 
     <h2 id="load-modules">5.0 Using `$import.modules` to asynchronously-loading JavaScript resources</h2>
+    
+    <a href="#index">Back to index of contents</a>
 
     Once JavaScript resources are configured using `$import.mapMany` statements, these resources are loaded by using `$import.modules` statement.
 
@@ -104,7 +113,14 @@
     In the other hand, if everything worked as expected, for the time that callback is invoked, specified modules will be already loaded and accessible by callback's
     JavaScript code.
 
+    <h2 id="samples">6.0 Samples</h2>
+    
+    <a href="#index">Back to index of contents</a>
 
+    Check the following code sample on jsFiddle.net. It configures a basic module that will load both jQuery and KnockoutJS in order, and once they get loaded
+    the callback of `$import.modules` will check that both libraries were loaded successfully (click on *Result* tab to execute the whole code):
+
+    <iframe width="100%" height="250" src="http://jsfiddle.net/mfidemraizer/JGHY5/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
     @class $import
     

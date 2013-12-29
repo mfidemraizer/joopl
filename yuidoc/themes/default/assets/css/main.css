@@ -97,7 +97,7 @@ ol#class-list li {
 #sidebar-container {
     background-color: #FFFFFF;
     border: 2px solid #FFFFFF;
-    box-shadow: 0 0 5px 5px rgba(37, 163, 217, 0.5) inset;
+    box-shadow: 0 0 5px 1px rgba(37, 163, 217, 0.5) inset;
     margin-right: 10px;
     padding: 10px 30px;
     width: 260px;
@@ -126,12 +126,10 @@ html {
 }
 
 body {
-    border-top: 3px ridge #AAAAAA;
     box-shadow: 0 0 190px 5px #25A3D9 inset;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     margin: 0;
-    padding: 10px;
     min-width: 1300px;
 }
 
@@ -890,7 +888,7 @@ kbd .cmd { font-family: Monaco, Helvetica; }
     background-color: #FFFFFF;
     border-radius: 0 !important;
     border: 2px solid #FFFFFF;
-    box-shadow: 0 0 5px 5px rgba(37, 163, 217, 0.5) inset;
+    box-shadow: 0 0 5px 1px rgba(37, 163, 217, 0.5) inset;
     max-width: 800px;
     padding-bottom: 2em;
     padding-top: 2em;

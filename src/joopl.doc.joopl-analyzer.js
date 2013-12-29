@@ -14,10 +14,14 @@
         - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)
         - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)
         - [Rule V: Object instantiation always with `new` operator](#rule-instantiation)
+        - [Rule VI: Modules which load themself don't include the code file from which are loaded](#rule-module-load-itself)
+    - [9.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)
+    - [10.0 Producing true modules](#modules)
 
     <hr />
 
     <h3 id="introduction">2.0 Introduction</h3>
+
     <a href="#index">Back to index of contents</a>
 
     jOOPL Analyzer is a command-line tool which comprehensively analyzes source code deeply looking for namespaces, classes and enumerations, and automatically
@@ -61,7 +65,10 @@
     
     This is just a simple sample of jOOPL Analyzer dependency detection!
 
+    <hr />
+
     <h3 id="how-it-works">3.0 How it works?</h3>
+
     <a href="#index">Back to index of contents</a>
 
     JavaScript files must be located in some diretory, but they can be distributed in subdirectories without a nesting limit. 
@@ -70,7 +77,10 @@
     namespaces, classes, enumerations and class instances across all files and identifies their physical dependencies. Once detection has ended, jOOPL Analyzer
     creates a file called `moduleinfo.js` on the root of given base directory which will contain the whole phsyical file dependency configuration.
 
+    <hr />
+
     <h3 id="requirements">4.0 System requirements</h3>
+
     <a href="#index">Back to index of contents</a>
 
     jOOPL Analyzer is a NodeJS-based command-line tool. These are the minimum system requirements in order to work with jOOPL Analyzer:
@@ -78,7 +88,10 @@
     - NodeJS-compatible operating system (Windows, Mac, Linux...). Look for compatibiliy on <a href="http://nodejs.org">NodeJS official site</a>.
     - JavaScript code written using at least jOOPL 2.5.
 
+    <hr />
+
     <h3 id="install">5.0 Installing jOOPL Analyzer</h3>
+
     <a href="#index">Back to index of contents</a>
 
     Once NodeJS was installed in your operating system, next step is **globally** installing jOOPL Analyzer using NodeJS Package Manager (NPM):
@@ -87,13 +100,17 @@
 
     Now jOOPL Analyzer will be installed in your local system.
 
+    <hr />
+
     <h3 id="configuration">6.0 Configuring jOOPL Analyzer</h3>
+
     <a href="#index">Back to index of contents</a>
 
     Command-line tool accepts configuration but there is no global configuration. Instead of a global configuration, there is an optional `joopl-analyzer.json` JSON
     configuration file that should be located in the base directory where the analyzer should start dependency detection.
 
     #### 6.1 Configuration scheme
+
     <a href="#index">Back to index of contents</a>
 
     The JSON configuration must be contained in a file called **joopl-analyzer.json** in the root directory of JavaScript files.
@@ -106,6 +123,7 @@
     > - *replaceWith*, which defines the directory to replace from the source one.
 
     ##### 6.1.1 About "baseDirectoryOverrides" configuration parameter
+
     <a href="#index">Back to index of contents</a>
 
     This parameter - *baseDirectoryOverrides* - is the ideal approach to change a local path to production one, even to a full HTTP URI:
@@ -118,6 +136,7 @@
         }
 
     ##### 6.1.2 Full configuration sample
+
     <a href="#index">Back to index of contents</a>
 
     **joopl-analyzer.json**
@@ -141,7 +160,10 @@
             ]
         }
 
+    <hr />
+
     <h3 id="run">7.0 How to run jOOPL Analyzer</h3>
+
     <a href="#index">Back to index of contents</a>
 
     As jOOPL Analyzer package using NPM must be installed globally (NPM `-g` command-line argument), there is a `joopl-analyzer` command available
@@ -180,6 +202,7 @@
     When `joopl-analyzer` command execution finishes it creates a file called `moduleinfo.js` in the given base directory.
 
     <h3 id="rules">8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>
+
     <a href="#index">Back to index of contents</a>
 
     jOOPL-based JavaScript code should follow some rules in order to allow `joopl-analyzer` command to work as expected.
@@ -188,6 +211,8 @@
     detection. *Free-style JavaScript code is still possible*.
     
     <h4 id="rule-import">Rule I: One `$import.modules` per source code file</h4>
+    
+    <a href="#index">Back to index of contents</a>
 
     Never use more than one `$import.modules` statement per source code file.
 
@@ -200,6 +225,8 @@
         });
     
     <h4 id="rule-using">Rule II: One `$namespace.using` per source code file</h4>
+    
+    <a href="#index">Back to index of contents</a>
 
     Never use more than one `$namespace.using` statement in the same source code file: just import all namespaces using a single 
     statement:
@@ -211,10 +238,14 @@
         });
 
     <h4 id="rule-one-nsmember-per-file">Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file</h4>
+    
+    <a href="#index">Back to index of contents</a>
 
     Never declare more than a class or enumeration in the same source code file.
 
     <h4 id="rule-no-aliases">Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)</h4>
+    
+    <a href="#index">Back to index of contents</a>
 
     Never alias namespaces and their members like classes or enumerations:
 
@@ -236,8 +267,154 @@
         });
     
     <h4 id="rule-instantiation">Rule V: Object instantiation always with `new` operator</h4>
+    
+    <a href="#index">Back to index of contents</a>
 
     Never instantiate objects using `Object.create` or any other approach. Always use `new` operator.
+
+    <h4 id="rule-module-load-itself">Rule VI: Modules which load themself don't include the code file from which are loaded</h4>
+    
+    <a href="#index">Back to index of contents</a>
+
+    See the following sample
+
+        // SomeClass.js
+
+        $import.modules("joopl.test.MyClass", function() {
+            $namespace.using("joopl.test", function(test) {
+                test.declareClass("SomeClass");
+            });
+        });
+
+    Once `joopl-analyzer` gets executed, resulting `moduleinfo.js` file would contain - along with other detected classes and enumerations - 
+    the following code:
+
+        // moduleinfo.js
+
+        $import.mapyMany({
+            // ... other detected members
+
+            "joopl.test.MyClass": [] // It's empty!!
+        });
+
+    When a code file imports itself as a module, it's skipped. This rule works as expected and it is extremely important because it prevents
+    the whole code file from being loaded twice!
+
+    <hr />
+
+    <h3 id="using-moduleinfo">9.0 Using `moduleinfo.js` resulting file</h3>
+    
+    <a href="#index">Back to index of contents</a>
+    
+    As explained in previous chapters, running `joopl-analyzer` command produces a file called `moduleinfo.js`. Also, as explained in 
+    [*Asynchronous dependency loading documentation*]($import.html), `moduleinfo.js` file
+    must be added on some HTML page just after jOOPL `<script>` tag. That is, detected JavaScript dependencies and their relations will be
+    configured before `$import.modules` statements are executed.
+
+    <hr />
+
+    <h3 id="modules">10.0 Producing true modules with `joopl-analyzer`!</h3>
+    
+    <a href="#index">Back to index of contents</a>
+
+    jOOPL Analyzer, as explained in previous chapters, looks for class/enumeration declarations and instantiations across a source code tree. 
+
+    If all files are just class and enumeration declarations, `moduleinfo.js` produced file will contain which files are required by each declared
+    member.
+
+    But what if instead of producing modules as classes `joopl-analyzer` should produce true modules grouping the required files to load a set of
+    classes or even a full namespace? No problem since it is about creating a file which instantiates all namespace classes inside a *placeholder class*
+    and `joopl-analyzer` will be smart enough to detect a module which will load more than a class!
+
+    See the following sample code:
+        
+        // A.js
+        $namespace.using("joopl.test", function(test) {
+            this.declareClass("A", {});
+        });
+
+        // B.js
+        $namespace.using("joopl.test", function(test) {
+            this.declareClass("B", {
+                inherits: test.A
+            });
+        });
+
+        // C.js
+        $namespace.using("joopl.test", function(test) {
+            this.declareClass("C", {
+                inherits: test.B
+            });
+        });
+
+        // SomeOtherClass.js
+        $namespace.using("joopl.test", function(test) {
+            this.declareClass("SomeOtherClass", {});
+        });
+
+        // TestClasses.js
+        // Now we create a module called "TestClasses" using a "placeholder class".
+        // The whole class has a constructor that instantiates all classes from the namespace...
+
+        $import.modules("joopl.test.TestClasses", function() {
+            $namespace.using("joopl.test", function(test) {
+                this.declareClass("TestClasses", {
+                    ctor: function() {
+                        new test.A();
+                        new test.B();
+                        new test.C();
+                        new test.SomeOtherClass();
+                    }
+                });
+            });
+        });
+
+    After executing `joopl-analyzer` for this hypothetical source code tree, `moduleinfo.js` file will contain a module called
+    **"joopl.test.testClasses"** containing JavaScript code files of the instantiated classes within the placeholder class constructor:
+
+        $import.mapMany({
+            "joopl.test.TestClasses": [
+                "A.js",
+                "B.js",
+                "C.js",
+                "SomeOtherClass.js",
+                "testClasses.js"
+            ]
+        });
+
+    Note that the code file defining which classes or enumerations will contain the whole module *TestClasses* is not included in the 
+    `moduleinfo.js` file. [This is because of the **Rule VI: Modules which load themself don't include the code file from which are loaded**](#rule-module-load-itself). This
+    is extremely useful because import/load the whole module using `$import.modules` will not load the placeholder class but just only the classes 
+    group by the module itself!
+
+    Great! **joopl.test.testClasses** module can be used to load 5 classes in order with less code:
+
+        // First of all, load the whole module
+        $import.modules("joopl.test.testClasses", function() {
+            $namespace.using("joopl.test", function(test) {
+                // Now joopl.test namespace will be correctly loaded
+                // and A, B, C and SomeOtherClass classes will be available!
+                var a = new test.A(); // This will work!
+                var a = new test.B(); // This will work!
+                var a = new test.C(); // This will work!
+                var a = new test.SomeOtherClass(); // This will work!
+            });
+        });
+
+    An important detail is above code instantiates classes in order (A, B, C...). This is not mandatory, since `joopl-analyzer` detects code file
+    loading order:
+
+        $import.modules("joopl.test.testClasses", function() {
+            $namespace.using("joopl.test", function(test) {
+                // Instantiation order has been altered, but code files will be detected
+                // in the same order as previous sample!
+                var a = new test.SomeOtherClass(); // This will work!
+                var a = new test.C(); // This will work!
+                var a = new test.A(); // This will work!
+                var a = new test.B(); // This will work!
+            });
+        });
+
 
 
     @class joopl-analyzer
