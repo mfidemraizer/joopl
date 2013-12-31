@@ -6,7 +6,8 @@
 
   <title>jOOPL Presentation</title>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/css/reveal.min.css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/css/theme/sky.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/css/theme/default.css">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/js/reveal.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/lib/js/head.min.js"></script>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night-bright.min.css">
@@ -26,8 +27,9 @@ It features:
 
 - **Class-based** object-oriented Programming
 - True and full **namespacing**
-- State-of-the-art inheritance and polymorphism system
-- Cutting-edge JavaScript dependency management thanks to exclusive `joopl-analyzer`
+- Exclusive inheritance and polymorphism system
+- Cutting-edge JavaScript dependency management: `joopl-analyzer`
+- jOOPL is plain JavaScript: it does not require any pre-compilation.
 
 <br />
 
@@ -209,6 +211,33 @@ $import.mapMany({
 </pre>
 				</script>
 			</section>
+
+			<section id="joopl-analyzer-3" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### jOOPL-Analyzer (III)
+
+Just imagine how productive and efficient becomes JavaScript development when physical dependencies across source code files
+are auto-inferred by usage? 
+
+Also, `joopl-analyzer` can be used in *watch mode*: it stays open and analyzes your code in real-time!
+
+Welcome to **asynchronous dependency loading**.
+				</script>
+			</section>
+
+			<section id="end" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+
+This is a sneak peack of what jOOPL can do in real-world projects.
+
+Learn more about jOOPL and get started on:
+
+- <a href="http://mfidemraizer.github.io/joopl/" target="_blank">Official Web site</a>
+- <a href="http://github.com/mfidemraizer/joopl/" target="_blank">GitHub repository</a>
+				</script>
+			</section>
         </div>
     </div>
     <script>
@@ -220,13 +249,29 @@ $import.mapMany({
     		]
 		});
 
-		window.addEventListener("mousedown", handleClick, false);
+        $(window).on("mousedown", function(e) {
+        	console.log(e.target.nodeName);
+
+        	if(e.target.nodeName != "A") {
+				e.preventDefault();
+
+				if(e.button === 0) 
+					Reveal.next(); 
+				if(e.button === 2) 
+					Reveal.prev();
+			}
+        });
+
+		//window.addEventListener("mousedown", handleClick, false);
 		window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
 		 
 		function handleClick(e) {
 			e.preventDefault();
-			if(e.button === 0) Reveal.next(); 
-			if(e.button === 2) Reveal.prev(); 
+
+			if(e.button === 0) 
+				Reveal.next(); 
+			if(e.button === 2) 
+				Reveal.prev();
 		}
     </script>
 </body>

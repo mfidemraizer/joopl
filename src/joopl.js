@@ -762,7 +762,7 @@ if (typeof $namespace == "undefined") {
             joopl.Object.prototype = Object.defineProperties(joopl.Object.prototype, {
                 joopl: {
                     get: function () {
-                        return "2.5.1";
+                        return "2.5.2";
                     },
                     configurable: false,
                     enumerable: true
