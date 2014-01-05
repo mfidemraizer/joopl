@@ -5,7 +5,7 @@
             </a>
             <h2>Welcome to the official jOOPL Web site!</h2>
             <ol id="main-links">
-                <li id="joopl-minified"><a href="http://cdn.jsdelivr.net/joopl/2.4.1/joopl.min.js" target="_self">jOOPL 2.4.1 CDN</a></li>
+                <li id="joopl-minified"><a href="http://cdn.jsdelivr.net/joopl/2.5.2/joopl.min.js" target="_self">jOOPL 2.5.2 CDN</a></li>
                 <li id="joopl-sourcecode"><a href="https://github.com/mfidemraizer/joopl" target="_self">GitHub Repository</a></li>
             </ol>
 
@@ -18,27 +18,26 @@
             <iframe width="100%" height="470" src="http://jsfiddle.net/mfidemraizer/XTE5z/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
             <h3>Get started!</h3>
-            <p>First of all, take a look at <a href="classes/Define%20classes%20with%20jOOPL.html">documentation about how to work with classes and object-oriented programming</a> and <a href="classes/$namespace.html">namespacing how-to</a>!</p>
+            <p>First of all, take a look at <a href="classes/Classes.html">documentation about how to work with classes and object-oriented programming</a> and <a href="classes/$namespace.html">namespacing how-to</a>!</p>
             
-            <p>Furthermore, if you are looking for samples, now jOOPL has a test suite developed using the great <a href="http://qunitjs.com/" target="_blank">QUnit testing framework made by the jQuery team</a>. Just see tests' source code and check each test case: it will give you a big picture about 
-            jOOPL capabilities!</p>
-            <ol>
-                <li><a href="test/namespace.test.html">Namespace tests</a></li>
-                <li><a href="test/class.test.html">Class tests</a></li>
-                <li><a href="test/enum.test.html">Enum tests</a></li>
-            </ol>
-            <p>A good idea is taking a look at source code of the whole test pages: the jOOPL-based JavaScript code is developed in the body of the documents. That way, anyone can explore all jOOPL features, as the tests are also documentation!</p>
+            <p>Furthermore, if you are looking for samples, <a href="../test/test.html" target="_blank">now jOOPL has a test suite</a> developed using the great <a href="http://qunitjs.com/" target="_blank">QUnit testing framework made by the jQuery team</a>. Just see tests' source code and check each test case: it will give you a big picture about jOOPL capabilities!</p>
 
-            <h3>Licensing</h3>
-            <p>jOOPL is a completely open sourced, free-of-charge JavaScript library distributed under the Apache License 2.0.</p>
+            These are direct links to tests' source code:
+
+            <ul>
+                <li><a href="../test/class.test.js" target="_blank">Class test</a></li>
+                <li><a href="../test/enum.test.js" target="_blank">Enumeration test</a></li>
+            </ul>
 
             <h3>Ok, wait. Why jOOPL? Why object-oriented programming?</h3>
-            <p>It is all about taking the client-side Web and server development to the next level: <strong>let's create true reusable and maintainable JavaScript 
-            software pieces based on good practices and on top of a incredibly simple type definition syntax!</strong></p>
-            <p>jOOPL is just class-based object-oriented programming and it fully supports:</p>
+            Let's create true re-usable and extensible frameworks on top of plain JavaScript using a no-brainer library which covers class-based object-oriented programming enforcing best software coding practices.
             
-            <ol>
+            
+            Here is a brief summary of object-oriented programming capabilities found in jOOPL:
+
+            <ul>
                 <li>Namespaces</li>
+                <li>Classes</li>
                 <li>Inheritance</li>
                 <li>Polymorphism</li>
                 <li>Encapsulation</li>
@@ -46,7 +45,7 @@
                 <li>Exclusive, easy-to-use and powerful custom events!</li>
                 <li>Enumerations</li>
                 <li>Declarative class metadata using attributes</li>
-            </ol>
+            </ul>
 
             <p>And it is a tiny JavaScript library when minimized (<i>~10KB</i>)!!</p>
 
@@ -67,6 +66,9 @@ $namespace.using("samples", function(samples) {
     instanceOfClassA.helloWorld();
 });
             </pre>
+
+            <h3>Licensing</h3>
+            <p>jOOPL is a completely open sourced, free-of-charge JavaScript library distributed under the Apache License 2.0.</p>
 
             <h3>Who is behind this project?</h3>
             <p>This project is actively developed by Matias Fidemraizer (<a href="http://linkedin.com/in/mfidemraizer/en" target="_blank">LinkedIn profile here</a>)</p>

@@ -15,6 +15,13 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
+            src: ["bin/*"],
+            dest: "doc/test"
+
+          },
+          {
+            expand: true,
+            flatten: true,
             src: ["test/*"],
             dest: "doc/test"
           },
@@ -73,4 +80,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-yuidoc');   
 
   grunt.registerTask('default', ['uglify', 'yuidoc', 'copy', 'qunit', 'run_grunt']);
+  grunt.registerTask("doc-only", ["yuidoc", "copy"]);
 }

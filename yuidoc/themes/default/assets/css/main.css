@@ -21,6 +21,13 @@ Here's a quick lookup table:
 #page-footer {
     margin: 0 auto;
     width: 36em;
+    color: white;
+    font-weight: bold;
+}
+
+#page-footer a {
+    color: white;
+    font-weight: bold;
 }
 
 .off-left {
@@ -95,8 +102,9 @@ ol#class-list li {
 }
 
 #sidebar-container {
-    background-color: #FFFFFF;
+    background: linear-gradient(to bottom, rgba(254,255,255,0.5) 0,rgba(254,255,255,0.7) 50px,rgba(254,255,255,1) 100px,rgba(255,255,255,1) 150px,rgba(255,255,255,1) 100%);
     border: 2px solid #FFFFFF;
+    border-radius: 10px;
     box-shadow: 0 0 5px 1px rgba(37, 163, 217, 0.5) inset;
     margin-right: 10px;
     padding: 10px 30px;
@@ -126,7 +134,7 @@ html {
 }
 
 body {
-    box-shadow: 0 0 190px 5px #25A3D9 inset;
+    background-color: #555555;
     font-family: 'Open Sans',sans-serif;
     font-size: 14px;
     margin: 0;
@@ -885,9 +893,9 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 }
 
 #main-content {
-    background-color: #FFFFFF;
-    border-radius: 0 !important;
+        background: linear-gradient(to bottom, rgba(254,255,255,0.5) 0,rgba(254,255,255,0.7) 50px,rgba(254,255,255,1) 100px,rgba(255,255,255,1) 150px,rgba(255,255,255,1) 100%);
     border: 2px solid #FFFFFF;
+    border-radius: 10px;
     box-shadow: 0 0 5px 1px rgba(37, 163, 217, 0.5) inset;
     max-width: 800px;
     padding-bottom: 2em;
