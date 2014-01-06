@@ -8,15 +8,16 @@
     - [6.0 Configuring jOOPL Analyzer](#configuration)
     - [7.0 How to run jOOPL Analyzer](#run)
         - [7.1 Executing `joopl-analyzer` command](#execute)
-    - [8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`](#rules)
+    - [8.0 How to use `joopl-analyzer`](#how-to-use)
+    - [9.0 Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`](#rules)
         - [Rule I: One `$import.modules` per source code file](#rule-import)
         - [Rule II: One `$namespace.using` per source code file](#rule-using)
         - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)
         - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)
         - [Rule V: Object instantiation always with `new` operator](#rule-instantiation)
         - [Rule VI: Modules which load themself don't include the code file from which are loaded](#rule-module-load-itself)
-    - [9.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)
-    - [10.0 Producing true modules](#modules)
+    - [10.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)
+    - [11.0 Producing true modules](#modules)
 
     <hr />
 
@@ -201,7 +202,36 @@
 
     When `joopl-analyzer` command execution finishes it creates a file called `moduleinfo.js` in the given base directory.
 
-    <h3 id="rules">8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>
+    <h3 id="how-to-use">8.0 How to use `joopl-analyzer`</h3>
+
+    Apart of its command-line arguments and other details, there is an important point and it is *how to use it in real-world projects*.
+
+    Since jOOPL is a library to build object-oriented frameworks, some project may require to load code files belonging to other one. 
+
+    For example, there is a Web application which needs to use a framework - which is a second project developed alone -. Even the Web application
+    might require 3 or 4 different framework projects.
+
+    In the above sample, `joopl-analyzer` should not run for each of the projects but for the Web application only.
+
+    The so-called Web application should have a copy of the whole frameworks and, if the Web Application requires some class found in some of 
+    copied frameworks, as everything is within the same directory tree, `joopl-analyzer` will detect dependencies as expected.
+
+    A sample Web Application would have a `Libs` directory where other frameworks required by the whole Web Application may reside in. 
+    
+        Web application
+        └───Libs
+            ├───Framework A
+            ├───Framework B
+            └───Framework C
+
+    When using JavaScript package managers like NodeJS Package Manager or Bower (or similar projects), that sample `Libs` directory would be 
+    the standard `node_modules` directory, since third-party projects or just dependencies are downloaded in a dedicated directory as child of
+    the application directory.
+
+    The whole point is that, when using `joopl-analyzer`, dependency detection must be done against a full source tree and any dependency must be within
+    that *source tree*.
+
+    <h3 id="rules">9.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>
 
     <a href="#index">Back to index of contents</a>
 
@@ -302,7 +332,7 @@
 
     <hr />
 
-    <h3 id="using-moduleinfo">9.0 Using `moduleinfo.js` resulting file</h3>
+    <h3 id="using-moduleinfo">10.0 Using `moduleinfo.js` resulting file</h3>
     
     <a href="#index">Back to index of contents</a>
     
@@ -313,7 +343,7 @@
 
     <hr />
 
-    <h3 id="modules">10.0 Producing true modules with `joopl-analyzer`!</h3>
+    <h3 id="modules">11.0 Producing true modules with `joopl-analyzer`!</h3>
     
     <a href="#index">Back to index of contents</a>
 
