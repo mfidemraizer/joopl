@@ -317,7 +317,8 @@
 <li><a href="#execute">7.1 Executing <code>joopl-analyzer</code> command</a></li>
 </ul>
 </li>
-<li><a href="#rules">8.0  Rules that JavaScript code must follow to be analyzable by <code>joopl-analyzer</code></a><ul>
+<li><a href="#how-to-use">8.0 How to use <code>joopl-analyzer</code></a></li>
+<li><a href="#rules">9.0 Rules that JavaScript code must follow to be analyzable by <code>joopl-analyzer</code></a><ul>
 <li><a href="#rule-import">Rule I: One <code>$import.modules</code> per source code file</a></li>
 <li><a href="#rule-using">Rule II: One <code>$namespace.using</code> per source code file</a></li>
 <li><a href="#rule-one-nsmembers-per-file">Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file</a></li>
@@ -326,8 +327,8 @@
 <li><a href="#rule-module-load-itself">Rule VI: Modules which load themself don&#39;t include the code file from which are loaded</a></li>
 </ul>
 </li>
-<li><a href="#using-moduleinfo">9.0 Using <code>moduleinfo.js</code> resulting file</a></li>
-<li><a href="#modules">10.0 Producing true modules</a></li>
+<li><a href="#using-moduleinfo">10.0 Using <code>moduleinfo.js</code> resulting file</a></li>
+<li><a href="#modules">11.0 Producing true modules</a></li>
 </ul>
 <hr />
 
@@ -473,7 +474,27 @@ joopl-analyzer --directory ./scripts
 joopl-analyzer --directory C:\myproject\scripts
 joopl-analyzer --directory /home/myproject/scripts</code></pre>
 <p>When <code>joopl-analyzer</code> command execution finishes it creates a file called <code>moduleinfo.js</code> in the given base directory.</p>
-<h3 id="rules">8.0  Rules that JavaScript code must follow to be analyzable by <code>joopl-analyzer</code></h3>
+<h3 id="how-to-use">8.0 How to use <code>joopl-analyzer</code></h3>
+
+<p>Apart of its command-line arguments and other details, there is an important point and it is <em>how to use it in real-world projects</em>.</p>
+<p>Since jOOPL is a library to build object-oriented frameworks, some project may require to load code files belonging to other one. </p>
+<p>For example, there is a Web application which needs to use a framework - which is a second project developed alone -. Even the Web application
+might require 3 or 4 different framework projects.</p>
+<p>In the above sample, <code>joopl-analyzer</code> should not run for each of the projects but for the Web application only.</p>
+<p>The so-called Web application should have a copy of the whole frameworks and, if the Web Application requires some class found in some of 
+copied frameworks, as everything is within the same directory tree, <code>joopl-analyzer</code> will detect dependencies as expected.</p>
+<p>A sample Web Application would have a <code>Libs</code> directory where other frameworks required by the whole Web Application may reside in. </p>
+<pre class="code prettyprint"><code>Web application
+└───Libs
+    ├───Framework A
+    ├───Framework B
+    └───Framework C</code></pre>
+<p>When using JavaScript package managers like NodeJS Package Manager or Bower (or similar projects), that sample <code>Libs</code> directory would be 
+the standard <code>node_modules</code> directory, since third-party projects or just dependencies are downloaded in a dedicated directory as child of
+the application directory.</p>
+<p>The whole point is that, when using <code>joopl-analyzer</code>, dependency detection must be done against a full source tree and any dependency must be within
+that <em>source tree</em>.</p>
+<h3 id="rules">9.0  Rules that JavaScript code must follow to be analyzable by <code>joopl-analyzer</code></h3>
 
 <p><a href="#index">Back to index of contents</a></p>
 <p>jOOPL-based JavaScript code should follow some rules in order to allow <code>joopl-analyzer</code> command to work as expected.</p>
@@ -549,7 +570,7 @@ $import.mapyMany({
 the whole code file from being loaded twice!</p>
 <hr />
 
-<h3 id="using-moduleinfo">9.0 Using <code>moduleinfo.js</code> resulting file</h3>
+<h3 id="using-moduleinfo">10.0 Using <code>moduleinfo.js</code> resulting file</h3>
 
 <p><a href="#index">Back to index of contents</a></p>
 <p>As explained in previous chapters, running <code>joopl-analyzer</code> command produces a file called <code>moduleinfo.js</code>. Also, as explained in 
@@ -558,7 +579,7 @@ must be added on some HTML page just after jOOPL <code>&lt;script&gt;</code> tag
 configured before <code>$import.modules</code> statements are executed.</p>
 <hr />
 
-<h3 id="modules">10.0 Producing true modules with <code>joopl-analyzer</code>!</h3>
+<h3 id="modules">11.0 Producing true modules with <code>joopl-analyzer</code>!</h3>
 
 <p><a href="#index">Back to index of contents</a></p>
 <p>jOOPL Analyzer, as explained in previous chapters, looks for class/enumeration declarations and instantiations across a source code tree. </p>
