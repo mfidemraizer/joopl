@@ -1,0 +1,278 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>jOOPL Presentation</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/css/reveal.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/css/theme/default.css">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/js/reveal.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/lib/js/head.min.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/tomorrow-night-bright.min.css">
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown>
+            	<script type="text/template">
+
+## jOOPL presentation
+#### jOOPL stands for *JavaScript Object-Oriented Programming Libarary*
+
+It features:
+
+- **Class-based** object-oriented Programming
+- True and full **namespacing**
+- Exclusive inheritance and polymorphism system
+- Cutting-edge JavaScript dependency management: `joopl-analyzer`
+- jOOPL is plain JavaScript: it does not require any pre-compilation.
+
+<br />
+
+jOOPL empowers JavaScript development **to the next level!**
+    			</script>
+            </section>
+            <section id="class-sample" data-markdown data-trim>
+            	<script type="text/template">
+## jOOPL presentation
+#### Declaring classes is so easy!
+
+Classes can only be declared within a *namespace*:
+
+<pre>
+	<code class="javascript">
+// $namespace.using imports a namespace (and if it does not exist, 
+// it creates the whole namespace). It takes a function which receives
+// a variable containing the imported namespace.
+$namespace.using("joopl.sample", function(sample) {
+	// Namespace instance have a declareClass(...) method which
+	// declares a new class/type:
+	sample.declareClass("A", {
+		ctor: function() {
+			// Class constructor stuff
+		},
+		members: {
+			doStuff: function() {
+				console.log("I did something!")
+			}
+		}
+	});
+});
+	</code>
+</pre>
+    			</script>
+            </section>
+            <section id="namespacing" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### Namespacing is very important!
+
+- It avoids naming collisions. 
+- What happens if two classes called the same way are required in the same code scope? **PROBLEM!** *No... jOOPL solves it!*
+
+<pre>
+	<code class="javascript">
+$namespace.using("ns1", "ns2", function(ns1, ns2) {
+	// Both ns1 and ns2 namespaces contain a class called A, 
+	// but namespacing solves the issue!
+	var instance1 = new ns1.A(); // Namespace-qualified class!
+	var instance2 = new ns2.A();
+});
+	</code>
+</pre>
+				</script>
+            </section>
+
+            <section id="instantiation" data-markdown>
+            	<script type="text/template">
+## jOOPL Presentation
+#### Standard JavaScript **new** operator to instantiate classes
+
+<pre>
+	<code class="javascript">
+$namespace.using("joopl.test", function(test) {
+	var instanceOfA = new test.A();
+});
+	</code>
+</pre>
+
+This is nice, since it allows easy interoperability across external libraries, because jOOPL
+classes do not require special factory methods to be instantiated!
+				</script>
+        	</section>
+
+        	<section id="inheritance" data-markdown>
+        		<script type="text/template">
+## jOOPL Presentation
+#### Inheritance made easy
+
+Class `B` inherits `A`:
+
+<pre>
+	<code class="javascript">
+$namespace.using("joopl.test", function(test) {
+	test.declareClass("A", {
+		members: {
+			doStuff: function() {
+				// Do some stuff
+			}
+		}
+	});
+
+	test.declareClass("B", {
+		inherits: test.A // This makes the trick!
+	});
+
+	var instanceOfB = new test.B();
+	// doStuff() is available on B, 
+	// but it's of A class! :)
+	instanceOfB.doStuff(); 
+});
+	</code>
+</pre>
+        		</script>
+    		</section>
+
+    		<section id="polymorphism" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### Polymorphism
+
+Just a simple sample:
+<pre>
+	<code class="javascript">
+$namespace.using("joopl.test", function() {
+	test.declareClass("A", {
+		members: {
+			doStuff: function() {
+				console.log("hello world");
+			}
+		}
+	});
+
+	test.declareClass("B", {
+		inherits: test.A,
+		members: {
+			doStuff: function() {
+				// This calls the base doStuff() implementation of
+				// parent class while it adds more stuff...
+				this.base.doStuff();
+
+				console.log("I add this text");
+			}
+		}
+	});
+
+	var instanceOfB = new test.B();
+	// This will print both "hello world" and
+	// "I add this text" since doStuff was 
+	// overriden by B class
+	instanceOfB.doStuff();
+});
+	</code>
+</pre>
+				</script>
+			</section>
+
+			<section id="joopl-analyzer-1" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### jOOPL-analyzer (I)
+
+- Write code... and `joopl-analyzer` command-line app will create a configuration file to automatically load required files by a class!
+- `joopl-analyzer` is a completely multi-platform NodeJS app!
+- HTML `<script>` tags order... File load order... **No!!!!** *`joopl-analyzer` automatically detects the order on which file dependencies must be loaded!!!*
+				</script>
+			</section>
+
+			<section id="joopl-analyzer-2" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### jOOPL-analyzer (II)
+
+Imagine there are three classes `A`, `B` and `C`. Also, `C` inherits `B` and `B` inherits `A`. Each class is in a separate code file (`A.js`, `B.js` and `C.js`).
+
+If `joopl-analyzer` is executed against the whole source code tree, it will create a file called `moduleinfo.js` containing the following code:
+
+<pre>
+	<code class="javascript">
+$import.mapMany({
+	"joopl.test.A": ["A.js"],
+	// See how A.js comes before B.js. B class requires
+	// A class code file in order to inherit the class!
+	"joopl.test.B": ["A.js", "B.js"],
+	"joopl.test.C": ["A.js", "B.js", "C.js"]
+});
+	</code>
+</pre>
+				</script>
+			</section>
+
+			<section id="joopl-analyzer-3" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+#### jOOPL-Analyzer (III)
+
+Just imagine how productive and efficient becomes JavaScript development when physical dependencies across source code files
+are auto-inferred by usage? 
+
+Also, `joopl-analyzer` can be used in *watch mode*: it stays open and analyzes your code in real-time!
+
+Welcome to **asynchronous dependency loading**.
+				</script>
+			</section>
+
+			<section id="end" data-markdown>
+				<script type="text/template">
+## jOOPL Presentation
+
+This is a sneak peack of what jOOPL can do in real-world projects.
+
+Learn more about jOOPL and get started on:
+
+- <a href="http://mfidemraizer.github.io/joopl/" target="_blank">Official Web site</a>
+- <a href="http://github.com/mfidemraizer/joopl/" target="_blank">GitHub repository</a>
+				</script>
+			</section>
+        </div>
+    </div>
+    <script>
+        Reveal.initialize({ 
+        	dependencies: [
+		        { src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+		        { src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+		        { src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.5/plugin/highlight/highlight.js', callback: function() { hljs.initHighlightingOnLoad(); } }
+    		]
+		});
+
+        $(window).on("mousedown", function(e) {
+        	console.log(e.target.nodeName);
+
+        	if(e.target.nodeName != "A") {
+				e.preventDefault();
+
+				if(e.button === 0) 
+					Reveal.next(); 
+				if(e.button === 2) 
+					Reveal.prev();
+			}
+        });
+
+		//window.addEventListener("mousedown", handleClick, false);
+		window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+		 
+		function handleClick(e) {
+			e.preventDefault();
+
+			if(e.button === 0) 
+				Reveal.next(); 
+			if(e.button === 2) 
+				Reveal.prev();
+		}
+    </script>
+</body>
+</html>

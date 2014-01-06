@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: joopl.NotImplementedException - joopl</title>
+    <title>jOOPL: src\joopl.doc.namespaces.js - joopl</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -291,502 +291,104 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: joopl.NotImplementedException</h1>
-<div class="box meta">
-    
+                        <h1 class="file-heading">File: src\joopl.doc.namespaces.js</h1>
 
-    
-        <div class="extends">
-            Extends <a href="..\classes\joopl.Exception.html" class="crosslink">joopl.Exception</a>
-        </div>
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+    The &#x60;$namespace&#x60; keyword represents an static object holding methods/functions to manage namespaces.
 
-    
+    ## What is a *namespace*?
 
-    
-</div>
+    A namespace is a container which may have zero or more members. Valid namespace members are:
+    - Classes
+    - Enumerations
 
+    Namespaces are a simple but yet powerful way of distinguishing two ore more classes or enumerations with the same identifier. 
 
+    For example, maybe a library should need to define two classes called &#x27;SomeClass&#x27;. If both &#x27;SomeClass&#x27; classes are imported in the same scope, which one
+    would be the available one? Usually the last imported one, because it was the latest to be defined...
 
-<div class="box intro">
-    <p>Represents an exception that occurs when a class member is not implemented.</p>
-<p><a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;</a></p>
+    Avoiding situation described above is as easy as just use namespacing. If both &#x27;SomeClass&#x27; classes would be defined in different namespaces, and both
+    can be referenced with their namespace plus their own class name, there is no more naming collisions! See example bellow:
 
-</div>
+        namespaceA.SomeClass
+        namespaceB.SomeClass
+        
+        // They are both called with the same identifier, but 
+        // in different namespaces, thus
+        // they are different classes!
+        new namespaceA.SomeClass(); 
+        new namespaceB.SomeClass(); 
 
+    ## jOOPL namespacing
 
-    <div class="constructor">
-        <h2>Constructor</h2>
-        <div id="method_joopl.NotImplementedException" class="method item">
-    <h3 class="name"><code>joopl.NotImplementedException</code></h3>
+    jOOPL has built-in namespacing. Namespaces can be created and/or imported by calling &#x60;$namespace.using&#x60; method/function:
 
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
+        // This registers and imports &quot;mynamespace&quot; namespace and 
+        // puts a reference to the whole namespace as an argument of the 
+        // callback function found as second argument of $namespace.using
+        $namespace.using(&quot;mynamespace&quot;, function(mynamespace) {
             
-                <li class="arg">
-                    
-                        <code>memberName</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        });
+
+    Also, jOOPL supports importing/registering more than a namespace at once:
+
+        $namespace.using(&quot;mynamespace&quot;, &quot;mynamespace2&quot;, &quot;mynamespace3&quot;, function(mynamespace, mynamespace2, mynamespace3) {
     
+        });
 
+    &#x60;$namespace.using&#x60; can import an unlimited number of namespaces. Each one is imported in the corresponding callback function argument and by order. That is, 
+    jOOPL will not care about function argument name, _but a right naming scheme will enforce code readability_.
+
+    As described before, &#x60;$namespace.using&#x60; requires a mandatory callback function known as **namespace scope**.  In fact, it can be given as first, second or any
+    argument of $namespace.using - order is not important, but again, _providing it as the last argument will enforce readability!_ -:
+
+        $namespace.using(function(mynamespace) { }, &quot;mynamespace&quot;);
+        $namespace.using(&quot;mynamespace&quot;, function(mynamespace, mynamespace2) {}, &quot;mynamespace2&quot;);
+        $namespace.using(&quot;mynamespace&quot;, &quot;mynamespace2&quot;, function(mynamespace, mynamespace2) { });
+
+    ### Nested namespaces
+
+    Nested namespaces are possible and also recommended. Nesting namespaces allows a right segmentation of classes exposed by a software library.
+
+    For example, next code listing would import/register a nested namespace:
+
+        $namespace.using(&quot;mynamespace.nestedNamespace&quot;, function(nestedNamespace) {
     
+        });
 
+    It is about creating dot-separated paths. 
+
+    When importing nested namespaces, classes from parent namespaces **are not imported**. An explicit *using* is required:
+
+        $namespace.using(&quot;mynamespace&quot;, &quot;mynamespace.nestedNamespace&quot;, function(mynamespace, nestedNamespace) {
     
+        });
 
+    ### Global namespace access
+
+    Once a namespace has been used somewhere, it is also available using a global path, or in other words a namespace and its members can be accessed directly:
+
+        $global.mynamespace.MyClass
+
+    Sometimes this is useful: when some code requires a single class from some namespace and it is enough rather than creating a namespace scope.
+
+    @class $namespace
+*/
+
+/**
+    Imports the members of a set of given namespace paths. If some or all paths do no exist, they will get automatically registered.
+
+    @method using
+    @param paths {string} A comma-separated list of string literals, where each one is a namespace path.
+    @param scopedFunc {Function} A function to create a namespace scope. It must have as many arguments as imported namespaces.
+    @example
+        $namespace.using(&quot;path1&quot;, &quot;path1.ns1&quot;, function(path1, ns1) {
     
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1569"><code>src\joopl.js:1569</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">memberName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The affected member name which does not implement something</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>throw new $global.joopl.NotImplementedException({ memberName: &quot;someMethod&quot;});</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-    </div>
-
-
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_error">error</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_innerException">innerException</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_memberName">memberName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_message">message</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_stackTrace">stackTrace</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_toString" class="method item inherited">
-    <h3 class="name"><code>toString</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#method_toString">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1507"><code>src\joopl.js:1507</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Returns the exception message plus the stack trace as a concatenated string</p>
-
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>The exception message plus the stack trace as a concatenated string</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_error" class="property item inherited">
-    <h3 class="name"><code>error</code></h3>
-    <span class="type">Error</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_error">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1496"><code>src\joopl.js:1496</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets underlying <code>Error</code> instance</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_innerException" class="property item inherited">
-    <h3 class="name"><code>innerException</code></h3>
-    <span class="type">Exception</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_innerException">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1474"><code>src\joopl.js:1474</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets an inner exception (optional) which provides information about the sorrounding one</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_memberName" class="property item">
-    <h3 class="name"><code>memberName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1594"><code>src\joopl.js:1594</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the not implemented member name</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_message" class="property item inherited">
-    <h3 class="name"><code>message</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_message">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1463"><code>src\joopl.js:1463</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the human-readable reason text for this exception</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_stackTrace" class="property item inherited">
-    <h3 class="name"><code>stackTrace</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_stackTrace">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1485"><code>src\joopl.js:1485</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the exception&#39;s stack trace as an array where each index is a code line</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-
-        
-
-<div id="classdocs" class="tabview" style="display: none">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-        
-        
-        
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index"></div>
-
-    </div>
+        });
+*/
+    </pre>
 </div>
 
                     </div>

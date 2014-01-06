@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: joopl.NotImplementedException - joopl</title>
+    <title>jOOPL: $import - joopl</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -291,14 +291,10 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: joopl.NotImplementedException</h1>
+                        <h1>Now on: $import</h1>
 <div class="box meta">
     
 
-    
-        <div class="extends">
-            Extends <a href="..\classes\joopl.Exception.html" class="crosslink">joopl.Exception</a>
-        </div>
     
 
     
@@ -309,156 +305,106 @@
 
 
 <div class="box intro">
-    <p>Represents an exception that occurs when a class member is not implemented.</p>
-<p><a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;</a></p>
+    <h2 id="index">1.0 Index of contents</h2>
 
+<ul>
+<li><a href="#intro">2.0 Introduction to asynchronous dependency loading</a></li>
+<li><a href="#modules">3.0 What is a module in jOOPL?</a></li>
+<li><a href="#mapmany">4.0 Using <code>$import.mapMany</code></a></li>
+<li><a href="#load-modules">5.0 Using <code>$import.modules</code> to asynchronously-loading JavaScript resources</a></li>
+<li><a href="#samples">6.0 Samples</a></li>
+</ul>
+<hr />
+
+<h2 id="intro">2.0 Introduction to asynchronous dependency loading</h2>
+
+<p><a href="#index">Back to index of contents</a></p>
+<p>jOOPL introduces asynchronous dependency loading thanks to the new <code>$import</code> object. That is, now jOOPL can load JavaScript files on the client-side.</p>
+<p>This is a great advantage, since jOOPL can load many JavaScript files in parallel using modern Web browsers improvements on resource loading.</p>
+<p>For those who are not familarized with asynchronous dependency loading, it means that JavaScript files are not imported using <code>&lt;script&gt;</code> elements in the
+HTML markup but they are loaded using AJAX under the hoods and parsed on the page asynchronously.</p>
+<p>Asynchronous dependency loading configuration and the resource loading itself is managed by the new <code>$import</code> object in the global JavaScript scope.</p>
+<p>While <code>$import</code> is absolutely decoupled from how JavaScript resources are loaded, current implementation internally relies on a small but powerful
+library called <em>HeadJS</em> (<a href="http://headjs.com">http://headjs.com</a>) for this purpose.   </p>
+<p><strong>For that reason, HeadJS should be added with a <code>&lt;script&gt;</code> tag on the HTML page always before <code>$import.modules</code> statements are executed.</strong></p>
+<h2 id="modules">3.0 What is a module in jOOPL?</h2>
+
+<p><a href="#index">Back to index of contents</a></p>
+<p>Most trending definition of JavaScript module is the <em>module pattern</em>:</p>
+<pre class="code prettyprint"><code>var module = {};
+
+(function(module) {
+    module.SomeObject = function() {};
+
+    module.SomeObject.prototype = {
+        doSomething: function() {
+            // Do some stuff
+        }
+    };
+})(module);</code></pre>
+<p>In the above sample, a global scope variable called <code>module</code> is the input parameter of a self-invoked function which adds an object prototype to the
+whole <code>module</code>. </p>
+<p>This ensures that objects are encloused by the <code>module</code> and they are not added to the JavaScript global scope (in browsers, this is the <code>Window</code> object).</p>
+<p>In jOOPL, instead of implementing this concept of module, since it incorporates namespacing and classes or enumerations, there is no need for the regular
+<em>module pattern</em>: </p>
+<pre class="code prettyprint"><code>$namespace.using(&quot;mynamespace.other&quot;, function(other) {
+    // Classes are never declared in the global scope but 
+    // as namespace object member! 
+    other.declareClass(&quot;Boo&quot;);
+});</code></pre>
+<p>Actually, the definition of module in jOOPL is just an identifier which represents a group of JavaScript resources/files:</p>
+<ul>
+<li><strong>sampleModule</strong> loads <strong>fileA.js</strong>, <strong>fileB.js</strong>, <strong>fileN.js</strong>...</li>
+</ul>
+<p>While loaded files by a module could be also non-jOOPL-based code files, it is expected to be JavaScript code developed using jOOPL and this means that
+as they will declare classes or enumerations inside namespaces, they will never introduce <em>garbage</em> in the global scope.</p>
+<h2 id="mapmany">4.0 Using <code>$import.mapMany</code></h2>
+
+<p><a href="#index">Back to index of contents</a></p>
+<p>In order to asynchronously load JavaScript resources, these should be configured before using the <code>$import.mapMany</code> function/method. </p>
+<p>This function/method takes an object as parameter, where the object properties are module names and each property
+has an array of string, where these strings are absolute or relative paths to a JavaScript resource in order:</p>
+<pre class="code prettyprint"><code>$import.mapMany({
+    // Some module called &#39;module1&#39; depends on the following 3 files...
+    &quot;module1&quot;: [
+        &quot;/scripts/someFile.js&quot;,
+        &quot;/scripts/someOtherFile.js&quot;,
+        &quot;/scripts/yetAnotherFile.js&quot;
+    ],
+
+    &quot;module2&quot;: [
+        &quot;/scripts/oneFile.js&quot;,
+        &quot;/scripts/foo.js&quot;
+    ]
+});</code></pre>
+<blockquote>
+<p><strong>NOTE:</strong> <em>Manually configuring JavaScript dependencies may be a waste of time when project has dozens or hundreds of JavaScript source code files. That is why</em>
+<em>jOOPL project has introduced <strong>jOOPL Analyzer</strong>, a command-line tool capable of reading source code files in order to automatically generate a massive</em>
+<em><code>$import.mapMany</code> statement reflecting dependencies of all declared classes within a source code tree! <a href="joopl-analyzer.html"><strong>Learn more here!!</strong></a></em></p>
+</blockquote>
+<p><code>$import.mapMany</code> statements must be executed before <code>$import.modules</code> (see next chapter).</p>
+<h2 id="load-modules">5.0 Using <code>$import.modules</code> to asynchronously-loading JavaScript resources</h2>
+
+<p><a href="#index">Back to index of contents</a></p>
+<p>Once JavaScript resources are configured using <code>$import.mapMany</code> statements, these resources are loaded by using <code>$import.modules</code> statement.</p>
+<p><code>$import.modules</code> function/method takes as arguments previously-configured module names and a callback function that will be called once JavaScript resources
+have been loaded and parsed on the Web browser:</p>
+<pre class="code prettyprint"><code>$import.modules(&quot;module1&quot;, &quot;module2&quot;, function() {
+    // Do stuff here when both modules are already loaded!
+}); </code></pre>
+<p>If HeadJS is not included in the Web page before <code>$import.modules</code> statements, then its callback is still executed but JavaScript modules will not be loaded.</p>
+<p>In the other hand, if everything worked as expected, for the time that callback is invoked, specified modules will be already loaded and accessible by callback&#39;s
+JavaScript code.</p>
+<h2 id="samples">6.0 Samples</h2>
+
+<p><a href="#index">Back to index of contents</a></p>
+<p>Check the following code sample on jsFiddle.net. It configures a basic module that will load both jQuery and KnockoutJS in order, and once they get loaded
+the callback of <code>$import.modules</code> will check that both libraries were loaded successfully (click on <em>Result</em> tab to execute the whole code):</p>
+<iframe width="100%" height="250" src="http://jsfiddle.net/mfidemraizer/JGHY5/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 
 
-    <div class="constructor">
-        <h2>Constructor</h2>
-        <div id="method_joopl.NotImplementedException" class="method item">
-    <h3 class="name"><code>joopl.NotImplementedException</code></h3>
 
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>memberName</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1569"><code>src\joopl.js:1569</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">memberName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The affected member name which does not implement something</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>throw new $global.joopl.NotImplementedException({ memberName: &quot;someMethod&quot;});</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-    </div>
-
-
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_error">error</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_innerException">innerException</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_memberName">memberName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_message">message</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_stackTrace">stackTrace</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -467,302 +413,7 @@
         </div>
 
         
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
 
-                
-                    <div id="method_toString" class="method item inherited">
-    <h3 class="name"><code>toString</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#method_toString">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1507"><code>src\joopl.js:1507</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Returns the exception message plus the stack trace as a concatenated string</p>
-
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>The exception message plus the stack trace as a concatenated string</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_error" class="property item inherited">
-    <h3 class="name"><code>error</code></h3>
-    <span class="type">Error</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_error">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1496"><code>src\joopl.js:1496</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets underlying <code>Error</code> instance</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_innerException" class="property item inherited">
-    <h3 class="name"><code>innerException</code></h3>
-    <span class="type">Exception</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_innerException">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1474"><code>src\joopl.js:1474</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets an inner exception (optional) which provides information about the sorrounding one</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_memberName" class="property item">
-    <h3 class="name"><code>memberName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1594"><code>src\joopl.js:1594</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the not implemented member name</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_message" class="property item inherited">
-    <h3 class="name"><code>message</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_message">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1463"><code>src\joopl.js:1463</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the human-readable reason text for this exception</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_stackTrace" class="property item inherited">
-    <h3 class="name"><code>stackTrace</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_stackTrace">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1485"><code>src\joopl.js:1485</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the exception&#39;s stack trace as an array where each index is a code line</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
         
 
         
@@ -774,10 +425,6 @@
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
         
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         

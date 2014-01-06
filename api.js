@@ -1,15 +1,20 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "$import",
         "$namespace",
-        "Declaring enumerations with jOOPL",
-        "Define classes with jOOPL",
+        "Classes",
+        "Enumerations",
         "Exception handling best practices",
+        "grunt-joopl-analyzer",
+        "joopl-analyzer",
         "joopl.ArgumentException",
         "joopl.Attribute",
         "joopl.Enum",
         "joopl.EnumValue",
         "joopl.Environment",
+        "joopl.Event",
+        "joopl.EventManager",
         "joopl.Exception",
         "joopl.Namespace",
         "joopl.NotImplementedException",

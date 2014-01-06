@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jOOPL: src\joopl.js - joopl</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+   <!-- <script src="../assets/../api.js"></script>
+    <script src="../assets/js/api-filter.js"></script>
+    <script src="../assets/js/api-list.js"></script>
+    <script src="../assets/js/api-search.js"></script>
+    <script src="../assets/js/apidocs.js"></script>-->
+</head>
+<body class="yui3-skin-sam">
+    <a href="https://github.com/mfidemraizer/joopl"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 9999" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+<div id="doc">
+    <div id="hd" class="yui3-g header" style="display: none">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="joopl"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 2.5.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div id="sidebar-container" class="yui3-u-1-4">
+            
+                <img src="../assets/css/logo.png" style="cursor: pointer" title="joopl" onclick="window.location='../index.html'"/>
+            
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+  <a href="../assets/presentation.html" target="_blank"><strong>jOOPL Presentation!</strong></a>
+  <h2 class="off-left">> Object-oriented programming</h2>
+  <ol id="oop-hints">
+    <li>
+      <a href="../classes/$namespace.html" target="_self">Namespacing how-to</a>
+    </li>
+    <li>
+      <a href="../classes/$namespace.html#namespace-global" target="_self">$global namespace</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-define" target="_self">Define a class how-to</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-constructors" target="_self">Class constructors</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-properties" target="_self">Class properties</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-methods" target="_self">Class methods</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-events" target="_self">Custom events how-to</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-instances" target="_self">Creating class instances how-to</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-inheritance" target="_self">Class inheritance how-to</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#class-polymorphism" target="_self">Class polymorphism how-to</a>
+    </li>
+    <li>
+      <a href="../classes/Classes.html#type-metadata" target="_self">Type metadata</a>
+    </li>
+    <li>
+      <a href="../classes/Enumerations.html#index" target="_self">Enumerations</a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Attribute.html#index" target="_self">Custom metadata: attributes</a>
+    </li>
+    <li>
+      <a href="../classes/Exception%20handling%20best%20practices.html#global-exception-handler" target="_self">
+        <strong>Global exception handler</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/Exception%20handling%20best%20practices.html" target="_self">
+        <strong>Exception handling best practices</strong>
+      </a>
+    </li>
+  </ol>
+
+  <h2 class="off-left">> Asynchronous dependency loading</h2>
+  <ol id="oop-hints">
+    <li>
+      <a href="../classes/joopl-analyzer.html" target="_self">jOOPL Analyzer</a>
+    </li>
+    <li>
+      <a href="../classes/$import.html" target="_self">Asynchronous dependency loading</a>
+    </li>
+    <li>
+      <a href="../classes/grunt-joopl-analyzer.html" target="_self">jOOPL Analyzer GruntJS task</a>
+    </li>
+  </ol>
+
+  <h2 class="off-left">> Tests</h2>
+  <ol id="oop-hints">
+    <li>
+      <a href="../test/test.html" target="_blank">QUnit tests</a>
+    </li>
+  </ol>
+
+  <h2 class="off-left">> API reference</h2>
+  <ol id="class-list">
+    <li>
+      <a href="../classes/joopl.Object.html" target="_self">
+        <strong>joopl.Object</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Attribute.html" target="_self">
+        <strong>joopl.Attribute</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Enum.html" target="_self">
+        <strong>joopl.Enum</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.EnumValue.html" target="_self">
+        <strong>joopl.EnumValue</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Type.html" target="_self">
+        <strong>joopl.Type</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Environment.html" target="_self">
+        <strong>joopl.Environment</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Event.html" target="_self">
+        <strong>joopl.Event</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.Exception.html" target="_self">
+        <strong>joopl.Exception</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.ArgumentException.html" target="_self">
+        <strong>joopl.ArgumentException</strong>
+      </a>
+    </li>
+    <li>
+      <a href="../classes/joopl.NotImplementedException.html" target="_self">
+        <strong>joopl.NotImplementedException</strong>
+      </a>
+    </li>
+  </ol>
+
+  <h2 class="off-left">> Quick links</h2>
+  <ol id="quick-links">
+    <li>
+      <a href="https://groups.google.com/forum/#!forum/joopl" target="_blank">jOOPL Google Group</a>
+    </li>
+    <li>
+      <a href="https://github.com/mfidemraizer/joopl" target="_blank">jOOPL on GitHub</a>
+    </li>
+    <li>
+      <a href="http://cdn.jsdelivr.net/joopl/2.5.2/joopl.min.js" target="_blank">
+        <strong>jOOPL 2.5.2 (CDN)</strong>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/mfidemraizer/joopl/issues" target="_blank">Issue tracker</a>
+    </li>
+  </ol>
+
+  <div id="api-tabview" class="tabview" style="display: none">
+    <ul class="tabs">
+      <li>
+        <a href="#api-classes">Classes</a>
+      </li>
+      <li>
+        <a href="#api-modules">Modules</a>
+      </li>
+    </ul>
+
+    <div id="api-tabview-filter">
+      <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+    <div id="api-tabview-panel">
+      <ul id="api-classes" class="apis classes">
+        
+        <li>
+          <a href="../classes/$import.html">$import</a>
+        </li>
+        
+        <li>
+          <a href="../classes/$namespace.html">$namespace</a>
+        </li>
+        
+        <li>
+          <a href="../classes/Classes.html">Classes</a>
+        </li>
+        
+        <li>
+          <a href="../classes/Enumerations.html">Enumerations</a>
+        </li>
+        
+        <li>
+          <a href="../classes/Exception handling best practices.html">Exception handling best practices</a>
+        </li>
+        
+        <li>
+          <a href="../classes/grunt-joopl-analyzer.html">grunt-joopl-analyzer</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl-analyzer.html">joopl-analyzer</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.ArgumentException.html">joopl.ArgumentException</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Attribute.html">joopl.Attribute</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Enum.html">joopl.Enum</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.EnumValue.html">joopl.EnumValue</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Environment.html">joopl.Environment</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Event.html">joopl.Event</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.EventManager.html">joopl.EventManager</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Exception.html">joopl.Exception</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Namespace.html">joopl.Namespace</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.NotImplementedException.html">joopl.NotImplementedException</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Object.html">joopl.Object</a>
+        </li>
+        
+        <li>
+          <a href="../classes/joopl.Type.html">joopl.Type</a>
+        </li>
+        
+      </ul>
+
+      <ul id="api-modules" class="apis modules">
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+            </div>
+        </div>
+        <div id="main-content" class="yui3-u-3-4">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: src\joopl.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+// (c) joopl 
+// By Mat�as Fidemraizer (http://www.matiasfidemraizer.com) (http://www.linkedin.com/in/mfidemraizer/en)
+// -------------------------------------------------
+// Project site on GitHub: http://mfidemraizer.github.io/joopl/
+//
+// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+if (typeof $namespace == &quot;undefined&quot;) {
+    // Keywords
+    var $namespace = null; // Holds an object to manage namespaces
+    var $global = null; // Represents the global namespace.
+    var $import = null;
+
+    (function (undefined) {
+        &quot;use strict&quot;;
+
+        /** 
+            Represents a namespace which can declare classes and enumerations, and provides metadata.
+
+            @class Namespace
+            @constructor
+        */
+        var Namespace = function (args) {
+
+            /**
+                Gets namespace name
+
+                @property name
+                @type string
+            */
+            Object.defineProperty(
+                this,
+                &quot;name&quot;, {
+                    value: args.name,
+                    writable: false,
+                    configurable: false,
+                    enumerable: true
+                }
+            );
+
+            /**
+                Gets namespace full namespace path
+
+                @property fullName
+                @type string
+            */
+            Object.defineProperty(
+                this,
+                &quot;fullName&quot;, {
+                    value: args.fullName,
+                    writable: false,
+                    configurable: false,
+                    enumerable: true
+                }
+            );
+
+            /**
+                Gets the parent namespace object
+
+                @property parent
+                @type Namespace
+            */
+            Object.defineProperty(
+                this,
+                &quot;parent&quot;, {
+                    value: args.parent,
+                    writable: false,
+                    configurable: false,
+                    enumerable: true
+                }
+            );
+
+            /**
+                Declares a class inside the namespace (see &lt;a href=&quot;define classes with joopl.html&quot; target=&quot;_self&quot;&gt;how to define classes&lt;/a&gt;)
+
+                @method declareClass
+                @param {string} className A class name (f.e. &quot;MyClass&quot;, &quot;Person&quot;, &quot;Order&quot;, &quot;Product&quot;...)
+                @param {object} classDef A class definition 
+            */
+            Object.defineProperty(
+                this,
+                &quot;declareClass&quot;, {
+                    value: function (className, classDef) {
+                        if (!this.hasOwnProperty(className)) {
+                            var builtDef = TypeUtil.declareClass(className, this, classDef);
+
+                            Object.defineProperty(
+                                this,
+                                className, {
+                                    value: builtDef,
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+
+                            $namespace._classes[this.fullName + &quot;.&quot; + className] = builtDef;
+                        } else {
+                            console.warn(&quot;Trying to define &#x27;&quot; + className + &quot;&#x27; class while it is already declared on &#x27;&quot; + this.fullName + &quot;&#x27; namespace&quot;);
+                        }
+                    },
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                }
+            );
+
+            Object.defineProperty(
+                this,
+                &quot;declareEnum&quot;, {
+                    value: function (name, enumDef) {
+                        if (!this.hasOwnProperty(name)) {
+                            var builtDef = TypeUtil.declareEnum(name, this, enumDef);
+
+                            Object.defineProperty(
+                                this,
+                                name, {
+                                    value: builtDef,
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+
+                            $namespace._classes[this.fullName + &quot;.&quot; + name] = builtDef;
+                        } else {
+                            console.warn(&quot;Trying to define &#x27;%s&#x27; enumeration while it is already declared on &#x27;%s&#x27; namespace&quot;, name, this.fullName);
+                        }
+                    },
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                }
+            );
+        };
+
+        Object.freeze(Namespace);
+
+        $global = new Namespace({ name: &quot;$global&quot;, fullName: &quot;$global&quot;, parent: null });
+
+        var BrowserUtil = {
+            get isIE() {
+                if (!window) {
+                    return false;
+                }
+
+                var div = document.createElement(&quot;div&quot;);
+                div.innerHTML = &quot;&lt;!--[if IE]&gt;&lt;i&gt;&lt;/i&gt;&lt;![endif]--&gt;&quot;;
+
+                return div.getElementsByTagName(&quot;i&quot;).length == 1 || navigator.userAgent.toLowerCase().indexOf(&quot;trident&quot;) &gt; 0;
+            },
+
+            get isWebkit() {
+                var isChrome = /Chrome/.test(navigator.userAgent) &amp;&amp; /Google Inc/.test(navigator.vendor);
+                var isSafari = /Safari/.test(navigator.userAgent) &amp;&amp; /Apple Computer/.test(navigator.vendor);
+
+                return isChrome || isSafari;
+            }
+        };
+
+        Object.freeze(BrowserUtil);
+
+        // An object containing a set of core features used by jOOPL
+        var TypeUtil = {
+            declareClass: function (className, namespace, args) {
+                var classDef = null;
+
+                if (!args &amp;&amp; this) {
+                    args = this;
+                }
+                else if (!args &amp;&amp; !this) {
+                    args = {};
+                }
+
+                if (args.$inmutable === true &amp;&amp; Object.freeze) {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, typeof callctor == &quot;undefined&quot;);
+
+                        Object.freeze(this);
+                    };
+
+                } else if (args.dynamic === false &amp;&amp; Object.preventExtensions) {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, typeof callctor == &quot;undefined&quot;);
+
+                        Object.preventExtensions(this);
+                    };
+
+                } else {
+                    classDef = function (args, callctor) {
+                        TypeUtil.buildObject(this, args, typeof callctor == &quot;undefined&quot;);
+                    };
+                }
+
+                classDef.prototype = new $global.joopl.Object();
+
+                var ctor = null;
+
+                if (args.ctor) {
+                    ctor = args.ctor;
+                } else {
+                    ctor = function () { };
+                }
+
+                Object.defineProperty(
+                    classDef.prototype,
+                    &quot;ctor&quot;, {
+                        value: ctor,
+                        writable: false,
+                        configurable: false,
+                        enumerable: false
+                    }
+                );
+
+                if (args.members) {
+                    var propertyDescriptor = null;
+
+                    for (var memberName in args.members) {
+                        propertyDescriptor = Object.getOwnPropertyDescriptor(args.members, memberName);
+
+                        if (typeof propertyDescriptor.value == &quot;function&quot;) {
+                            if (classDef.prototype.hasOwnProperty(memberName)) {
+                                Object.defineProperty(
+                                    classDef.prototype,
+                                    memberName, {
+                                        value: args.members[memberName]
+                                    }
+                                );
+                            } else {
+                                Object.defineProperty(
+                                    classDef.prototype,
+                                    memberName, {
+                                        value: args.members[memberName],
+                                        writable: false,
+                                        configurable: true,
+                                        enumerable: true
+                                    }
+                                );
+                            }
+                        } else if (memberName == &quot;events&quot; &amp;&amp; typeof propertyDescriptor.value == &quot;object&quot;) {
+                            for (var eventIndex in propertyDescriptor.value) {
+                                TypeUtil.createEvent(classDef.prototype, propertyDescriptor.value[eventIndex]);
+                            }
+
+                        } else if (propertyDescriptor.hasOwnProperty(&quot;value&quot;) || propertyDescriptor.hasOwnProperty(&quot;get&quot;) || propertyDescriptor.hasOwnProperty(&quot;set&quot;)) {
+                            TypeUtil.createPropertyFromDescriptor(classDef, memberName, propertyDescriptor);
+                        }
+                    }
+                }
+
+
+                if (args.inherits) {
+                    TypeUtil.buildInheritance(classDef, args.inherits);
+
+                    Object.defineProperty(
+                        classDef.prototype,
+                        &quot;__base__&quot;, {
+                            value: args.inherits,
+                            writable: false,
+                            configurable: false,
+                            enumerable: false
+                        }
+                    );
+                }
+
+                var hasMetadata = false;
+
+                if (Array.isArray(args.attributes)) {
+                    for (var attrIndex in args.attributes) {
+                        if (!args.attributes[attrIndex] &amp;&amp; !(args.attributes[attrIndex].isTypeOf instanceof Function) &amp;&amp; !args.attributes[attrIndex].isTypeOf($global.joopl.Attribute)) {
+                            throw new $global.joopl.ArgumentException({
+                                argName: &quot;attributes&quot;,
+                                reason: &quot;A non-attribute type given as attribute&quot;
+                            });
+                        }
+                    }
+
+                    hasMetadata = true;
+                }
+
+                if (typeof $global.joopl.Type == &quot;function&quot;) {
+                    var typeDescriptor = {
+                        configurable: true,
+                        enumerable: true,
+                        writable: false,
+                        value: new $global.joopl.Type({ name: className, baseType: args.inherits ? args.inherits.type : null, namespace: namespace, attributes: hasMetadata ? args.attributes : [] })
+                    };
+
+                    Object.defineProperty(classDef, &quot;type&quot;, typeDescriptor);
+                    Object.defineProperty(classDef.prototype, &quot;type&quot;, typeDescriptor);
+                }
+
+                return classDef;
+            },
+
+            declareEnum: function (name, namespace, enumDef) {
+                if (typeof enumDef != &quot;object&quot;) {
+                    throw new $global.joopl.ArgumentException({
+                        argName: &quot;enumDef&quot;,
+                        reason: &quot;No definition for the enumeration given&quot;
+                    });
+                }
+
+                var enumerationType = function () {
+                };
+
+                enumerationType.prototype = new $global.joopl.Object();
+
+                var enumNames = [];
+                var enumValue;
+
+                for (var propertyName in enumDef) {
+                    if (typeof enumDef[propertyName] != &quot;number&quot;) {
+                        throw new $global.joopl.ArgumentException({
+                            argName: &quot;enumDef&quot;,
+                            reason: &quot;An enumeration definition must contain numeric properties only&quot;
+                        });
+                    }
+
+                    enumValue = new Number(enumDef[propertyName]);
+                    enumValue.enum = new $global.joopl.EnumValue({ value: enumValue, name: propertyName });
+
+                    Object.defineProperty(
+                        enumerationType,
+                        propertyName, {
+                            value: enumValue,
+                            configurable: false,
+                            enumerable: true,
+                            writable: false
+                        }
+                    );
+
+                    enumNames.push(propertyName);
+                }
+
+                Object.defineProperty(
+                    enumerationType,
+                    &quot;valueNames&quot;,
+                    {
+                        value: enumNames,
+                        configurable: false,
+                        enumerable: true,
+                        writable: false
+                    }
+                );
+
+                Object.defineProperty(
+                    enumerationType,
+                    &quot;type&quot;, {
+                        value: new $global.joopl.Type({ name: name, fullName: namespace.fullName + &quot;.&quot; + name, namespace: namespace }),
+                        writable: false,
+                        configurable: false,
+                        enumerable: true
+                    }
+                );
+
+                Object.freeze(enumerationType);
+
+                return enumerationType;
+            },
+
+            //  Creates a property on the given class definition based on a provided property descriptor.
+            // @classDef: The class definition (it must be the ctor function!
+            // @name: The property name
+            // @descriptor: An object representing the property descriptor
+            // @context: An optional context object that will work as the &quot;this&quot; keyword binder for the getter and/or setter when defining the property.
+            createPropertyFromDescriptor: function (classDef, name, descriptor, context) {
+                if (context) {
+                    if (descriptor.get) {
+                        descriptor.get = descriptor.get.bind(context);
+                    }
+
+                    if (descriptor.set) {
+                        descriptor.set = descriptor.set.bind(context);
+                    }
+                }
+
+                Object.defineProperty(
+                    context ? context : classDef.prototype,
+                    name,
+                    descriptor
+                );
+            },
+
+            // Creates a property.
+            // @classDef: A class definition (it must be the class ctor function).
+            // @name: The property name.
+            // @getter: The getter parameterless function.
+            // @setter: The setter function with a parameter representing the value to set.
+            // @inmutable: A boolean flag specifying if the created property is configurable or not.
+            createProperty: function (classDef, name, getter, setter, inmutable) {
+                if (typeof inmutable == &quot;undefined&quot;) {
+                    inmutable = false;
+                }
+
+                if (!classDef.prototype.hasOwnProperty(name)) {
+                    // This case is for a read-write property
+                    if (typeof getter != &quot;undefined&quot; &amp;&amp; typeof setter != &quot;undefined&quot;) {
+
+                        Object.defineProperty(
+                            classDef.prototype,
+                            name, {
+                                get: getter,
+                                set: setter,
+                                configurable: !inmutable,
+                                enumerable: true
+                            }
+                        );
+                    } else if (typeof getter != &quot;undefined&quot;) { // This case is for a read-only property
+                        Object.defineProperty(
+                            classDef.prototype,
+                            name, {
+                                get: getter,
+                                configurable: !inmutable,
+                                enumerable: true
+                            }
+                        );
+                    } else if (typeof setter != &quot;undefined&quot;) { // This case is for a write-only property
+                        Object.defineProperty(
+                            classDef.prototype,
+                            name, {
+                                set: setter,
+                                configurable: !inmutable,
+                                enumerable: true
+                            }
+                        );
+                    }
+                }
+            },
+
+            createEvent: function (source, name) {
+                Object.defineProperty(
+                    source,
+                    name,
+                    {
+                        get: function () {
+                            if (!this._.hasOwnProperty(&quot;__eventManager__&quot;)) {
+                                Object.defineProperty(
+                                    this._,
+                                    &quot;__eventManager__&quot;, {
+                                        value: new $global.joopl.EventManager({ source: this }),
+                                        configurable: false,
+                                        writable: false,
+                                        enumerable: true
+                                    }
+                                );
+                            }
+
+                            if (!this._.__eventManager__.hasOwnProperty(name)) {
+                                this._.__eventManager__.register(name);
+                            }
+
+                            return this._.__eventManager__[name];
+                        },
+                        configurable: false,
+                        enumerable: true
+                    }
+                );;
+            },
+
+            // Builds a class instance into a full jOOPL object supporting inheritance and polymoprhism, and calls the ctor of the whole class instance.
+            // @instance: The class instance
+            // @args: The ctor arguments.
+            buildObject: function (instance, args, callctor) {
+                if (instance.__base__ instanceof Function) {
+                    Object.defineProperty(
+                        instance,
+                        &quot;base&quot;,
+                        {
+                            get: function () {
+                                if (instance.__base__ instanceof Function) {
+                                    Object.defineProperty(
+                                        instance,
+                                        &quot;__base__&quot;, {
+                                            value: new instance.__base__(args, false),
+                                            configurable: false,
+                                            writable: false,
+                                            enumerable: false
+                                        }
+                                    );
+                                }
+
+                                return instance.__base__;
+                            },
+                            configurable: false,
+                            enumerable: true
+                        }
+                    );
+
+                    Object.defineProperty(
+                        instance,
+                        &quot;__fields__&quot;, {
+                            value: instance.base._,
+                            writable: false,
+                            configurable: false,
+                            enumerable: false
+                        }
+                    );
+                } else {
+                    Object.defineProperty(
+                        instance,
+                        &quot;__fields__&quot;, {
+                            value: {},
+                            writable: false,
+                            configurable: false,
+                            enumerable: false
+                        }
+                    );
+                }
+
+                Object.defineProperty(
+                    instance._,
+                    &quot;__derived__&quot;, {
+                        value: instance,
+                        writable: false,
+                        enumerable: false,
+                        configurable: true
+                    }
+                );
+
+                if (callctor) {
+                    instance.ctor.call(instance, args);
+                }
+
+                return instance;
+            },
+
+            // Builds a given class inheritance with the given parent class.
+            // @derived: The child class.
+            // @parent: The parent class.
+            buildInheritance: function (derived, parent) {
+                if (parent != null) {
+                    var propertyDescriptor = null;
+
+                    // Adding both methods and properties to the derived class...
+                    for (var memberName in parent.prototype) {
+                        if (!derived.prototype.hasOwnProperty(memberName) &amp;&amp; !$global.joopl.Object.prototype.hasOwnProperty(memberName)) {
+                            propertyDescriptor = Object.getOwnPropertyDescriptor(parent.prototype, memberName);
+
+                            // If it has a property descriptor...
+                            if (propertyDescriptor) {
+                                // and the value of the descriptor is a function it means that it&#x27;s inheriting a method.
+                                if (typeof propertyDescriptor.value == &quot;function&quot;) {
+                                    Object.defineProperty(
+                                        derived.prototype,
+                                        memberName, {
+                                            value: parent.prototype[memberName],
+                                            writable: false,
+                                            enumerable: true,
+                                            configurable: true
+                                        }
+                                    );
+                                    // derived.prototype[memberName] = parent.prototype[memberName];
+                                } else { // If not, it is a property accessor.
+                                    this.createPropertyFromDescriptor(derived, memberName, propertyDescriptor);
+                                }
+                            } else if (typeof parent.prototype[memberName] == &quot;function&quot;) { // It can also happen that it&#x27;s a function defined in the $global.joopl.Object prototype...
+                                Object.defineProperty(
+                                    derived.prototype,
+                                    memberName, {
+                                        value: parent.prototype[memberName],
+                                        writable: false,
+                                        enumerable: true,
+                                        configurable: false
+                                    }
+                                );
+                            }
+                        }
+                    }
+                }
+
+                return parent ? parent.prototype : null;
+            },
+
+            // Whether determines if some object reference has an associated value (object) and returns true/false.
+            // @someRef: The object reference.
+            hasValue: function (someRef) {
+                return typeof someRef != &quot;undefined&quot; &amp;&amp; someRef != null;
+            }
+        };
+
+        Object.freeze(TypeUtil);
+
+        $import = {
+            _dependencyMaps: {},
+            _loadedFiles: [],
+
+            mapMany: function (dependencyMaps) {
+                for (var uri in dependencyMaps) {
+                    this.map(uri, dependencyMaps[uri]);
+                }
+            },
+
+            map: function (uri, dependencies) {
+                if (!this._dependencyMaps.hasOwnProperty(uri)) {
+                    this._dependencyMaps[uri] = dependencies;
+                }
+            },
+
+            modules: function () {
+                var scopeModules = [];
+                var that = this;
+                var scopeFunc = null;
+                var arg = null;
+
+                for (var argIndex = 0; argIndex &lt; arguments.length; argIndex++) {
+                    arg = arguments[argIndex];
+
+                    if (typeof arg == &quot;function&quot;) {
+                        scopeFunc = arg;
+                    } else if (typeof arg == &quot;string&quot;) {
+                        scopeModules.push(arg);
+                    } else {
+                        throw new $global.joopl.ArgumentException({ argName: &quot;paths&quot;, reason: &quot;Some of given module names is not a string literal&quot; });
+                    }
+                };
+
+                if (scopeFunc == null) {
+                    throw new $global.joopl.ArgumentException({ argName: &quot;scopeFunc&quot;, reason: &quot;No modules&#x27; scope function given&quot; });
+                }
+
+                var enableHeadJS = Object.keys(this._dependencyMaps).length &gt; 0 &amp;&amp; typeof head != &quot;undefined&quot; &amp;&amp; typeof window.head.js != &quot;undefined&quot;;
+
+                // If HeadJS is available, jOOPL integrates HeadJS asynchronous loading 
+                // of DependencyUsageMap dependencies
+                if (enableHeadJS) {
+                    var dependencyMaps = this._dependencyMaps;
+
+                    var args = [];
+                    var dependencies = null;
+                    var currentFile = null;
+
+                    for (var moduleIndex in scopeModules) {
+                        dependencies = dependencyMaps[scopeModules[moduleIndex]];
+
+                        if (dependencies instanceof Array) {
+                            for (var dependencyIndex in dependencies) {
+                                currentFile = dependencies[dependencyIndex];
+
+                                if (this._loadedFiles.indexOf(currentFile) == -1) {
+                                    this._loadedFiles.push(currentFile);
+                                    args.push(currentFile);
+                                }
+                            }
+                        }
+                    }
+
+                    if (args.length &gt; 0) {
+                        args.push(function () {
+                            scopeFunc();
+                        });
+
+                        head.js.apply(window, args);
+                    } else {
+                        scopeFunc();
+                    }
+
+                } else {
+                    scopeFunc();
+                }
+            }
+        };
+
+        Object.freeze($import);
+
+        $namespace = {
+            _namespaces: {},
+            _classes: {},
+
+            __register__: function (path, scopedFunc) {
+
+                var nsIdentifiers = typeof path == &quot;string&quot; ? path.split(&quot;.&quot;) : null;
+
+                if (!this._namespaces.hasOwnProperty(path)) {
+                    // The parent namespace of everything is the reserved $global object!
+                    var parentNs = $global;
+                    var currentNs = null;
+                    var nsPath = [];
+
+                    for (var nsIndex = 0; nsIndex &lt; nsIdentifiers.length; nsIndex++) {
+                        currentNs = nsIdentifiers[nsIndex];
+                        nsPath.push(currentNs);
+
+                        // The current namespace  is not registered (if evals true)
+                        if (typeof parentNs[currentNs] == &quot;undefined&quot;) {
+                            var ns = new Namespace({ parent: parentNs, name: currentNs, fullName: nsPath.join(&quot;.&quot;) });
+
+                            Object.defineProperty(
+                                parentNs,
+                                currentNs, {
+                                    value: ns,
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+
+                            this._namespaces[ns.fullName] = ns;
+                        }
+
+                        parentNs = parentNs[currentNs];
+                    }
+                }
+            },
+
+            using: function () {
+                var scopeNamespaces = [];
+                var that = this;
+                var scopeFunc = null;
+                var arg = null;
+
+                for (var argIndex = 0; argIndex &lt; arguments.length; argIndex++) {
+                    arg = arguments[argIndex];
+
+                    if (typeof arg == &quot;function&quot;) {
+                        scopeFunc = arg;
+                    } else if (typeof arg == &quot;string&quot;) {
+                        if (!that._namespaces.hasOwnProperty(arg)) {
+                            that.__register__(arg);
+                        }
+
+                        scopeNamespaces.push(that._namespaces[arg]);
+                    } else {
+                        throw new $global.joopl.ArgumentException({ argName: &quot;paths&quot;, reason: &quot;Some of given namespace paths is not a string literal&quot; });
+                    }
+                };
+
+                if (scopeFunc == null) {
+                    throw new $global.joopl.ArgumentException({ argName: &quot;scopeFunc&quot;, reason: &quot;No namespace scope function given&quot; });
+                }
+
+                scopeFunc.apply(scopeNamespaces, scopeNamespaces);
+            },
+        };
+
+        Object.freeze($namespace);
+
+        $namespace.using(&quot;joopl&quot;, function (joopl) {
+            /**
+                @namespace joopl
+            */
+
+            /** 
+                Represents the base type of any class defined by jOOPL
+
+                @class Object
+                @constructor
+            */
+            joopl.Object = function () {
+            };
+            joopl.Object.prototype = {};
+            joopl.Object.prototype = Object.defineProperties(joopl.Object.prototype, {
+                joopl: {
+                    get: function () {
+                        return &quot;2.5.2&quot;;
+                    },
+                    configurable: false,
+                    enumerable: true
+                },
+
+                _: {
+                    get: function () {
+                        return this.__fields__;
+                    },
+                    configurable: false,
+                    enumerable: true
+                },
+
+                derived: {
+                    get: function () {
+                        return this._.__derived__;
+                    },
+                    configurable: false,
+                    enumerable: true
+                },
+
+                /**
+                    Determines if a given type is of type of current object
+
+                    @method isTypeOf
+                    @param {class} type The whole type to compare with
+                    @example 
+                        obj.isTypeOf(this.A)
+                    
+                */
+                isTypeOf: {
+                    value: function (type) {
+                        var allBases = [];
+                        var lastBase = this;
+                        var isMember = false;
+
+                        if (this instanceof type) {
+                            isMember = true;
+                        } else {
+                            while (!isMember &amp;&amp; lastBase.base) {
+                                if (!(isMember = lastBase.base instanceof type)) {
+                                    lastBase = lastBase.base;
+                                }
+                            }
+                        }
+
+                        return isMember;
+                    },
+                    configurable: false,
+                    enumerable: true,
+                    writable: false
+                }
+            });
+
+            /**
+                Represents type information and provides access to types&#x27; metadata.
+
+                @class Type
+                @final
+                @since 2.3.0
+            */
+            joopl.declareClass(&quot;Type&quot;, {
+                ctor: function (args) {
+                    this._.attributes = args.attributes;
+                    this._.name = args.name;
+                    this._.namespace = args.namespace;
+                    this._.baseType = args.baseType;
+                },
+                members: {
+                    /**
+                        Gets type name (f.e. &quot;MyClass&quot;)
+
+                        @property name
+                        @type string
+                        @readonly
+                    */
+                    get name() {
+                        return this._.name;
+                    },
+
+                    /**
+                        Gets current type name including full namespace path (f.e. &quot;joopl.test.MyClass&quot;)
+
+                        @property fullName
+                        @type string
+                        @readonly
+                    */
+                    get fullName() {
+                        return this.namespace.fullName + &quot;.&quot; + this.name;
+                    },
+
+                    /**
+                        Gets current base type (i.e. parent class) metadata.
+
+                        @property baseType
+                        @type joopl.Type
+                        @readonly
+                    */
+                    get baseType() {
+                        return this._.baseType;
+                    },
+
+                    /**
+                        Gets current namespace instance
+
+                        @property baseType
+                        @type joopl.Namespace
+                        @readonly
+                    */
+                    get namespace() {
+                        return this._.namespace;
+                    },
+
+                    /**
+                        Gets all type&#x27;s attributes.
+
+                        @property attributes
+                        @type joopl.Attribute
+                        @readonly
+                    */
+                    get attributes() {
+                        return this._.attributes;
+                    },
+
+                    /**
+                        Gets an attribute instance by giving its type, if the type has the whole attribute
+
+                        @method getAttribute
+                        @param {joopl.Attribute} An attribute class definition (rather than an instance!)
+                        @return {joopl.Attribute} The attribute instance or &#x60;null&#x60; if the type does not have the given attribute type
+                        @example 
+                            myNamespace.MyClass.type.getAttribute(this.MyAttribute);
+                    */
+                    getAttribute: function (attributeType) {
+                        var found = false;
+                        var index = 0;
+
+                        while (!found &amp;&amp; index &lt; this.attributes.length) {
+                            if (this.attributes[index] instanceof attributeType) {
+                                found = true;
+                            } else {
+                                index++;
+                            }
+                        }
+
+                        if (found) {
+                            return this.attributes[index];
+                        } else {
+                            return null;
+                        }
+                    },
+
+                    /**
+                        Determines whether a given type has an attribute giving its class (rather than giving an instance!)
+
+                        @method hasAttribute
+                        @param {joopl.Attribute} The whole attribute class
+                        @example
+                            this.SomeClass.type.hasAttribute(SomeAttribute);
+                    */
+                    hasAttribute: function (attributeType) {
+                        return this.getAttribute(attributeType) != null;
+                    }
+                }
+            });
+
+            /**
+                &lt;h2 id=&quot;index&quot;&gt;Index&lt;/h2&gt;
+
+                * 1.0\. [What is an attribute?](#attribute-definition)
+                * 2.0\. [How to implement and consume an attribute](#attribute-howto)
+                    * 2.1\. [Attributes with parameters](#attribute-params)
+
+                &lt;h2 id=&quot;attribute-definition&quot;&gt;1.0 What is an attribute?&lt;/h2&gt;
+                
+                Usually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. 
+
+                In some cases, classes require some descriptive information that may be useful by the consumers. 
+
+                For example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. 
+
+                How can an arbitrary class tell the environment &quot;*I will not work if the authenticated user is not an administrator*&quot;? **The answer is *attributes**.*
+
+                An attribute is an inherited class of &#x60;Attribute&#x60; which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.
+
+                Finally, a class supports as many attributes as the code requires. The &#x60;attributes&#x60; parameters for the &#x60;$def&#x60; operator is an array of attributes.
+
+                &lt;h2 id=&quot;attribute-howto&quot;&gt;2.0 How to implement and consume an attribute&lt;/h2&gt;
+                
+                The so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called &#x60;RequiresAuthenticationAttribute&#x60;:
+
+                    $namespace.using(&quot;joopl&quot;, &quot;myNamespace&quot;, function(joopl, myNamespace) {
+                        myNamespace.declareClass(&quot;RequiresAuthenticationAttribute&quot;, {
+                            inherits: joopl.Attribute
+                        });
+                    });
+
+                Later on, some class that may require authentication to work will apply the whole &#x60;RequiresAuthenticationAttribute&#x60; as follows:
+
+                    $namespace.using(&quot;myNamespace&quot;, function(myNamespace) {
+                        myNamespace.declareClass(&quot;MyClass&quot;, {
+                            attributes: [new myNamespace.RequiresAuthenticationAttribute()]
+                        });
+                    });
+
+                Finally, some other code which instantiate the &#x60;MyClass&#x60; class will inspect if the class requires authentication:
+
+                    $namespace.using(&quot;myNamespace&quot;, function(myNamespace) {
+                        if(myNamespace.MyClass.type.hasAttribute(myNamespace.RequiresAuthenticationAttribute)) {
+                            // Do some stuff if MyClass has the whole attribute
+                        } else {
+                            throw Error(&quot;Sorry, this code will not execute classes if they do not require authentication...&quot;);
+                        }
+                    });
+
+                &lt;h3 id=&quot;attribute-params&quot;&gt;2.1 Attributes with parameters&lt;/h3&gt;
+                Sometimes using an attribute *as is* is not enough, because the attribute itself should contain data. 
+
+                For example, some code may require some classes to define a default property. &#x60;Person&#x60; class may have &#x60;FirstName&#x60;, &#x60;Surname&#x60; and &#x60;Nickname&#x60; properties. Which one will be the one to display in some listing?
+
+                    $namespace.using(&quot;joopl&quot;, &quot;myNamespace&quot;, function(joopl, myNamespace) {
+                        myNamespace.declareClass(&quot;DefaultPropertyAttribute&quot;, {
+                            inherits: oopl.Attribute,
+                            ctor: function(args) {
+                                this._.defaultPropertyName = args.defaultPropertyName;
+                            },
+                            members: {
+                                get defaultPropertyName() { return this._.defaultPropertyName; }
+                            }
+                        });
+
+                        myNamespace.declareClass(&quot;Person&quot;, {
+                            attributes: [new myNamespace.DefaultPropertyAttribute(&quot;nickname&quot;)],
+                            ctor: function() {
+                                this._.firstName = null;
+                                this._.surname = null;
+                                this._.nickname = null;
+                            }
+                            members: {
+                                get firstName() { return this._.firstName; },
+                                set firstName(value) { this._.firstName = value; },
+
+                                get surname() { return this._.surname; },
+                                set surname(value) { this._.surname = value; },
+
+                                get nickname() { return this._.nickname; },
+                                set nickname(value) { this._.nickname = value; }
+                            }
+                        });
+                    });
+
+                
+                Now, some code consumes instances of &#x60;Person&#x60; and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the &#x60;DefaultPropertyValueAttribute&#x60;:
+
+                    $namespace.using(&quot;myNamespace&quot;, function(myNamespace) {
+                        
+                        // The first step is creating a regular instance of Person
+                        var person = new myNamespace.Person();
+                        person.firstName = &quot;Matias&quot;;
+                        person.surname = &quot;Fidemraizer&quot;;
+                        person.nickname = &quot;mfidemraizer&quot;;
+
+                        // Secondly, this is checking if the Person class has the whole attribute
+                        if(Person.type.hasAttribute(myNamespace.DefaultPropertyAttribute)) {
+                            // Yes, it has the attribute!
+                            //
+                            // Then, the attribute instance is retrieved from the type information
+                            var defaultProperty = Person.type.getAttribute(myNamespace.DefaultPropertyAttribute);
+
+                            // Once the attribute is retrieved, the code can access the &quot;defaultPropertyName&quot; instance property
+                            // of the DefaultPropertyAttribute
+                            var defaultPropertyName = defaultProperty.defaultPropertyName;
+                            
+                            // Since any object is also an associative array (this is plain JavaScript!), 
+                            // the default property can be retrieved by using the &quot;defaultPropertyName&quot; variable
+                            // as key of the array
+                            var defaultPropertyValue = person[defaultPropertyName];
+
+                            // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, 
+                            // it will be &quot;mfidemraizer&quot;, because the Person class has the DefaultPropertyAttribute set to &quot;nickname&quot;!
+                            var p = document.createElement(&quot;p&quot;);
+                            p.appendChild(document.createTextNode(defaultPropertyValue));
+                            document.body.appendChild(p);
+                        }
+                    });
+            
+                @class Attribute
+                @since 2.3.0
+            */
+            joopl.declareClass(&quot;Attribute&quot;, {
+                members: {
+                }
+            });
+
+            /**
+                Represents an enumeration value and provides access to common operations for the whole enumeration value.
+
+                See {{#crossLink &quot;Enumerations&quot;}}{{/crossLink}} to learn more about enumerations.
+
+                @class EnumValue
+                @final
+                @since 2.3.0
+            */
+            var EnumValue = joopl.declareClass(&quot;EnumValue&quot;, {
+                ctor: function (args) {
+                    this._.value = args.value;
+                    this._.name = args.name;
+                },
+                members: {
+                    /** 
+                        Gets the enumeration value.
+
+                        @property value
+                        @type Number
+                    */
+                    get value() { return this._.value; },
+
+                    /**
+                        Gets the enumeration value name
+
+                        @property name
+                        @type string
+                        @readOnly
+                    */
+                    get name() { return this._.name; },
+
+                    /** 
+                        Performs a bitwise OR with the given enumeration value
+
+                        @method or
+                        @param enumValue {Number} An enumeration value
+                        @return {Number} The flag of two or more enumeration values
+                        @example 
+                            var flag = myNamespace.State.open.enum.or(State.closed); // This is State.open | State.closed
+                    */
+                    or: function (enumValue) {
+                        var value = this.value | enumValue;
+
+                        var result = new Number(value);
+                        result.enum = new $global.joopl.EnumValue({ value: value });
+
+                        Object.freeze(result);
+
+                        return result;
+                    },
+
+                    /** 
+                        Performs a bitwise AND with the given enumeration value
+
+                        @method and
+                        @param enumValue {Number} An enumeration value
+                        @return {Number} The flag of two or more enumeration values
+                        @example 
+                            var flag = myNamespace.State.open.enum.and(myNamespace.State.closed); // This is State.open &amp; State.closed
+                    */
+                    and: function (enumValue) {
+                        var value = this.value &amp; enumValue;
+
+                        var result = new Number(value);
+                        result.enum = new $global.joopl.EnumValue({ value: value });
+
+                        Object.freeze(result);
+
+                        return result;
+                    },
+
+                    /** 
+                        Determines if some enumeration value contains other enumeration value.
+
+                        @method hasFlag
+                        @param enumValue {Number} An enumeration value
+                        @return {Boolean} A boolean specifying if the given enumeration value was found in the flag.
+                        @example 
+                            var flag = myNamespace.State.open.enum.or(myNamespace.State.closed);
+                            var hasOpen = flag.enum.hasFlag(myNamespace.State.open);
+                    */
+                    hasFlag: function (enumValue) {
+                        return (this.value &amp; enumValue) === Number(enumValue);
+                    }
+                }
+            });
+
+            /**
+                Represents an utility class to work with enumerations.
+
+                @class Enum
+                @static
+                @since 2.3.0
+            */
+            joopl.Enum = new (TypeUtil.declareClass(&quot;Enum&quot;, this, {
+                members: {
+                    /** 
+                        Parses a text into a given enumeration value
+
+                        @method parseName
+                        @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                        @param valueName {string} The value name to be parsed (i.e. If an enumeration called States would have an *open* and *closed* values, *open* or *closed* would be a value names)
+                        @static
+                        @example
+                            $namespace.using(&quot;joopl&quot;, function(joopl) {
+                                joopl.declareEnum(&quot;State&quot;, {
+                                    open: 1,
+                                    closed: 2
+                                });
+
+                                var open = joopl.Enum.parseName(State, &quot;open&quot;)
+                            });
+                    */
+                    parseName: function (enumType, valueName) {
+                        if (enumType.valueNames.indexOf(valueName) &gt; -1) {
+                            return enumType[valueName];
+                        } else {
+                            throw new scope.ArgumentException({
+                                argName: &quot;valueName&quot;,
+                                reason: &quot;Given value name could not be found as value of the given enumeration type&quot;
+                            });
+                        }
+                    },
+
+                    /** 
+                        Parses a comma-separated list of text values as a mask of given enumeration
+
+                        @method parseNames
+                        @param enumType {enum} The enumeration definition (i.e. *State*, *ConnectionTypes*, ...)
+                        @param valueNames {String} A comma-separated list of a mask of given enumeration type (i.e. &quot;open, closed, working&quot;).
+                        @static
+                        @example
+                            $namespace.using(&quot;joopl&quot;, function(joopl) {
+                                joopl.declareEnum(&quot;State&quot;, {
+                                    open: 1,
+                                    closed: 2
+                                });
+
+                                joopl.Enum.parseNames(State, &quot;open, closed&quot;)
+                            });
+                    */
+                    parseNames: function (enumType, valueNames) {
+                        if (!(valueNames &amp;&amp; typeof valueNames == &quot;string&quot;)) {
+                            throw new scope.ArgumentException({
+                                argName: &quot;valueName&quot;,
+                                reason: &quot;Wrong value names&quot;
+                            });
+                        }
+
+                        var valueNamesArr = valueNames.replace(&quot; &quot;, &quot;&quot;).split(&quot;,&quot;);
+                        var value = 0;
+
+                        for (var nameIndex = 0; nameIndex &lt; valueNamesArr.length; nameIndex++) {
+                            value += this.parseName(enumType, valueNamesArr[nameIndex])
+                        }
+
+                        return new $global.joopl.EnumValue({ value: value });
+                    }
+                }
+            }));
+
+            /**
+                Represents a multi-cast event. 
+
+                An event is an observable object which notifies multiple objects listening event raises.
+
+                @class Event
+                @final
+                @constructor
+                @param {object} source The object who will be raising this event
+            */
+            joopl.declareClass(&quot;Event&quot;, {
+                ctor: function (args) {
+                    this._.handlers = [];
+                    this._.source = args.source;
+                },
+                members: {
+
+                    /**
+                        Gets an array of event handlers listenting for event raise
+
+                        @property handlers
+                        @return Array
+                        @private
+                    */
+                    get handlers() { return this._.handlers; },
+
+                    /**
+                        Gets the object who raises the event
+
+                        @property source
+                        @type Object
+                        @private
+                    */
+                    get source() { return this._.source; },
+
+                    /**
+                        Adds and binds a function to this event that will be called whenever
+                        this event is raised.
+
+                        It supports unlimited event listeners and they will be called in order *FIFO*.
+
+                        @method addEventListener
+                        @param {function} handler A function reference which handles the event
+                        @return {void}
+                    */
+                    addEventListener: function (handler) {
+                        var index = this.handlers.indexOf(handler);
+
+                        if (index == -1) {
+                            this.handlers.push(handler);
+                        }
+                    },
+
+                    /**
+                        Removes and unbinds a function from this event.
+                        
+                        Given function handler should be the one that was previously added with &#x60;addEventListener&#x60;.
+
+                        @method addEventListener
+                        @param {function} handler A function reference which handles the event
+                        @return {void}
+                    */
+                    removeEventListener: function (handler) {
+                        var index = this.handlers.indexOf(handler);
+
+                        if (index &gt;= 0) {
+                            this.handlers.splice(index, 1);
+                        }
+                    },
+
+                    raise: function (args) {
+                        if (this.handlers.length &gt; 0) {
+                            for (var delegateIndex in this.handlers) {
+                                this.handlers[delegateIndex].call(
+                                    args ? (args.$this ? args.$this : this.source) : this.source,
+                                    args ? (args.args ? args.args : null) : null
+                                );
+                            }
+                        }
+                    }
+                }
+            });
+
+            /**
+                Represents an event manager for some class supporting events.
+
+                It is capable of registering events and managing their life-cycle.
+
+                @class EventManager
+                @final
+                @constructor 
+                @param {object} source The object who is associated with the event manager
+            */
+            joopl.declareClass(&quot;EventManager&quot;, {
+                ctor: function (args) {
+                    this._.source = args.source;
+                },
+                members: {
+                    /**
+                        Gets the object who is associated with the event manager
+
+                        @property source
+                        @type object
+                        @private
+                    */
+                    get source() {
+                        return this._.source;
+                    },
+
+                    /**
+                        Registers an event in the event manager
+                        
+                        @method register
+                        @return void
+                    */
+                    register: function (eventName) {
+                        var delegates = [];
+                        var that = this;
+                        var source = this.source;
+
+                        Object.defineProperty(
+                            this,
+                            eventName, {
+                                value: new $global.joopl.Event({ source: this.source }),
+                                writable: false,
+                                configurable: false,
+                                enumerable: true
+                            }
+                        );
+                    }
+                },
+            });
+
+            /**
+                Represents a set of environmental values and operations
+
+                @class Environment
+                @final
+            */
+            joopl.declareClass(&quot;Environment&quot;, {
+                members: {
+                    /**
+                        Occurs when any exception of any type is thrown within current application
+
+                        @event exceptionThrown
+                        @param {joopl.Exception} thrownException The exception that has been thrown
+                        @example
+                            // Listening exceptions...
+                            $global.joopl.Environment.current.exceptionThrown.addEventListener(function(e) {
+                                var exception = e.thrownException;
+                            });
+
+                            // Raising the event...
+                            $global.joopl.Environment.current.notifyException(someException);
+                    */
+                    events: [&quot;exceptionThrown&quot;],
+
+                    /**
+                        Notifies a given exception to all subscribers
+
+                        @method notifyException
+                        @param {joopl.Exception} exception The exception to be notified
+                        @example 
+                            $global.joopl.Environment.current.notifyException(someException);
+                    */
+                    notifyException: function (exception) {
+                        this.exceptionThrown.raise({ args: { thrownException: exception } });
+                    }
+                }
+            });
+
+            /**
+                Gets current Environment instance
+
+                @property current
+                @type Environment
+                @readonly
+                @static
+            */
+            Object.defineProperty(
+                joopl.Environment,
+                &quot;current&quot;, {
+                    value: new joopl.Environment(),
+                    writable: false,
+                    configurable: false,
+                    enumerable: true
+                }
+            );
+
+            joopl.declareClass(&quot;Exception&quot;, {
+
+                /**
+                    Represents the base class for any exception 
+
+                    &lt;a href=&quot;Exception%20handling%20best%20practices.html&quot; target=&quot;_self&quot;&gt;Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;&lt;/a&gt;
+
+                    @class Exception
+                    @constructor
+                    @param {string} message A human-readable reason text for the whole exception
+                    @param {Exception} innerException An inner exception that is more specific to occured error
+                    @example 
+                        throw new $global.joopl.Exception({ message: &quot;Some&quot;, innerException: otherException });
+                */
+                ctor: function (args) {
+                    this._.message = args.message;
+                    this._.innerException = args.innerException;
+
+                    var error = Error(args.message);
+
+                    if (BrowserUtil.isIE) {
+                        try {
+                            throw error;
+                        } catch (e) {
+                            error = e;
+                        }
+                    }
+
+                    var stackTrace = error.stack.split(&quot;\n&quot;);
+                    var found = false;
+                    var index = BrowserUtil.isIE || BrowserUtil.isWebkit ? 0 : -1;
+                    var stackRegex = BrowserUtil.isIE || BrowserUtil.isWebkit ? /(joopl[.A-Za-z0-9]+\.js[:0-9]+\)$)|(at Error)/ : /joopl[.A-Za-z0-9]+\.js[:0-9]+$/;
+
+                    while (!found &amp;&amp; index &lt; stackTrace.length) {
+                        if (!stackRegex.test(stackTrace[++index])) {
+                            found = true;
+                        }
+                    }
+
+                    if (found) {
+                        stackTrace.splice(0, index);
+
+                        this._.stackTrace = stackTrace;
+                    }
+
+                    this._.error = error;
+
+                    $global.joopl.Environment.current.notifyException(this._.derived);
+                },
+
+                members:
+                {
+                    /**
+                        Gets the human-readable reason text for this exception
+
+                        @property message
+                        @type string
+                        @readonly
+                    */
+                    get message() {
+                        return this._.message;
+                    },
+
+                    /**
+                        Gets an inner exception (optional) which provides information about the sorrounding one
+
+                        @property innerException
+                        @type Exception
+                        @readonly
+                    */
+                    get innerException() {
+                        return this._.innerException;
+                    },
+
+                    /**
+                        Gets the exception&#x27;s stack trace as an array where each index is a code line  
+
+                        @property stackTrace
+                        @type Array
+                        @readonly
+                    */
+                    get stackTrace() {
+                        return this._.stackTrace;
+                    },
+
+                    /**
+                        Gets underlying &#x60;Error&#x60; instance  
+
+                        @property error
+                        @type Error
+                        @readonly
+                    */
+                    get error() {
+                        return this._.error;
+                    },
+
+                    /**
+                        Returns the exception message plus the stack trace as a concatenated string
+
+                        @method toString
+                        @return {String} The exception message plus the stack trace as a concatenated string
+                    */
+                    toString: function () {
+                        var text = &quot;An exception of type &#x27;&quot; + this.type.fullName + &quot;&#x27; has been thrown with message &#x27;&quot; + this.message + &quot;&#x27;\n\n&quot;;
+                        text += &quot;Stack trace:\n_________________________\n\n&quot;;
+                        text += this.stackTrace.join(&quot;\n&quot;);
+
+                        return text;
+                    }
+                }
+            });
+
+            joopl.declareClass(&quot;ArgumentException&quot;, {
+                inherits: joopl.Exception,
+
+                /**
+                    Represents an exception that occurs when some method argument is missing or invalid
+
+                    &lt;a href=&quot;Exception%20handling%20best%20practices.html&quot; target=&quot;_self&quot;&gt;Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;&lt;/a&gt;
+
+                    @class ArgumentException
+                    @extends joopl.Exception
+                    @constructor
+                    @param {string} argName The affected argument name
+                    @param {string} reason (optional) A reason text explaining what was wrong with the affected argument
+                    @example
+                        throw new $global.joopl.ArgumentException({ argName: &quot;someArgument&quot;});
+                */
+                ctor: function (args) {
+                    this._.argName = args.argName;
+
+                    var message = &quot;The given argument &#x27;&quot; + args.argName + &quot;&#x27; is not valid&quot;;
+
+                    if (args.reason) {
+                        message += &quot; (Reason: &quot; + args.reason + &quot;)&quot;;
+                    }
+
+                    this.base.ctor({
+                        message: message
+                    });
+                },
+                members: {
+                    /**
+                        Gets the affected argument name
+
+                        @property argName
+                        @type string
+                        @readonly
+                    */
+                    get argName() {
+                        return this._.argName;
+                    }
+                }
+            });
+
+            joopl.declareClass(&quot;NotImplementedException&quot;, {
+                inherits: joopl.Exception,
+
+                /**
+                    Represents an exception that occurs when a class member is not implemented.
+
+                    &lt;a href=&quot;Exception%20handling%20best%20practices.html&quot; target=&quot;_self&quot;&gt;Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;&lt;/a&gt;
+
+                    @class NotImplementedException
+                    @extends joopl.Exception
+                    @constructor
+                    @param {string} memberName The affected member name which does not implement something
+                    @example
+                        throw new $global.joopl.NotImplementedException({ memberName: &quot;someMethod&quot;});
+                */
+                ctor: function (args) {
+                    this.base.ctor(
+                        {
+                            message: !TypeUtil.hasValue(args) || !TypeUtil.hasValue(args.memberName) ?
+                                            &quot;A method or property is not implemented&quot;
+                                            :
+                                            &quot;Method or property &#x27;&quot; + args.memberName + &quot;&#x27; is not implemented&quot;
+                        }
+                    );
+
+                    this._.memberName = args.memberName;
+                },
+                members: {
+                    /**
+                        Gets the not implemented member name
+
+                        @property memberName
+                        @type string
+                        @readonly
+                    */
+                    get memberName() {
+                        return this._.memberName;
+                    }
+                }
+            });
+        });
+    })(undefined);
+}
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer id="page-footer">
+        &copy; 2013 <a href="http://www.linkedin.com/in/mfidemraizer/en" target="_blank">Matias Fidemraizer</a>. jOOPL is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0.</a>
+    </footer>
+    <script src="../assets/vendor/prettify/prettify-min.js"></script>
+    <script>prettyPrint();</script>
+    <script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

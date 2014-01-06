@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: joopl.NotImplementedException - joopl</title>
+    <title>jOOPL: src\joopl.doc.grunt-joopl-analyzer.js - joopl</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -291,502 +291,62 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: joopl.NotImplementedException</h1>
-<div class="box meta">
-    
+                        <h1 class="file-heading">File: src\joopl.doc.grunt-joopl-analyzer.js</h1>
 
-    
-        <div class="extends">
-            Extends <a href="..\classes\joopl.Exception.html" class="crosslink">joopl.Exception</a>
-        </div>
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+&lt;h2&gt;Installation&lt;/h2&gt;
 
-    
+jOOPL Analyzer&#x27;s &#x60;joopl-analyzer&#x60; command may be integrated on a *GruntJS* build using the &#x60;grunt-joopl-analyzer&#x60; task.
 
-    
-</div>
+The whole task is distributed as a NodeJS Package Manager (NPM) module and it can be installed using the following regular approach:
 
+    npm install joopl-analyzer
+    npm install grunt-joopl-analyzer
 
+This should both install the whole task and &#x60;joopl-analyzer&#x60; dependencies in your local development directory.
 
-<div class="box intro">
-    <p>Represents an exception that occurs when a class member is not implemented.</p>
-<p><a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;</a></p>
+&lt;h2&gt;Configuring &#x60;Gruntfile.js&#x60;&lt;/h2&gt;
 
-</div>
+In order to integrate &#x60;joopl-analyzer&#x60; task in your own &#x60;Gruntfile.js&#x60; and  be able to run it, &#x60;grunt-joopl-analyzer&#x60; should be imported and configured this way:
 
+    module.exports = function(grunt) {
+      grunt.initConfig({
+        pkg: grunt.file.readJSON(&#x27;package.json&#x27;),
 
-    <div class="constructor">
-        <h2>Constructor</h2>
-        <div id="method_joopl.NotImplementedException" class="method item">
-    <h3 class="name"><code>joopl.NotImplementedException</code></h3>
+        // joopl-analyzer specific settings
+        jooplanalyzer: {
+          all: {
+            baseDirectory: &quot;./scripts&quot;,
+            watch: grunt.option(&quot;watch&quot;) || false
+          }
+        }
+      });
 
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>memberName</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
+      grunt.loadNpmTasks(&quot;grunt-joopl-analyzer&quot;);
 
-    
+      // Default task(s).
+      grunt.registerTask(&#x27;default&#x27;, [&#x27;jooplanalyzer&#x27;]);
+    };
 
-    
+&lt;h3&gt;Available settings&lt;/h3&gt;
+&#x60;jooplanalyzer&#x60; task supports the following settings:
 
-    
+- &#x60;baseDirectory&#x60;. Configures the absolute or relative base directory from which the analyzer should start looking for code files.
+- &#x60;watch&#x60; (true/false). Holds the build open indefinitely and, after any change within the given base directory, automatically re-analyzes it.
 
-    
+&lt;h4&gt;About &#x60;watch&#x60; setting&lt;/h4&gt;
+As shown in configuration sample, &#x60;watch&#x60; is &#x60;false&#x60; by default until option &#x60;watch&#x60; is given when running GruntJS from the command-line. In order to 
+activate &#x60;watch&#x60;, just run GruntJS as follows:
 
-    
+    grunt jooplanalyzer --watch=true
 
-    
+This will hold the execution as expected and any change in the base directory and any of its own sub-directories will trigger &#x60;jooplanalyzer&#x60; GruntJS task.
 
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1569"><code>src\joopl.js:1569</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">memberName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The affected member name which does not implement something</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>throw new $global.joopl.NotImplementedException({ memberName: &quot;someMethod&quot;});</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-    </div>
-
-
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_error">error</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_innerException">innerException</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_memberName">memberName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_message">message</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_stackTrace">stackTrace</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_toString" class="method item inherited">
-    <h3 class="name"><code>toString</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#method_toString">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1507"><code>src\joopl.js:1507</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Returns the exception message plus the stack trace as a concatenated string</p>
-
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>The exception message plus the stack trace as a concatenated string</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_error" class="property item inherited">
-    <h3 class="name"><code>error</code></h3>
-    <span class="type">Error</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_error">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1496"><code>src\joopl.js:1496</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets underlying <code>Error</code> instance</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_innerException" class="property item inherited">
-    <h3 class="name"><code>innerException</code></h3>
-    <span class="type">Exception</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_innerException">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1474"><code>src\joopl.js:1474</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets an inner exception (optional) which provides information about the sorrounding one</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_memberName" class="property item">
-    <h3 class="name"><code>memberName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1594"><code>src\joopl.js:1594</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the not implemented member name</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_message" class="property item inherited">
-    <h3 class="name"><code>message</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_message">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1463"><code>src\joopl.js:1463</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the human-readable reason text for this exception</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_stackTrace" class="property item inherited">
-    <h3 class="name"><code>stackTrace</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_stackTrace">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1485"><code>src\joopl.js:1485</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets the exception&#39;s stack trace as an array where each index is a code line</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-
-        
-
-<div id="classdocs" class="tabview" style="display: none">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-        
-        
-        
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index"></div>
-
-    </div>
+    @class grunt-joopl-analyzer
+*/
+    </pre>
 </div>
 
                     </div>

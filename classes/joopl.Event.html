@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jOOPL: joopl.NotImplementedException - joopl</title>
+    <title>jOOPL: joopl.Event - joopl</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -291,14 +291,10 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Now on: joopl.NotImplementedException</h1>
+                        <h1>Now on: joopl.Event</h1>
 <div class="box meta">
     
 
-    
-        <div class="extends">
-            Extends <a href="..\classes\joopl.Exception.html" class="crosslink">joopl.Exception</a>
-        </div>
     
 
     
@@ -309,16 +305,16 @@
 
 
 <div class="box intro">
-    <p>Represents an exception that occurs when a class member is not implemented.</p>
-<p><a href="Exception%20handling%20best%20practices.html" target="_self">Please read more about exception handling by following this link to &quot;Exception handling best practices&quot;</a></p>
+    <p>Represents a multi-cast event. </p>
+<p>An event is an observable object which notifies multiple objects listening event raises.</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_joopl.NotImplementedException" class="method item">
-    <h3 class="name"><code>joopl.NotImplementedException</code></h3>
+        <div id="method_joopl.Event" class="method item">
+    <h3 class="name"><code>joopl.Event</code></h3>
 
     
         <div class="args">
@@ -326,7 +322,7 @@
             
                 <li class="arg">
                     
-                        <code>memberName</code>
+                        <code>source</code>
                     
                 </li>
             
@@ -340,6 +336,8 @@
 
     
 
+    
+        <span class="flag final">final</span>
     
 
     
@@ -359,7 +357,7 @@
             
         
         
-        <a href="../files/src_joopl.js.html#l1569"><code>src\joopl.js:1569</code></a>
+        <a href="../files/src_joopl.js.html#l1222"><code>src\joopl.js:1222</code></a>
         
         </p>
 
@@ -381,14 +379,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">memberName</code>
-                        <span class="type">String</span>
+                        <code class="param-name">source</code>
+                        <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The affected member name which does not implement something</p>
+                        <p>The object who will be raising this event</p>
 
                     </div>
 
@@ -402,15 +400,6 @@
     
 
     
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>throw new $global.joopl.NotImplementedException({ memberName: &quot;someMethod&quot;});</code></pre>
-
-            </div>
-        </div>
-    
 </div>
 
     </div>
@@ -420,38 +409,17 @@
                 <div class="index-section properties">
                     <h3>Properties</h3>
 
-                    <ul class="index-list properties extends">
+                    <ul class="index-list properties">
                         
-                            <li class="index-item property inherited">
-                                <a href="#property_error">error</a>
+                            <li class="index-item property private">
+                                <a href="#property_handlers">handlers</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item property inherited">
-                                <a href="#property_innerException">innerException</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_memberName">memberName</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_message">message</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_stackTrace">stackTrace</a>
+                            <li class="index-item property private">
+                                <a href="#property_source">source</a>
 
                                 
                                 
@@ -471,171 +439,32 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_toString" class="method item inherited">
-    <h3 class="name"><code>toString</code></h3>
+                    <div id="method_addEventListener" class="method item">
+    <h3 class="name"><code>addEventListener</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>handler</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
         <span class="returns-inline">
-            <span class="type">String</span>
+            <span class="type">Void</span>
         </span>
     
 
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#method_toString">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1507"><code>src\joopl.js:1507</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Returns the exception message plus the stack trace as a concatenated string</p>
-
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>The exception message plus the stack trace as a concatenated string</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-            </div>
-        
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_error" class="property item inherited">
-    <h3 class="name"><code>error</code></h3>
-    <span class="type">Error</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_error">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1496"><code>src\joopl.js:1496</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets underlying <code>Error</code> instance</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_innerException" class="property item inherited">
-    <h3 class="name"><code>innerException</code></h3>
-    <span class="type">Exception</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_innerException">joopl.Exception</a>:
-            
-        
-        
-        <a href="../files/src_joopl.js.html#l1474"><code>src\joopl.js:1474</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Gets an inner exception (optional) which provides information about the sorrounding one</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_memberName" class="property item">
-    <h3 class="name"><code>memberName</code></h3>
-    <span class="type">String</span>
 
     
 
@@ -656,9 +485,10 @@
             
         
         
-        <a href="../files/src_joopl.js.html#l1594"><code>src\joopl.js:1594</code></a>
+        <a href="../files/src_joopl.js.html#l1257"><code>src\joopl.js:1257</code></a>
         
         </p>
+
 
         
 
@@ -666,21 +496,82 @@
     </div>
 
     <div class="description">
-        <p>Gets the not implemented member name</p>
+        <p>Adds and binds a function to this event that will be called whenever
+this event is raised.</p>
+<p>It supports unlimited event listeners and they will be called in order <em>FIFO</em>.</p>
 
     </div>
 
     
+        <div class="params">
+            <h4>Parameters:</h4>
 
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">handler</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A function reference which handles the event</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Void</span>:
+                    
+                
+            </div>
+        </div>
     
 
     
 </div>
 
                 
-                    <div id="property_message" class="property item inherited">
-    <h3 class="name"><code>message</code></h3>
-    <span class="type">String</span>
+                    <div id="method_addEventListener" class="method item">
+    <h3 class="name"><code>addEventListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>handler</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+    
+
+    
+
+    
 
     
 
@@ -693,12 +584,108 @@
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_message">joopl.Exception</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="../files/src_joopl.js.html#l1463"><code>src\joopl.js:1463</code></a>
+        <a href="../files/src_joopl.js.html#l1275"><code>src\joopl.js:1275</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Removes and unbinds a function from this event.</p>
+<p>Given function handler should be the one that was previously added with <code>addEventListener</code>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">handler</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A function reference which handles the event</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Void</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_handlers" class="property item private">
+    <h3 class="name"><code>handlers</code></h3>
+    <span class="type">Unknown</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_joopl.js.html#l1239"><code>src\joopl.js:1239</code></a>
         
         </p>
 
@@ -708,7 +695,7 @@
     </div>
 
     <div class="description">
-        <p>Gets the human-readable reason text for this exception</p>
+        <p>Gets an array of event handlers listenting for event raise</p>
 
     </div>
 
@@ -720,12 +707,14 @@
 </div>
 
                 
-                    <div id="property_stackTrace" class="property item inherited">
-    <h3 class="name"><code>stackTrace</code></h3>
-    <span class="type">Array</span>
+                    <div id="property_source" class="property item private">
+    <h3 class="name"><code>source</code></h3>
+    <span class="type">Object</span>
 
     
 
+    
+        <span class="flag private">private</span>
     
 
     
@@ -735,12 +724,15 @@
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..\classes\joopl.Exception.html#property_stackTrace">joopl.Exception</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="../files/src_joopl.js.html#l1485"><code>src\joopl.js:1485</code></a>
+        <a href="../files/src_joopl.js.html#l1248"><code>src\joopl.js:1248</code></a>
         
         </p>
 
@@ -750,7 +742,7 @@
     </div>
 
     <div class="description">
-        <p>Gets the exception&#39;s stack trace as an array where each index is a code line</p>
+        <p>Gets the object who raises the event</p>
 
     </div>
 

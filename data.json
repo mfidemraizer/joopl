@@ -1,32 +1,31 @@
 {
     "project": {
-        "name": "{ joopl };",
-        "description": "Object-oriented programming for JavaScript on the Web and anywhere!",
-        "version": "2.2.0",
-        "url": "http://joopl.codeplex.com",
-        "logo": "https://download-codeplex.sec.s-msft.com/Download?ProjectName=joopl&DownloadId=652315&Build=20425"
+        "name": "joopl",
+        "description": "jOOPL is simply powerful OOP for the JavaScript language, both in Web browsers and runtimes like NodeJS!",
+        "version": "2.5.0",
+        "url": ""
     },
     "files": {
-        "joopl.doc.defineClasses.js": {
-            "name": "joopl.doc.defineClasses.js",
+        "src\\joopl.doc.defineClasses.js": {
+            "name": "src\\joopl.doc.defineClasses.js",
             "modules": {},
             "classes": {
-                "Define classes with jOOPL": 1
+                "Classes": 1
             },
             "fors": {},
             "namespaces": {}
         },
-        "joopl.doc.defineEnums.js": {
-            "name": "joopl.doc.defineEnums.js",
+        "src\\joopl.doc.defineEnums.js": {
+            "name": "src\\joopl.doc.defineEnums.js",
             "modules": {},
             "classes": {
-                "Declaring enumerations with jOOPL": 1
+                "Enumerations": 1
             },
             "fors": {},
             "namespaces": {}
         },
-        "joopl.doc.exceptionHandling.js": {
-            "name": "joopl.doc.exceptionHandling.js",
+        "src\\joopl.doc.exceptionHandling.js": {
+            "name": "src\\joopl.doc.exceptionHandling.js",
             "modules": {},
             "classes": {
                 "Exception handling best practices": 1
@@ -34,8 +33,35 @@
             "fors": {},
             "namespaces": {}
         },
-        "joopl.doc.namespaces.js": {
-            "name": "joopl.doc.namespaces.js",
+        "src\\joopl.doc.grunt-joopl-analyzer.js": {
+            "name": "src\\joopl.doc.grunt-joopl-analyzer.js",
+            "modules": {},
+            "classes": {
+                "grunt-joopl-analyzer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\joopl.doc.joopl-analyzer.js": {
+            "name": "src\\joopl.doc.joopl-analyzer.js",
+            "modules": {},
+            "classes": {
+                "joopl-analyzer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\joopl.doc.modules.js": {
+            "name": "src\\joopl.doc.modules.js",
+            "modules": {},
+            "classes": {
+                "$import": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\joopl.doc.namespaces.js": {
+            "name": "src\\joopl.doc.namespaces.js",
             "modules": {},
             "classes": {
                 "$namespace": 1
@@ -43,8 +69,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "joopl.js": {
-            "name": "joopl.js",
+        "src\\joopl.js": {
+            "name": "src\\joopl.js",
             "modules": {},
             "classes": {
                 "joopl.Namespace": 1,
@@ -53,6 +79,8 @@
                 "joopl.Attribute": 1,
                 "joopl.EnumValue": 1,
                 "joopl.Enum": 1,
+                "joopl.Event": 1,
+                "joopl.EventManager": 1,
                 "joopl.Environment": 1,
                 "joopl.Exception": 1,
                 "joopl.ArgumentException": 1,
@@ -66,29 +94,29 @@
     },
     "modules": {},
     "classes": {
-        "Define classes with jOOPL": {
-            "name": "Define classes with jOOPL",
-            "shortname": "Define classes with jOOPL",
+        "Classes": {
+            "name": "Classes",
+            "shortname": "Classes",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "joopl.doc.defineClasses.js",
+            "file": "src\\joopl.doc.defineClasses.js",
             "line": 1,
-            "description": "## <a id=\"index\"></a> Index\n\n* 1.0\\. [Defining a class](#class-define)\n    * 1.1\\. [Fields](#class-fields)\n    * 1.2\\. [ctors](#class-ctors)\n    * 1.3\\. [Properties](#class-properties)\n    * 1.4\\. [Methods/Functions](#class-methods)\n    * 1.5\\. [Events](#class-events)\n    * 1.6\\. [Type property on classes and instances: type metadata](#type-metadata)\n* 2.0\\. [Creating instances of classes - the `new` operator](#class-instances)\n* 3.0\\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)\n    * 3.1\\. [Class inheritance](#class-inheritance)\n    * 3.2\\. [Inheritance with polymorphism](#class-polymorphism)\n        * 3.2.1\\. [The `this.base` keyword](#class-base)\n        * 3.2.2\\. [The derived class ctor calls the parent's class ctor](#class-basector)\n        * 3.2.3\\. [A base class member calls the most specialized implementation](#class-basecallsderived)\n    * 3.3\\. [The isTypeOf operator](#class-istypeof)\n\n{{#crossLink \"Attribute\"}}**See also class attributes for declarative and metadata class programming**{{/crossLink}}\n\n<h3 id=\"class-define\">1. Defining a class</h3> \n([Back to index](#index))\n\nSince jOOPL 2.4, classes are always declared in a given namespace. Each namespace has a `declareClass(...)` function that will declare a class based\non given arguments as an object map. Basic parameters are:\n\n- **ctor** *(optional)*. The ctor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.\n- **members** *(optional)*. An object containing the methods and properties for the whole class.\n\nA basic class may look like the next code listing:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            // ctor \n            ctor: function() {\n                this._.name = null;\n            },\n            members: {\n                get name() {\n                    return this._.name;\n                }\n\n                set name(value) {\n                    this._.name = value;\n                }\n\n                sayYourName: function() {\n                    alert(\"Hey, \" + this.name)\n                }\n            }\n        });\n    });\n\n\n<h4 id=\"class-fields\">1.1 Class fields</h4> \n([Back to index](#index))\n\nA class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).\n\nAny class constructor, property or method has a reserved variable called `_` accessible through `this._` on which class fields can be declared and\nmanipulated. For example, `this._.myName = \"Matias\";` will declare a class field called `myName` with a default value `Matías`.\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            ctor: function() {\n                // This is a class field:\n                this._.value = \"A string for the class field\";\n            }\n        });\n    });\n\n<h4 id=\"class-constructors\">1.2 Constructors</h4>\n([Back to index](#index))\n\nIn classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing \nthe whole class.\n\nFor example, class constructors are the place to define class fields:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            // constructor \n            ctor: function() {\n                this._.myName = \"Matias\";\n            }\n        });\n    });\n\nIn instance, the class constructor has access to the already declared methods and properties:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            // constructor \n            ctor: function() {\n                this._.myName = \"Matias\";\n\n                // The \"someMethod()\" method can be called from the constructor!\n                this.initialize();\n            }\n\n            members: {\n                initialize: function() {\n                    alert(\"hello world called from the constructor!\")\n                }\n            }\n        });\n    });\n\n##### See also\n\n- [Call parent class constructor](#class-basector)\n\n<h4 id=\"class-properties\">1.3 Properties</h4>\n([Back to index](#index))\n\nAny class can declare properties. Apparently, a property looks like a variable by its usage, but it differs from variables on\nhow they are declared.\n\nProperties are the best way to encapsulate the access to private resources held by the class like class fields or calculated values. \n\nA property is composed by two possible parts (it can have both or only one of them)\n\n- **Getter**. It is a block like a function defining how a value is obtained.\n- **Setter**. It is a block like a function defining how to set a value.\n\nFor example, without properties, an object would look like the next code listing:\n\n    var myObject = {\n        name: \"Matias\",\n        age: 28\n    };\n\nAnd once the `myObject` variable holds the new object, both `name` and `age` can be altered:\n\n    myObject.name = \"John\";\n    myObject.age = 33;\n\nBut what happens if there is a need to constraint the `name` and `age` variables? A primitive solution would be:\n\n    var possibleName = \"John\";\n    var possibleAge = 33;\n\n    if(possibleName != \"John\") {\n        myObject.name = possibleName;\n    } else {\n        throw Error(\"Sorry, John, I do not like you!\")\n    }\n\n    if(possibleAge > 30) {\n        myObject.age = possibleAge;\n    } else {\n        throw Error(\"You are too young! Please try again in some years...\");\n    }\n\nThis is how the above code would be implemented using properties:\n\n    var myObject = {\n        // Some regular variables\n        _name: null,\n        _age: null,\n\n        // A getter for the _name variable:\n        get name() { \n            return this._name; \n        },\n        // A setter for the _name variable. The setter defines the validation logic!\n        set name(value) { \n            if(value != \"John\") {\n                this._name = value; \n            } else {\n                throw Error(\"Sorry, John, I do not like you!\")\n            }\n        },\n\n        // A getter for the _name variable:\n        get age() { \n            return this._age;\n        },\n        // A setter for the _name variable. The setter also defines the validation logic here!\n        set age(value) {\n            if(value > 30) {\n                myObject.age = value;\n            } else {\n                throw Error(\"You are too young! Please try again in some years...\");\n            }\n        }\n    }\n\nNow, if some code tries to assign \"John\" or an age lesser than 30, the properties setters will throw the error, but this time\nthe validation logic is encapsulated:\n\n    myObject.name = \"John\" // ERROR\n    myObject.name = \"Matias\" // OK\n\n    myObject.age = 28 // ERROR\n    myObject.age = 33 // OK\n\njOOPL fully supports ECMA-Script 5 properties like the described before:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            ctor: function() {\n                // Define a class field for later provide access to it through a property getter and setter\n                this._.name = null;\n            },\n            members: {\n                // Gets the value held by the this._.name class field:\n                get name() {\n                    return this._.name;\n                },\n\n                // Sets a new value to the this._.name class field:\n                set name(value) {\n                    this._.name = value;\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.A();\n\n        // Set the 'name' property value\n        a.name = \"Matias\";\n\n        // Gets the name property value\n        alert(a.name); // Alerts \"Matias\"\n    });\n\n<h4 id=\"class-methods\">1.4  Methods/Functions</h4>\n([Back to index](#index))\n\nMethods (*also known as functions*) are the behavior of classes. They are the actions that can be performed by the class. Examples\nof methods can be:\n\n- do\n- create\n- notify\n- write\n- build\n- ...\n\nClass methods are defined as regular JavaScript functions and as part of the `members` in a class definition:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            members: {\n                do: function() {\n                    return \"do what?\";\n                }\n            }\n        });\n    });\n\n##### See also\n\n- [Polymorphism](#class-polymorphism)\n\n<h4 id=\"class-events\">1.5 Events</h4> \n([Back to index](#index))\n\n##### Events glossary\n\n- **Event**. It is an observable action. Classes defining them or others can subscribe to events and react to them.\n- **Event handler**. It is a function assigned to the event which is called when the event happens.\n\nEvents are an out-of-the-box feature that enables any class to create observable objects.\n\nAn observable object is a one emitting notifications when something happens within it. For example, an event may be:\n\n+ When some button is clicked.\n+ An asynchronous operation completed.\n+ An item was added to a list.\n\nEvents are class members like properties and methods, but they are special in terms of how they are declared. For example, \nif a class needs to implement an event to notify to others that it said \"hello world\", an event \"saying\" would be declared this way:\n\n    $namespace.register(\"test\", function() {\n       this.declareClass(\"A\", {\n            members: {\n                events: [\"saying\"]\n            }\n        });\n    });\n\nThe above code declares an event \"saying\". Events are declared as an array of identifiers (names) as value of the `events` special member. Once\nan event is declared, the next step is triggering/raising/firing it somewhere in the whole class:\n    \n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            members: {\n                events: [\"saying\"],\n\n                helloWorld: function() {\n                    // This is triggering the event. jOOPL has created an special function called\n                    // 'saying' which can receive an object of arguments so the object suscribed to\n                    // the class event will receive the whole argument 'text'\n                    this.saying.raise({ args: { text: \"yes, the object is about to say 'hello world'!\"} });\n\n                    // The event 'saying' notified that the class A was about saying something\n                    // and, finally, now it says \"hello world!\" using an alert.\n                    alert(\"hello world!\")\n                }\n            }\n        });\n    });\n\nFinally, the last step is listening for the `saying` event. For that matter, an instance of A is created and the code will set an event handler in order\nto do an action when the `A` class instance says something:\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.A();\n\n        instance.saying.addEventListener(function(args) {\n            // The `args` input argument will hold the text set when the event was triggered\n            alert(\"The instance said: \" + args.text);\n        });\n    });\n\nOnce an event handler added to an event, it is possible to *unsuscribe* from it calling `removeEventListener(...)`.\n\nFor example:\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.A();\n\n        var handler = function(args) {\n        }\n\n        // This adds an event handler to the event\n        instance.saying.addEventListener(handler);\n\n        // Setting the same handler again removes it from the event.\n        instance.saying.removeEventListener(handler);\n    });\n\n\n<h4 id=\"type-metadata\">1.6 Type property on classes and instances: type metadata</h4> \n([Back to index](#index))\n\nSince 2.4 version of jOOPL, any class and instance has a built-in property called `type`. This property gives access to both class or instance\ntype metadata like its namespace path, name, name with namespace path, ...\n\nFor example, declaring a class like follows:\n\n    $namespace.register(\"joopl.sample\", function() {\n        this.declareClass(\"A\");\n        \n        // Getting class name from type property of A class\n        var className = this.A.type.name;\n\n        // Gettings class name from type property of A instance\n        var instance = new this.A();\n        className = instance.type.name;\n    });\n\nFurther details can be found on <a href=\"joopl.Type.html\" target=\"_self\">`Type` class documentation</a>.\n\n<h3 id=\"class-instances\">2. Creating instances of classes</h3>\n([Back to index](#index))\n\nOnce a class is defined using the namespace's `declareClass(...)` function, an instance of the class must be created in order to use it. \n\nIn jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard\n`new` operator:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"A\", {\n            members: {\n                someMethod: function() {\n                    alert(\"hello world\");\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function() {\n        // Creating an instance of A:\n        var instance = new this.A();\n\n        // Now the instance variable - a reference to an object of type A - \n        // has its instance methods available to be called:\n        instance.someMethod();\n    });\n\n<h3 id=\"class-oop\">3. Object-oriented programming on JavaScript using jOOPL</h3> \n([Back to index](#index))\n\nDefining classes and creating instances of it using the namespace's `declareClass(...)` function and `new` operator respectively are just the most basic features of jOOPL.\n\njOOPL introduces an state-of-the-art and powerful class inheritance and polymoprhism enabling JavaScript language to \nwork with true object-oriented programming:\n\n- **Inheritance**. Classes can inherit from others in order to share their behaviors, properties and events.\n- **Polymorphism**. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.\n- **Encapsulation**. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.\n\n<h4 id=\"class-inheritance\">3.1 Class inheritance</h4>\n([Back to index](#index))\n\nInheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.\n\nThe namespace's `declareClass(...)` function supports an additional and optional parameter called `inherits` which specifies that the declaring class inherits another class.\n\nA class `A` may implement some methods and properties and a class `B` can inherit `A` and it will not need to implement them as all members from `A`\nare already available as members of `B`:\n\n    $namespace.register(\"test\", function() {\n        // Defining a class A having a method \"do()\"\n        this.declareClass(\"A\", {\n            members: {\n                do: function() {\n                    // Do some stuff\n                }\n            }\n        });\n\n        // Class B inherits A\n        this.declareClass(\"B\", {\n            inherits: this.A\n        });\n    });\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.B();\n\n        // The B instance can invoke the do() function \n        // inherited from A\n        instance.do();\n    });\n\njOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (*no multi-inheritance*), but any\nclass can inherit other. There is no limitation of how many levels of inheritance can implement an hierarchy. \n\nAn important detail is that, if a class does not directly inherit a class (there is no `inherit` input parameter for namespace's `declareClass(...)` function), it will \nimplicitly inherit the top-most class `Object` implemented as a plain JavaScript prototype, which provides basic methods and properties that any class \nwill contain. At the end of the day, **any class inherits Object**.\n\n<h4 id=\"class-polymorphism\">3.2 Inheritance with polymorphism </h4>\n([Back to index](#index))\n\nPolymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base\nimplementation found in the parent class. \n\nFor example, there is a class called `Salutation` which implements a method/function `sayHello` and it returns **\"hello world\"**, and there is a derived class\n`SpecializedSalutation` that inherits `Salutation` class, the whole derived class can override the `sayHello` method and make it say **\"Hello, world!\"**:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"Salutator\", {\n            members: {\n                sayHello: function() {\n                    return \"hello world\"\n                }\n            }\n        });\n\n        this.declareClass(\"SpecializedSalutator\", {\n            inherits: this.Salutator,\n            members: {\n                // Overrides the parent class sayHello implementation\n                sayHello: function() {\n                    return \"Hello, world!\";\n                }\n            }\n        });\n    });\n    \n    $namespace.using(\"test\", function() {\n        var instance = new this.SpecializedSalutator();\n        var text = instance.sayHello();\n\n        // This will alert \"Hello, world!\" since the class has overriden the default implementation\n        // which was returning \"hello world\"\n        alert(text); \n    });\n\n<h4 id=\"class-base\">3.2.1 The `this.base` keyword</h4>\n([Back to index](#index))\n\nAny method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the\noverriden member.\n\nThe overriden members may or may not call the parent class member implementation using the `this.base` keyword. \n\nFor example, there is a class `Calculator` having a method `add`, and a specialized calculator called `UnsignedCalculator` which makes any addition an absolute number result,\nthe code would look like this:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"Calculator\", {\n            members: {\n                add: function(num1, num2) {\n                    // It simply adds num2 to num1\n                    return num1 + num2;\n                }\n            }\n        });\n\n        this.declareClass(\"UnsignedCalculator\", {\n            members: {\n                add: function(num1, num2) {\n                    // This is calling the \"add\"'s parent class implementation\n                    var result = this.base.add(num1, num2);\n\n                    // Now the result from calling the base implementation of this method\n                    // is converted to an unsigned number\n                    return Math.abs(result);\n                }\n            }\n        });\n    });\n\n<h4 id=\"class-basector\">3.2.2 The derived class constructor calls the parent's class constructor</h4> \n([Back to index](#index))\n\nEven class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same\nhierarchy requires some construction-time initialization:\n\n    $namespace.register(\"test\", function() {\n        // The top-most parent class Person defines basic data\n        // and provides getter and setter properties in order to\n        // get or set the whole contained data.\n        //\n        // The constructor receives as arguments the default data.\n        this.declareClass(\"Person\", {\n            ctor: function(args) {\n                this._.name = args.name;\n                this._.secondName = args.secondName;\n                this._.age = args.age;\n            },\n            members: {\n                get name() {\n                    return this._.name;\n                },\n                set name(value) {\n                    this._.name = value;\n                },\n\n                get secondName() {\n                    return this._.secondName;\n                },\n                set secondName(value) {\n                    this._.secondName = value;\n                }\n\n                get age(){\n                    return this._.age;\n                },\n                set age(value) {\n                    this._.age = value;\n                }\n            }\n        });\n\n        // The Employee class inherits Person and adds\n        // more data. The Employee constructor both defines\n        // new class fields and calls the Person's ctor\n        // by invoking this.base.ctor(args), thus the base constructor\n        // will receive the expected arguments.\n        this.declareClass(\"Employee\", {\n           inherits: this.Person,\n           ctor: function(args) {\n                this.base.ctor(args);\n\n                this._.companyName = args.companyName;\n                this._.salary = args.salary;\n           } \n        });\n    });\n\n    // Now this is creating an instance of Employee. As the Employee ctor\n    // calls its base Person class' ctor, it will be correctly initialized \n    // with the data passed as ctor arguments:\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.Employee({\n            name: \"Matias\",\n            secondName: \"Fidemraizer\",\n            age: 28,\n            companyName: \"ACME\",\n            salary: 99999\n        });\n    });\n\n    alert(instance.name); // Popups \"Matias\"\n    alert(instance.secondName); // Popups \"Fidemraizer\"\n    alert(instance.age); // Popups \"28\"\n    alert(instance.companyName); // Popups \"ACME\"\n    alert(instance.salary); // Popups \"99999\"\n\n<h4 id=\"class-basecallsderived\">3.2.3 A base class member calls the most specialized implementation</h4> \n([Back to index](#index))\n\nSometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.\n\nFor example, a parent class `Polygon` overrides the default JavaScript `toString()` method in order to calculate the polygon area and\nreturn it as a string. That is, `Polygon` implements a `calcArea` method. Now `Square` inherits `Polygon` and overrides the `calcArea`\nmethod and performs the whole area calculation. The `Square` class will now need to override the base `toString()` `Polygon`'s method in order to\nshow the area.\n\nIn jOOPL, the most derived or specialized member is accessed through the special class field `this._.$derived`. \n\nHere is a sample of the above explanation:\n\n    $namespace.register(\"test\", function() {\n        this.declareClass(\"Polygon\", {\n            members: {\n                calcArea: function() {\n                    // A generic polygon will not know how to calculate the area. The\n                    // derived classes will do it!\n                },\n\n                toString: function() {\n                    // See how calcArea() from the most derived class is accessed:\n                    return \"The area of this polygon is: '\" + this._.derived.calcArea(); + \"'\";\n                }\n            }\n        });\n\n        this.declareClass(\"Square\", {\n            inherits: Polygon,\n            ctor: function(args) {\n                this._.x = args.x;\n                this._.y = args.y;\n            },\n            members: {\n                get x() {\n                    return this._.x;\n                },\n                get y() {\n                    return this._.y;\n                },\n\n                calcArea: function() {\n                    return this.x * this.y;\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function() {\n        var instance = new this.Square(20, 30);\n        \n        // This will alert \"The area of this polygon is: '600'\"\"\n        alert(instance.toString());\n    });\n\n<h3 id=\"class-istypeof\">3.3 The isTypeOf operator</h3> \nThe `isTypeOf` operator is a function/method present in any instance of a class defined by jOOPL. \n\nIt evaluates if an instance is of type of some given class. An interesting point is `isTypeOf` evaluates\neither if the instance is of type of the most derived class or it can check if an instance is of type of\na given base class (polymorphism).\n\nFor example, if there is a class `A`, `B` and `C`, and `C` inherits `B` and `B` inherits `A`:\n\n    var instanceOfC = new this.C();\n\n    var isType = instanceOfC.isTypeOf(this.A); // Evals true!\n    isType = instanceOfC.isTypeOf(this.B); // Evals true!\n    isType = instanceOfC.isTypeOf(this.C); // Evals true!\n\n    var instanceOfA = new this.A();\n\n    isType = instanceOfA.isTypeOf(this.C); // Evals false - A is not C!\n    isType = instanceOfA.isTypeOf(this.B); // Evals false - A is not B!\n    isType = instanceOfA.isTypeOf(this.A); // Evals true!"
+            "description": "## <a id=\"index\"></a> Index\n\n* 1.0\\. [Defining a class](#class-define)\n    * 1.1\\. [Fields](#class-fields)\n    * 1.2\\. [ctors](#class-ctors)\n    * 1.3\\. [Properties](#class-properties)\n    * 1.4\\. [Methods/Functions](#class-methods)\n    * 1.5\\. [Events](#class-events)\n    * 1.6\\. [Type property on classes and instances: type metadata](#type-metadata)\n* 2.0\\. [Creating instances of classes - the `new` operator](#class-instances)\n* 3.0\\. [Object-oriented programming on JavaScript with jOOPL](#class-oop)\n    * 3.1\\. [Class inheritance](#class-inheritance)\n    * 3.2\\. [Inheritance with polymorphism](#class-polymorphism)\n        * 3.2.1\\. [The `this.base` keyword](#class-base)\n        * 3.2.2\\. [The derived class ctor calls the parent's class ctor](#class-basector)\n        * 3.2.3\\. [A base class member calls the most specialized implementation](#class-basecallsderived)\n    * 3.3\\. [The isTypeOf operator](#class-istypeof)\n\n{{#crossLink \"Attribute\"}}**See also class attributes for declarative and metadata class programming**{{/crossLink}}\n\n<h3 id=\"class-define\">1. Defining a class</h3> \n([Back to index](#index))\n\nSince jOOPL 2.4, classes are always declared in a given namespace. Each namespace has a `declareClass(...)` function that will declare a class based\non given arguments as an object map. Basic parameters are:\n\n- **ctor** *(optional)*. The ctor of the class is a method called first when an instance of some class is created. If no constructor is provided, jOOPL automatically creates a default parameterless constructor.\n- **members** *(optional)*. An object containing the methods and properties for the whole class.\n\nA basic class may look like the next code listing:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            // ctor \n            ctor: function() {\n                this._.name = null;\n            },\n            members: {\n                get name() {\n                    return this._.name;\n                }\n\n                set name(value) {\n                    this._.name = value;\n                }\n\n                sayYourName: function() {\n                    alert(\"Hey, \" + this.name)\n                }\n            }\n        });\n    });\n\n\n<h4 id=\"class-fields\">1.1 Class fields</h4> \n([Back to index](#index))\n\nA class field is a variable declared in the class that can be accessed from any member (constructors, properties and methods).\n\nAny class constructor, property or method has a reserved variable called `_` accessible through `this._` on which class fields can be declared and\nmanipulated. For example, `this._.myName = \"Matias\";` will declare a class field called `myName` with a default value `Matías`.\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            ctor: function() {\n                // This is a class field:\n                this._.value = \"A string for the class field\";\n            }\n        });\n    });\n\n<h4 id=\"class-constructors\">1.2 Constructors</h4>\n([Back to index](#index))\n\nIn classes, the constructor is a method/function called once an instance of some class is created. That is, this is a good moment for initializing \nthe whole class.\n\nFor example, class constructors are the place to define class fields:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            // constructor \n            ctor: function() {\n                this._.myName = \"Matias\";\n            }\n        });\n    });\n\nIn instance, the class constructor has access to the already declared methods and properties:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            // constructor \n            ctor: function() {\n                this._.myName = \"Matias\";\n\n                // The \"someMethod()\" method can be called from the constructor!\n                this.initialize();\n            }\n\n            members: {\n                initialize: function() {\n                    alert(\"hello world called from the constructor!\")\n                }\n            }\n        });\n    });\n\n##### See also\n\n- [Call parent class constructor](#class-basector)\n\n<h4 id=\"class-properties\">1.3 Properties</h4>\n([Back to index](#index))\n\nAny class can declare properties. Apparently, a property looks like a variable by its usage, but it differs from variables on\nhow they are declared.\n\nProperties are the best way to encapsulate the access to private resources held by the class like class fields or calculated values. \n\nA property is composed by two possible parts (it can have both or only one of them)\n\n- **Getter**. It is a block like a function defining how a value is obtained.\n- **Setter**. It is a block like a function defining how to set a value.\n\nFor example, without properties, an object would look like the next code listing:\n\n    var myObject = {\n        name: \"Matias\",\n        age: 28\n    };\n\nAnd once the `myObject` variable holds the new object, both `name` and `age` can be altered:\n\n    myObject.name = \"John\";\n    myObject.age = 33;\n\nBut what happens if there is a need to constraint the `name` and `age` variables? A primitive solution would be:\n\n    var possibleName = \"John\";\n    var possibleAge = 33;\n\n    if(possibleName != \"John\") {\n        myObject.name = possibleName;\n    } else {\n        throw Error(\"Sorry, John, I do not like you!\")\n    }\n\n    if(possibleAge > 30) {\n        myObject.age = possibleAge;\n    } else {\n        throw Error(\"You are too young! Please try again in some years...\");\n    }\n\nThis is how the above code would be implemented using properties:\n\n    var myObject = {\n        // Some regular variables\n        _name: null,\n        _age: null,\n\n        // A getter for the _name variable:\n        get name() { \n            return this._name; \n        },\n        // A setter for the _name variable. The setter defines the validation logic!\n        set name(value) { \n            if(value != \"John\") {\n                this._name = value; \n            } else {\n                throw Error(\"Sorry, John, I do not like you!\")\n            }\n        },\n\n        // A getter for the _name variable:\n        get age() { \n            return this._age;\n        },\n        // A setter for the _name variable. The setter also defines the validation logic here!\n        set age(value) {\n            if(value > 30) {\n                myObject.age = value;\n            } else {\n                throw Error(\"You are too young! Please try again in some years...\");\n            }\n        }\n    }\n\nNow, if some code tries to assign \"John\" or an age lesser than 30, the properties setters will throw the error, but this time\nthe validation logic is encapsulated:\n\n    myObject.name = \"John\" // ERROR\n    myObject.name = \"Matias\" // OK\n\n    myObject.age = 28 // ERROR\n    myObject.age = 33 // OK\n\njOOPL fully supports ECMA-Script 5 properties like the described before:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            ctor: function() {\n                // Define a class field for later provide access to it through a property getter and setter\n                this._.name = null;\n            },\n            members: {\n                // Gets the value held by the this._.name class field:\n                get name() {\n                    return this._.name;\n                },\n\n                // Sets a new value to the this._.name class field:\n                set name(value) {\n                    this._.name = value;\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.A();\n\n        // Set the 'name' property value\n        a.name = \"Matias\";\n\n        // Gets the name property value\n        alert(a.name); // Alerts \"Matias\"\n    });\n\n<h4 id=\"class-methods\">1.4  Methods/Functions</h4>\n([Back to index](#index))\n\nMethods (*also known as functions*) are the behavior of classes. They are the actions that can be performed by the class. Examples\nof methods can be:\n\n- do\n- create\n- notify\n- write\n- build\n- ...\n\nClass methods are defined as regular JavaScript functions and as part of the `members` in a class definition:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            members: {\n                do: function() {\n                    return \"do what?\";\n                }\n            }\n        });\n    });\n\n##### See also\n\n- [Polymorphism](#class-polymorphism)\n\n<h4 id=\"class-events\">1.5 Events</h4> \n([Back to index](#index))\n\n##### Events glossary\n\n- **Event**. It is an observable action. Classes defining them or others can subscribe to events and react to them.\n- **Event handler**. It is a function assigned to the event which is called when the event happens.\n\nEvents are an out-of-the-box feature that enables any class to create observable objects.\n\nAn observable object is a one emitting notifications when something happens within it. For example, an event may be:\n\n+ When some button is clicked.\n+ An asynchronous operation completed.\n+ An item was added to a list.\n\nEvents are class members like properties and methods, but they are special in terms of how they are declared. For example, \nif a class needs to implement an event to notify to others that it said \"hello world\", an event \"saying\" would be declared this way:\n\n    $namespace.using(\"test\", function(test) {\n       test.declareClass(\"A\", {\n            members: {\n                events: [\"saying\"]\n            }\n        });\n    });\n\nThe above code declares an event \"saying\". Events are declared as an array of identifiers (names) as value of the `events` special member. Once\nan event is declared, the next step is triggering/raising/firing it somewhere in the whole class:\n    \n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            members: {\n                events: [\"saying\"],\n\n                helloWorld: function() {\n                    // This is triggering the event. jOOPL has created an special function called\n                    // 'saying' which can receive an object of arguments so the object suscribed to\n                    // the class event will receive the whole argument 'text'\n                    this.saying.raise({ args: { text: \"yes, the object is about to say 'hello world'!\"} });\n\n                    // The event 'saying' notified that the class A was about saying something\n                    // and, finally, now it says \"hello world!\" using an alert.\n                    alert(\"hello world!\")\n                }\n            }\n        });\n    });\n\nFinally, the last step is listening for the `saying` event. For that matter, an instance of A is created and the code will set an event handler in order\nto do an action when the `A` class instance says something:\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.A();\n\n        instance.saying.addEventListener(function(args) {\n            // The `args` input argument will hold the text set when the event was triggered\n            alert(\"The instance said: \" + args.text);\n        });\n    });\n\nOnce an event handler added to an event, it is possible to *unsuscribe* from it calling `removeEventListener(...)`.\n\nFor example:\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.A();\n\n        var handler = function(args) {\n        }\n\n        // This adds an event handler to the event\n        instance.saying.addEventListener(handler);\n\n        // Setting the same handler again removes it from the event.\n        instance.saying.removeEventListener(handler);\n    });\n\n\n<h4 id=\"type-metadata\">1.6 Type property on classes and instances: type metadata</h4> \n([Back to index](#index))\n\nSince 2.4 version of jOOPL, any class and instance has a built-in property called `type`. This property gives access to both class or instance\ntype metadata like its namespace path, name, name with namespace path, ...\n\nFor example, declaring a class like follows:\n\n    $namespace.using(\"joopl.sample\", function(test) {\n        test.declareClass(\"A\");\n        \n        // Getting class name from type property of A class\n        var className = test.A.type.name;\n\n        // Gettings class name from type property of A instance\n        var instance = new test.A();\n        className = instance.type.name;\n    });\n\nFurther details can be found on <a href=\"joopl.Type.html\" target=\"_self\">`Type` class documentation</a>.\n\n<h3 id=\"class-instances\">2. Creating instances of classes</h3>\n([Back to index](#index))\n\nOnce a class is defined using the namespace's `declareClass(...)` function, an instance of the class must be created in order to use it. \n\nIn jOOPL and JavaScript, a class is a standard constructor function and instances can be created using also the standard\n`new` operator:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n            members: {\n                someMethod: function() {\n                    alert(\"hello world\");\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function(test) {\n        // Creating an instance of A:\n        var instance = new test.A();\n\n        // Now the instance variable - a reference to an object of type A - \n        // has its instance methods available to be called:\n        instance.someMethod();\n    });\n\n<h3 id=\"class-oop\">3. Object-oriented programming on JavaScript using jOOPL</h3> \n([Back to index](#index))\n\nDefining classes and creating instances of it using the namespace's `declareClass(...)` function and `new` operator respectively are just the most basic features of jOOPL.\n\njOOPL introduces an state-of-the-art and powerful class inheritance and polymoprhism enabling JavaScript language to \nwork with true object-oriented programming:\n\n- **Inheritance**. Classes can inherit from others in order to share their behaviors, properties and events.\n- **Polymorphism**. Class methods can be overriden by derived classes (ones inheriting a base class), keep the inherited members signature but alter their implementation.\n- **Encapsulation**. Classes expose their behavior thanks to their members, and the implementation details are hidden to the code consuming a class.\n\n<h4 id=\"class-inheritance\">3.1 Class inheritance</h4>\n([Back to index](#index))\n\nInheritance is one of the most important concepts in object-oriented programming. That is, some class can derive from other.\n\nThe namespace's `declareClass(...)` function supports an additional and optional parameter called `inherits` which specifies that the declaring class inherits another class.\n\nA class `A` may implement some methods and properties and a class `B` can inherit `A` and it will not need to implement them as all members from `A`\nare already available as members of `B`:\n\n    $namespace.using(\"test\", function(test) {\n        // Defining a class A having a method \"do()\"\n        test.declareClass(\"A\", {\n            members: {\n                do: function() {\n                    // Do some stuff\n                }\n            }\n        });\n\n        // Class B inherits A\n        test.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.B();\n\n        // The B instance can invoke the do() function \n        // inherited from A\n        instance.do();\n    });\n\njOOPL supports single inheritance. It means that a class can derive another class but not from multiple classes (*no multi-inheritance*), but any\nclass can inherit other. There is no limitation of how many levels of inheritance can implement an hierarchy. \n\nAn important detail is that, if a class does not directly inherit a class (there is no `inherit` input parameter for namespace's `declareClass(...)` function), it will \nimplicitly inherit the top-most class `Object` implemented as a plain JavaScript prototype, which provides basic methods and properties that any class \nwill contain. At the end of the day, **any class inherits Object**.\n\n<h4 id=\"class-polymorphism\">3.2 Inheritance with polymorphism </h4>\n([Back to index](#index))\n\nPolymorphism is a key feature and it is tied to inheritance: it is the ability of an inherited member - methods and properties - to override the base\nimplementation found in the parent class. \n\nFor example, there is a class called `Salutation` which implements a method/function `sayHello` and it returns **\"hello world\"**, and there is a derived class\n`SpecializedSalutation` that inherits `Salutation` class, the whole derived class can override the `sayHello` method and make it say **\"Hello, world!\"**:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"Salutator\", {\n            members: {\n                sayHello: function() {\n                    return \"hello world\"\n                }\n            }\n        });\n\n        test.declareClass(\"SpecializedSalutator\", {\n            inherits: test.Salutator,\n            members: {\n                // Overrides the parent class sayHello implementation\n                sayHello: function() {\n                    return \"Hello, world!\";\n                }\n            }\n        });\n    });\n    \n    $namespace.using(\"test\", function(test) {\n        var instance = new test.SpecializedSalutator();\n        var text = instance.sayHello();\n\n        // This will alert \"Hello, world!\" since the class has overriden the default implementation\n        // which was returning \"hello world\"\n        alert(text); \n    });\n\n<h4 id=\"class-base\">3.2.1 The `this.base` keyword</h4>\n([Back to index](#index))\n\nAny method/function or property is overridable. But what makes polymorphism even more powerful is the chance to call the base implementation from the\noverriden member.\n\nThe overriden members may or may not call the parent class member implementation using the `this.base` keyword. \n\nFor example, there is a class `Calculator` having a method `add`, and a specialized calculator called `UnsignedCalculator` which makes any addition an absolute number result,\nthe code would look like this:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"Calculator\", {\n            members: {\n                add: function(num1, num2) {\n                    // It simply adds num2 to num1\n                    return num1 + num2;\n                }\n            }\n        });\n\n        test.declareClass(\"UnsignedCalculator\", {\n            members: {\n                add: function(num1, num2) {\n                    // This is calling the \"add\"'s parent class implementation\n                    var result = this.base.add(num1, num2);\n\n                    // Now the result from calling the base implementation of this method\n                    // is converted to an unsigned number\n                    return Math.abs(result);\n                }\n            }\n        });\n    });\n\n<h4 id=\"class-basector\">3.2.2 The derived class constructor calls the parent's class constructor</h4> \n([Back to index](#index))\n\nEven class constructors can call their parent class constructor. This is extremely useful if the parent class or another class in the same\nhierarchy requires some construction-time initialization:\n\n    $namespace.using(\"test\", function(test) {\n        // The top-most parent class Person defines basic data\n        // and provides getter and setter properties in order to\n        // get or set the whole contained data.\n        //\n        // The constructor receives as arguments the default data.\n        this.declareClass(\"Person\", {\n            ctor: function(args) {\n                this._.name = args.name;\n                this._.secondName = args.secondName;\n                this._.age = args.age;\n            },\n            members: {\n                get name() {\n                    return this._.name;\n                },\n                set name(value) {\n                    this._.name = value;\n                },\n\n                get secondName() {\n                    return this._.secondName;\n                },\n                set secondName(value) {\n                    this._.secondName = value;\n                }\n\n                get age(){\n                    return this._.age;\n                },\n                set age(value) {\n                    this._.age = value;\n                }\n            }\n        });\n\n        // The Employee class inherits Person and adds\n        // more data. The Employee constructor both defines\n        // new class fields and calls the Person's ctor\n        // by invoking this.base.ctor(args), thus the base constructor\n        // will receive the expected arguments.\n        test.declareClass(\"Employee\", {\n           inherits: test.Person,\n           ctor: function(args) {\n                this.base.ctor(args);\n\n                this._.companyName = args.companyName;\n                this._.salary = args.salary;\n           } \n        });\n    });\n\n    // Now this is creating an instance of Employee. As the Employee ctor\n    // calls its base Person class' ctor, it will be correctly initialized \n    // with the data passed as ctor arguments:\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.Employee({\n            name: \"Matias\",\n            secondName: \"Fidemraizer\",\n            age: 28,\n            companyName: \"ACME\",\n            salary: 99999\n        });\n    });\n\n    alert(instance.name); // Popups \"Matias\"\n    alert(instance.secondName); // Popups \"Fidemraizer\"\n    alert(instance.age); // Popups \"28\"\n    alert(instance.companyName); // Popups \"ACME\"\n    alert(instance.salary); // Popups \"99999\"\n\n<h4 id=\"class-basecallsderived\">3.2.3 A base class member calls the most specialized implementation</h4> \n([Back to index](#index))\n\nSometimes it is needed that some method or property in the base class may able to call some most specialized member implementation.\n\nFor example, a parent class `Polygon` overrides the default JavaScript `toString()` method in order to calculate the polygon area and\nreturn it as a string. That is, `Polygon` implements a `calcArea` method. Now `Square` inherits `Polygon` and overrides the `calcArea`\nmethod and performs the whole area calculation. The `Square` class will now need to override the base `toString()` `Polygon`'s method in order to\nshow the area.\n\nIn jOOPL, the most derived or specialized member is accessed through the special class field `this._.$derived`. \n\nHere is a sample of the above explanation:\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"Polygon\", {\n            members: {\n                calcArea: function() {\n                    // A generic polygon will not know how to calculate the area. The\n                    // derived classes will do it!\n                },\n\n                toString: function() {\n                    // See how calcArea() from the most derived class is accessed:\n                    return \"The area of this polygon is: '\" + this.derived.calcArea(); + \"'\";\n                }\n            }\n        });\n\n        test.declareClass(\"Square\", {\n            inherits: test.Polygon,\n            ctor: function(args) {\n                this._.x = args.x;\n                this._.y = args.y;\n            },\n            members: {\n                get x() {\n                    return this._.x;\n                },\n                get y() {\n                    return this._.y;\n                },\n\n                calcArea: function() {\n                    return this.x * this.y;\n                }\n            }\n        });\n    });\n\n    $namespace.using(\"test\", function(test) {\n        var instance = new test.Square(20, 30);\n        \n        // This will alert \"The area of this polygon is: '600'\"\"\n        alert(instance.toString());\n    });\n\n<h3 id=\"class-istypeof\">3.3 The isTypeOf operator</h3> \nThe `isTypeOf` operator is a function/method present in any instance of a class defined by jOOPL. \n\nIt evaluates if an instance is of type of some given class. An interesting point is `isTypeOf` evaluates\neither if the instance is of type of the most derived class or it can check if an instance is of type of\na given base class (polymorphism).\n\nFor example, if there is a class `A`, `B` and `C`, and `C` inherits `B` and `B` inherits `A`:\n\n    var instanceOfC = new test.C();\n\n    var isType = instanceOfC.isTypeOf(test.A); // Evals true!\n    isType = instanceOfC.isTypeOf(test.B); // Evals true!\n    isType = instanceOfC.isTypeOf(test.C); // Evals true!\n\n    var instanceOfA = new test.A();\n\n    isType = instanceOfA.isTypeOf(test.C); // Evals false - A is not C!\n    isType = instanceOfA.isTypeOf(test.B); // Evals false - A is not B!\n    isType = instanceOfA.isTypeOf(test.A); // Evals true!"
         },
-        "Declaring enumerations with jOOPL": {
-            "name": "Declaring enumerations with jOOPL",
-            "shortname": "Declaring enumerations with jOOPL",
+        "Enumerations": {
+            "name": "Enumerations",
+            "shortname": "Enumerations",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "joopl.doc.defineEnums.js",
+            "file": "src\\joopl.doc.defineEnums.js",
             "line": 1,
-            "description": "<h2 id=\"index\">Index</h2>\n\nIf you are looking for code samples, <a href=\"../test/enum.test.html\" target=\"_self\">please see enumeration tests' and their source code.</a>\n\n* 1.0\\. [What is an enumeration?](#enum-definition)\n* 2.0\\. [What is the goal of enumerations](#enum-goal)\n* 3.0\\. [Enumerations how-to](#enum-howto)\n    * 3.1\\. [When and how to use enumerations](#enum-usage)\n    * 3.2\\. [Enumeration values](#enum-values)\n        * 3.2.1\\. [Enumeration flags](#enum-flags)\n\n<h3 id=\"enum-definition\">1.0 What is an enumeration?</h3>\n<a href=\"#index\">Back to index</a>\n\nAn enumeration is an *special class* of constants. \n\n<h3 id=\"enum-goal\">2.0 What is the goal of enumerations?</h3>\n<a href=\"#index\">Back to index</a>\n\nIn regular JavaScript, when some code needs to identify states uses integers (`Number`):\n    \n    // \"1\" would mean that something is open (for example, an HTTP connection)\n    if(someVar == 1) {\n        // Do stuff\n    }\n\njOOPL introduces true enumerations and the above code could be turned into:\n\n    $namespace.register(\"joopl.enumerations\", function() {\n        this.declareEnum(\"HttpState\", {\n            closed: 0,\n            open: 1\n        });\n\n        var someVar = this.HttpState.open;\n\n        if(someVar == this.HttpState.open) {\n            // Do stuff\n        }\n    });\n\nThe above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may\nincrease code readibility, since developers will not need to check documentation in order to know what `0` or `1` states\nmean.\n\n<h3 id=\"enum-howto\">3. Enumerations how-to</h3>\n<a href=\"#index\">Back to index</a>\n\nEnumerations are created using the `$enumdef` operator. The `$enumdef` operator is a ctor accepting an object\ndefining one or more constants:\n\n    $namespace.register(\"mynamespace\", function() {\n        this.declareEnum(\"State\", {\n            open: 0,\n            closed: 1,\n            disconnected: 2,\n            working: 3\n        });\n    });\n\nThe given constants **must be always numeric** and the enumeration must contain only numeric properties.\n\n<h4 id=\"enum-usage\">3.1 When and how to use enumerations</h4>\n<a href=\"#index\">Back to index</a>\n\nEnumerations are required when some code can define a closed set of values that may not change overtime.\n\nFor example, some code may have a class with a method accepting a limited number of HTTP verbs:\n\n    $namespace.register(\"mynamspace\", function() {\n        this.declareEnum(\"HttpVerb\", {\n            get: 0,\n            post: 1,\n            put : 2\n        });\n\n        var scope = this;\n\n        this.declareClass(\"MyClass\", {\n            members: {\n                // The @verb argument will only support verbs of the HttpVerb enumeration\n                doRequest: function(verb, url, args) {\n                    switch(verb) {\n                        case scope.HttpVerb.get: \n                            // Perform the HTTP GET request\n                            break;\n\n                        case scope.HttpVerb.post:\n                            // Perform the HTTP POST request\n                            break;\n\n                        default: \n                            throw Error(\"Only HTTP POST and GET are supported!\");\n                    }\n\n                }\n            }\n        });\n    });\n\n<h4 id=\"enum-values\">3.2 Enumeration values</h4>\n<a href=\"#index\">Back to index</a>\n\nAn enumeration value is an instance of standard ECMA-Script `Number` object (the primitive `Number` type wrapper). jOOPL inherits `Number` and\nany enumeration value has also a reserved property `enum` ( see {{#crossLink \"EnumValue\"}}{{/crossLink}} to explore available methods and properties of\nan enumeration value).\n\nThe `enum` property represents a set of common operations for enum values.\n\n<h5 id=\"enum-flags\">3.2.1 Enumeration flags</h5>\n<a href=\"#index\">Back to index</a>\n\nSometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:\n\n    var state = this.State.open;\n\njOOPL provides support for *flags* (combination of more than an enumeration values) using bit-wise operators like `OR` and `AND` in order to create enumeration \nvalues containing more than an enumeration value.\n\nFor example, taking this enumeration as example:\n\n    $namespace.register(\"joopl.enumerations\", function() {\n        this.declareEnum(\"States\", {\n            open: 0,\n            closed: 1,\n            working: 2\n        });\n    });\n\nSome code may need to express that something is `open` but it is also `working`. This is achieved by using the `OR` operator:\n\n    var openAndWorking = this.State.open.enum.or(State.working);\n\nAnd, finally, if some other code needs to evaluate that the enumeration value includes `open` (see `EnumValue.`{{#crossLink \"EnumValue/hasFlag:method\"}}{{/crossLink}}\nmethod for further details):\n\n    if(openAndWorking.enum.hasFlag(this.State.open)) {\n        // Do stuff if it is open already\n    }"
+            "description": "<h2 id=\"index\">Index</h2>\n\nIf you are looking for code samples, <a href=\"../test/enum.test.html\" target=\"_self\">please see enumeration tests' and their source code.</a>\n\n* 1.0\\. [What is an enumeration?](#enum-definition)\n* 2.0\\. [What is the goal of enumerations](#enum-goal)\n* 3.0\\. [Enumerations how-to](#enum-howto)\n    * 3.1\\. [When and how to use enumerations](#enum-usage)\n    * 3.2\\. [Enumeration values](#enum-values)\n        * 3.2.1\\. [Enumeration flags](#enum-flags)\n\n<h3 id=\"enum-definition\">1.0 What is an enumeration?</h3>\n<a href=\"#index\">Back to index</a>\n\nAn enumeration is an *special class* of constants. \n\n<h3 id=\"enum-goal\">2.0 What is the goal of enumerations?</h3>\n<a href=\"#index\">Back to index</a>\n\nIn regular JavaScript, when some code needs to identify states uses integers (`Number`):\n    \n    // \"1\" would mean that something is open (for example, an HTTP connection)\n    if(someVar == 1) {\n        // Do stuff\n    }\n\njOOPL introduces true enumerations and the above code could be turned into:\n\n    $namespace.using(\"joopl.enumerations\", function(enumerations) {\n        enumerations.declareEnum(\"HttpState\", {\n            closed: 0,\n            open: 1\n        });\n\n        var someVar = enumerations.HttpState.open;\n\n        if(someVar == enumerations.HttpState.open) {\n            // Do stuff\n        }\n    });\n\nThe above code listing demonstrates how enumerations can turn states and kinds into a more verbose code which may\nincrease code readibility, since developers will not need to check documentation in order to know what `0` or `1` states\nmean.\n\n<h3 id=\"enum-howto\">3. Enumerations how-to</h3>\n<a href=\"#index\">Back to index</a>\n\nEnumerations are created using the `$enumdef` operator. The `$enumdef` operator is a ctor accepting an object\ndefining one or more constants:\n\n    $namespace.using(\"mynamespace\", function(mynamespace) {\n        mynamespace.declareEnum(\"State\", {\n            open: 0,\n            closed: 1,\n            disconnected: 2,\n            working: 3\n        });\n    });\n\nThe given constants **must be always numeric** and the enumeration must contain only numeric properties.\n\n<h4 id=\"enum-usage\">3.1 When and how to use enumerations</h4>\n<a href=\"#index\">Back to index</a>\n\nEnumerations are required when some code can define a closed set of values that may not change overtime.\n\nFor example, some code may have a class with a method accepting a limited number of HTTP verbs:\n\n    $namespace.using(\"mynamspace\", function(mynamspace) {\n        mynamspace.declareEnum(\"HttpVerb\", {\n            get: 0,\n            post: 1,\n            put : 2\n        });\n\n        mynamspace.declareClass(\"MyClass\", {\n            members: {\n                // The @verb argument will only support verbs of the HttpVerb enumeration\n                doRequest: function(verb, url, args) {\n                    switch(verb) {\n                        case mynamspace.HttpVerb.get: \n                            // Perform the HTTP GET request\n                            break;\n\n                        case mynamspace.HttpVerb.post:\n                            // Perform the HTTP POST request\n                            break;\n\n                        default: \n                            throw Error(\"Only HTTP POST and GET are supported!\");\n                    }\n\n                }\n            }\n        });\n    });\n\n<h4 id=\"enum-values\">3.2 Enumeration values</h4>\n<a href=\"#index\">Back to index</a>\n\nAn enumeration value is an instance of standard ECMA-Script `Number` object (the primitive `Number` type wrapper). jOOPL inherits `Number` and\nany enumeration value has also a reserved property `enum` ( see {{#crossLink \"EnumValue\"}}{{/crossLink}} to explore available methods and properties of\nan enumeration value).\n\nThe `enum` property represents a set of common operations for enum values.\n\n<h5 id=\"enum-flags\">3.2.1 Enumeration flags</h5>\n<a href=\"#index\">Back to index</a>\n\nSometimes enumeration values should support more than a possible state. Using regular enumerations ends in single values:\n\n    var state = mynamspace.State.open;\n\njOOPL provides support for *flags* (combination of more than an enumeration values) using bit-wise operators like `OR` and `AND` in order to create enumeration \nvalues containing more than an enumeration value.\n\nFor example, taking this enumeration as example:\n\n    $namespace.using(\"joopl.enumerations\", function(enumerations) {\n        enumerations.declareEnum(\"States\", {\n            open: 0,\n            closed: 1,\n            working: 2\n        });\n    });\n\nSome code may need to express that something is `open` but it is also `working`. This is achieved by using the `OR` operator:\n\n    var openAndWorking = enumerations.State.open.enum.or(State.working);\n\nAnd, finally, if some other code needs to evaluate that the enumeration value includes `open` (see `EnumValue.`{{#crossLink \"EnumValue/hasFlag:method\"}}{{/crossLink}}\nmethod for further details):\n\n    if(openAndWorking.enum.hasFlag(this.State.open)) {\n        // Do stuff if it is open already\n    }"
         },
         "Exception handling best practices": {
             "name": "Exception handling best practices",
@@ -98,9 +126,45 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "joopl.doc.exceptionHandling.js",
+            "file": "src\\joopl.doc.exceptionHandling.js",
             "line": 1,
-            "description": "## In JavaScript, any object is *throwable* as exception\n\nJavaScript, as any other modern language, supports exceptions and exception handling. What makes JavaScript different to other languages and runtimes is it\nis able to throw any object as an exception:\n\n    throw \"hello world\";\n    throw { text: \"hello world\" };\n    throw Error(\"hello world\");\n    throw 1;\n    throw false;\n\nObviously no one is looking to throw a text `as is` but throwing useful objects with data in order to allow proper exception handling.\n\n## Debuggers like Firebug don't like custom objects as exceptions\n\nA big limitation when throwing any kind of object instead of throwing the built-in `Error` one (i.e. `throw Error(\"exception message\")`) is that Web browser\ndebuggers like **Firebug** will be able to output the exception in their debugging console but it will not mark where it happened at all and the console log will not be *clickable*\nturning exception debugging into a big issue.\n\nFirebug will only output an exception to the console tab as *clickable* in order to go to the code line where it was thrown if the thrown exception is a\nbuild-in `Error` object.\n\nIn opposite to Firebug, Chrome and modern Internet Explorer JavaScript debuggers will log to console the exact line where the exception was thrown, either if \nit is an `Error`, `Error`-derived custom exception type or just an object.\n\n## jOOPL's approach to exception handling\n\nIn jOOPL there is a design decision and it is that exceptions will not be never inheriting `Error` prototype nor internal exceptions throw `Error` instances.\n\nFor now `Error` object has different behavior depending on the browser vendor and version, and there are known issues when playing with custom error types.\n\njOOPL introduces a build-in `Exception` class available in the out-of-the-box `joopl` namespace that combines the best of exception handling when using `Error` object\ninstances and true exception handling like one found in other software development platforms, languages and technologies. \n\n`Exception` class can be inherited with jOOPL inheritance approach.\n\nWhen either `Exception` or derived classes of itself are thrown using the `throw new` standard JavaScript syntax, jOOPL will extract useful debugging information and it will add this \nto the `Exception` instance (line number, stack trace, ...). \n\nIn addition, `Exception` and its derived classes have a default `toString` override which outputs not only the exception message but also the stack trace! See next picture for a sample:\n\n<img src=\"../assets/img/exception_output_sample.png\" alt=\"Exception output sample\" />\n\n## Handling exceptions by type\n\nExceptions may be caught using `try/catch` statements and they can be filtered by type by using the standard `instanceof` operator:\n\n    try {\n        throw new $global.joopl.ArgumentException({ argName: \"id\", reason: \"'id' is mandatory\" });\n    } catch(e) {\n        if(e instanceof $global.joopl.ArgumentException) {\n            // Do stuff here if thrown exception is an ArgumentException!\n        } else {\n            // Do other stuff if thrown exception is not an ArgumentException!\n        }\n    }\n\n\n<h2 id=\"global-exception-handler\">Global exception handler</h2>\n\nSince 2.4.x version jOOPL includes a global exception event which can be handled by multiple event handlers:\n\n    $namespace.using(\"joopl\", function() {\n        this.Environment.current.exceptionThrown.addEventListener(function(e) {\n            // \"e\" contains a property \"thrownException\":\n            if(e.thrownException instanceof this.ArgumentException) {\n                // Do stuff if thrown exception is an ArgumentException\n            }\n        });\n\n        // This throw will be listened by the event handler added in the Environment class singleton \"exceptionThrown\" event!\n        throw new this.ArgumentException({ argName: \"id\" });\n    });\n\n*Note: `Environment.exceptionThrown` event occurs when any exception is instantiated, even if it's not already thrown.*"
+            "description": "## In JavaScript, any object is *throwable* as exception\n\nJavaScript, as any other modern language, supports exceptions and exception handling. What makes JavaScript different to other languages and runtimes is it\nis able to throw any object as an exception:\n\n    throw \"hello world\";\n    throw { text: \"hello world\" };\n    throw Error(\"hello world\");\n    throw 1;\n    throw false;\n\nObviously no one is looking to throw a text `as is` but throwing useful objects with data in order to allow proper exception handling.\n\n## jOOPL's approach to exception handling\n\nIn jOOPL there is a design decision and it is that exceptions will not be never inheriting `Error` prototype nor internal exceptions throw `Error` instances.\n\nFor now `Error` object has different behavior depending on the browser vendor and version, and there are known issues when playing with custom error types.\n\njOOPL introduces a build-in `Exception` class available in the out-of-the-box `joopl` namespace that combines the best of exception handling when using `Error` object\ninstances and true exception handling like one found in other software development platforms, languages and technologies. \n\n`Exception` class can be inherited with jOOPL inheritance approach.\n\nWhen either `Exception` or derived classes of itself are thrown using the `throw new` standard JavaScript syntax, jOOPL will extract useful debugging information and it will add this \nto the `Exception` instance (line number, stack trace, ...). \n\nIn addition, `Exception` and its derived classes have a default `toString` override which outputs not only the exception message but also the stack trace! See next picture for a sample:\n\n<img src=\"../assets/img/exception_output_sample.png\" alt=\"Exception output sample\" />\n\n## Handling exceptions by type\n\nExceptions may be caught using `try/catch` statements and they can be filtered by type by using the standard `instanceof` operator:\n\n    try {\n        throw new $global.joopl.ArgumentException({ argName: \"id\", reason: \"'id' is mandatory\" });\n    } catch(e) {\n        if(e instanceof $global.joopl.ArgumentException) {\n            // Do stuff here if thrown exception is an ArgumentException!\n        } else {\n            // Do other stuff if thrown exception is not an ArgumentException!\n        }\n    }\n\n\n<h2 id=\"global-exception-handler\">Global exception handler</h2>\n\nSince 2.4.x version jOOPL includes a global exception event which can be handled by multiple event handlers:\n\n    $namespace.using(\"joopl\", function(joopl) {\n        joopl.Environment.current.exceptionThrown.addEventListener(function(e) {\n            // \"e\" contains a property \"thrownException\":\n            if(e.thrownException instanceof joopl.ArgumentException) {\n                // Do stuff if thrown exception is an ArgumentException\n            }\n        });\n\n        // This throw will be listened by the event handler added in the Environment class singleton \"exceptionThrown\" event!\n        throw new joopl.ArgumentException({ argName: \"id\" });\n    });\n\n*Note: `Environment.exceptionThrown` event occurs when any exception is instantiated, even if it's not already thrown.*"
+        },
+        "grunt-joopl-analyzer": {
+            "name": "grunt-joopl-analyzer",
+            "shortname": "grunt-joopl-analyzer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\joopl.doc.grunt-joopl-analyzer.js",
+            "line": 1,
+            "description": "<h2>Installation</h2>\n\njOOPL Analyzer's `joopl-analyzer` command may be integrated on a *GruntJS* build using the `grunt-joopl-analyzer` task.\n\nThe whole task is distributed as a NodeJS Package Manager (NPM) module and it can be installed using the following regular approach:\n\n    npm install joopl-analyzer\n    npm install grunt-joopl-analyzer\n\nThis should both install the whole task and `joopl-analyzer` dependencies in your local development directory.\n\n<h2>Configuring `Gruntfile.js`</h2>\n\nIn order to integrate `joopl-analyzer` task in your own `Gruntfile.js` and  be able to run it, `grunt-joopl-analyzer` should be imported and configured this way:\n\n    module.exports = function(grunt) {\n      grunt.initConfig({\n        pkg: grunt.file.readJSON('package.json'),\n\n        // joopl-analyzer specific settings\n        jooplanalyzer: {\n          all: {\n            baseDirectory: \"./scripts\",\n            watch: grunt.option(\"watch\") || false\n          }\n        }\n      });\n\n      grunt.loadNpmTasks(\"grunt-joopl-analyzer\");\n\n      // Default task(s).\n      grunt.registerTask('default', ['jooplanalyzer']);\n    };\n\n<h3>Available settings</h3>\n`jooplanalyzer` task supports the following settings:\n\n- `baseDirectory`. Configures the absolute or relative base directory from which the analyzer should start looking for code files.\n- `watch` (true/false). Holds the build open indefinitely and, after any change within the given base directory, automatically re-analyzes it.\n\n<h4>About `watch` setting</h4>\nAs shown in configuration sample, `watch` is `false` by default until option `watch` is given when running GruntJS from the command-line. In order to \nactivate `watch`, just run GruntJS as follows:\n\n    grunt jooplanalyzer --watch=true\n\nThis will hold the execution as expected and any change in the base directory and any of its own sub-directories will trigger `jooplanalyzer` GruntJS task."
+        },
+        "joopl-analyzer": {
+            "name": "joopl-analyzer",
+            "shortname": "joopl-analyzer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\joopl.doc.joopl-analyzer.js",
+            "line": 1,
+            "description": "<h3 id=\"index\">1.0 Index of contents</h3>\n\n- [2.0 Introduction](#introduction)\n- [3.0 How it works?](#how-it-works)\n- [4.0 System requirements](#requirements)\n- [5.0 Installing jOOPL Analyzer](#install)\n- [6.0 Configuring jOOPL Analyzer](#configuration)\n- [7.0 How to run jOOPL Analyzer](#run)\n    - [7.1 Executing `joopl-analyzer` command](#execute)\n- [8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`](#rules)\n    - [Rule I: One `$import.modules` per source code file](#rule-import)\n    - [Rule II: One `$namespace.using` per source code file](#rule-using)\n    - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)\n    - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)\n    - [Rule V: Object instantiation always with `new` operator](#rule-instantiation)\n    - [Rule VI: Modules which load themself don't include the code file from which are loaded](#rule-module-load-itself)\n- [9.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)\n- [10.0 Producing true modules](#modules)\n\n<hr />\n\n<h3 id=\"introduction\">2.0 Introduction</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a command-line tool which comprehensively analyzes source code deeply looking for namespaces, classes and enumerations, and automatically\ncreates a configuration that is used on run-time to load JavaScript file dependencies on the fly!\n\nFor example, there are three source code files where each file defines a class A, B, C. Now C inherits B and B inherits A:\n\n**A.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n\n        });\n    });\n\n**B.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n**C.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\nRunning jOOPL Analyzer command-line tool will result in a file called `moduleinfo.js` containing this code listing:\n\n    $import.mapMany({\n        \"test.A\": [\"A.js\"],\n        \"test.B\": [\"A.js\", \"B.js\"],\n        \"test.C\": [\"A.js\", \"B.js\", \"C.js\"]\n    });\n\nNote how jOOPL analyzer detects that class inheritance requires the file containing the base class declaration - *hopefully it is smart enough!* -.\n\nThis is just a simple sample of jOOPL Analyzer dependency detection!\n\n<hr />\n\n<h3 id=\"how-it-works\">3.0 How it works?</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nJavaScript files must be located in some diretory, but they can be distributed in subdirectories without a nesting limit. \n\njOOPL Analyzer is executed in the base directory where JavaScript files are located (i.e., usually Web sites have a `/scripts` directory) and looks for\nnamespaces, classes, enumerations and class instances across all files and identifies their physical dependencies. Once detection has ended, jOOPL Analyzer\ncreates a file called `moduleinfo.js` on the root of given base directory which will contain the whole phsyical file dependency configuration.\n\n<hr />\n\n<h3 id=\"requirements\">4.0 System requirements</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a NodeJS-based command-line tool. These are the minimum system requirements in order to work with jOOPL Analyzer:\n\n- NodeJS-compatible operating system (Windows, Mac, Linux...). Look for compatibiliy on <a href=\"http://nodejs.org\">NodeJS official site</a>.\n- JavaScript code written using at least jOOPL 2.5.\n\n<hr />\n\n<h3 id=\"install\">5.0 Installing jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nOnce NodeJS was installed in your operating system, next step is **globally** installing jOOPL Analyzer using NodeJS Package Manager (NPM):\n\n    npm install -g joopl-analyzer\n\nNow jOOPL Analyzer will be installed in your local system.\n\n<hr />\n\n<h3 id=\"configuration\">6.0 Configuring jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nCommand-line tool accepts configuration but there is no global configuration. Instead of a global configuration, there is an optional `joopl-analyzer.json` JSON\nconfiguration file that should be located in the base directory where the analyzer should start dependency detection.\n\n#### 6.1 Configuration scheme\n\n<a href=\"#index\">Back to index of contents</a>\n\nThe JSON configuration must be contained in a file called **joopl-analyzer.json** in the root directory of JavaScript files.\n\nThe whole file has the following configuration parameters:\n\n- **fileExcludes**. It is an array of strings where each string is either a relative path to a file or directory that should be excluded from the analyzing process.\n- **baseDirectoryOverrides**. Overrides base directory in the resulting **moduleinfo.js** file after JavaScript source code analysis. It is an array of objects, where each object has two properties\n> - *startsWith*, which defines the directory to override (for example, \"./scripts\")\n> - *replaceWith*, which defines the directory to replace from the source one.\n\n##### 6.1.1 About \"baseDirectoryOverrides\" configuration parameter\n\n<a href=\"#index\">Back to index of contents</a>\n\nThis parameter - *baseDirectoryOverrides* - is the ideal approach to change a local path to production one, even to a full HTTP URI:\n\n    {\n        \"baseDirectoryOverrides\": [\n            \"startsWith\": \"./scripts\",\n            \"replaceWith\": \"http://cdn.mywebsite.com/scripts\"\n        ]\n    }\n\n##### 6.1.2 Full configuration sample\n\n<a href=\"#index\">Back to index of contents</a>\n\n**joopl-analyzer.json**\n\n    {\n\n        \"baseDirectoryOverrides\": [\n            { \n                \"startsWith\": \"./scripts/foo\", \n                \"replaceWith\": \"./scripts/boo\" \n            },\n            { \n                \"startsWith\": \"./scripts/libs\", \n                \"replaceWith\": \"http://cdn.mysite.com/scripts/libs\" \n            }\n        ],\n\n        \"fileExcludes\": [\n            \"./scripts/jquery\",\n            \"./knockout.min.js\"\n        ]\n    }\n\n<hr />\n\n<h3 id=\"run\">7.0 How to run jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs jOOPL Analyzer package using NPM must be installed globally (NPM `-g` command-line argument), there is a `joopl-analyzer` command available\nfrom the operating system shell (bash, Windows command prompt CMD, Windows Powershell...).\n\nOnce `joopl-analyzer -h` or `joopl-analyzer --help` is executed, it writes down on the shell output the following documentation with basic details\nabout how to work with `joopl-analyzer` command-line interface:\n\n      Usage: cli.js [options]\n\n          Options:\n\n            -h, --help                 output usage information\n            -V, --version              output the version number\n            -w, --watch                Holds this CLI open and executes the analyzer whenever some file changes within the given base directory\n            -d, --directory <basedir>  Specifies the base directory from which the analyzer must start the search of JavaScript dependencies\n            -q, --quiet                Quiet mode: no console output\n            -n, --nologo               Hides jOOPL logo\n\n\n<h4 id=\"execute\">7.1 Executing `joopl-analyzer` command</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\n`joopl-analyzer` command is executed against a base directory from which the analyzer will do the whole code analysis. This base directory can be \ninferred from current shell working directory or by providing the `-d` / `--directory` argument. For example:\n\n    joopl-analyzer\n    joopl-analyzer -d ./scripts\n    joopl-analyzer -d C:\\myproject\\scripts\n    joopl-analyzer -d /home/myproject/scripts\n    joopl-analyzer --directory ./scripts\n    joopl-analyzer --directory C:\\myproject\\scripts\n    joopl-analyzer --directory /home/myproject/scripts\n\nWhen `joopl-analyzer` command execution finishes it creates a file called `moduleinfo.js` in the given base directory.\n\n<h3 id=\"rules\">8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL-based JavaScript code should follow some rules in order to allow `joopl-analyzer` command to work as expected.\n \nOtherwise, any code that does not follow the next rules will be still analyzed but with no result in terms of file dependency\ndetection. *Free-style JavaScript code is still possible*.\n\n<h4 id=\"rule-import\">Rule I: One `$import.modules` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$import.modules` statement per source code file.\n\n**SomeFile.js**\n    \n    // One $import.modules per code file. Callback function sorrounds the code\n    // that will be executed and which depends on loaded modules\n    $import.modules(\"module1\", \"module2\", function() {\n        // Do stuff here\n    });\n\n<h4 id=\"rule-using\">Rule II: One `$namespace.using` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$namespace.using` statement in the same source code file: just import all namespaces using a single \nstatement:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // More code here, but never another $namespace.using!!!\n    });\n\n<h4 id=\"rule-one-nsmember-per-file\">Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever declare more than a class or enumeration in the same source code file.\n\n<h4 id=\"rule-no-aliases\">Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever alias namespaces and their members like classes or enumerations:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // NOOOOOOO!!!!\n        var nsAlias = ns2;\n\n        // This would store ns1.A class constructor on a variable so it can be called \n        // as the next sentence to this variable declaration/initialization...\n        var A = ns1.A;\n\n        var instance = new A();\n         // OK, this would work on run-time, but joopl-analyzer will not be able to cover\n         // this use case. ALWAYS INSTANTIATE CLASSES FROM THEIR ORIGINAL NAMESPACE!!\n\n        var instance2 = new ns1.A(); // This is fine for joopl-analyzer!\n    });\n\n<h4 id=\"rule-instantiation\">Rule V: Object instantiation always with `new` operator</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever instantiate objects using `Object.create` or any other approach. Always use `new` operator.\n\n<h4 id=\"rule-module-load-itself\">Rule VI: Modules which load themself don't include the code file from which are loaded</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nSee the following sample\n\n    // SomeClass.js\n\n    $import.modules(\"joopl.test.MyClass\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            test.declareClass(\"SomeClass\");\n        });\n    });\n\nOnce `joopl-analyzer` gets executed, resulting `moduleinfo.js` file would contain - along with other detected classes and enumerations - \nthe following code:\n\n    // moduleinfo.js\n\n    $import.mapyMany({\n        // ... other detected members\n\n        \"joopl.test.MyClass\": [] // It's empty!!\n    });\n\nWhen a code file imports itself as a module, it's skipped. This rule works as expected and it is extremely important because it prevents\nthe whole code file from being loaded twice!\n\n<hr />\n\n<h3 id=\"using-moduleinfo\">9.0 Using `moduleinfo.js` resulting file</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs explained in previous chapters, running `joopl-analyzer` command produces a file called `moduleinfo.js`. Also, as explained in \n[*Asynchronous dependency loading documentation*]($import.html), `moduleinfo.js` file\nmust be added on some HTML page just after jOOPL `<script>` tag. That is, detected JavaScript dependencies and their relations will be\nconfigured before `$import.modules` statements are executed.\n\n<hr />\n\n<h3 id=\"modules\">10.0 Producing true modules with `joopl-analyzer`!</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer, as explained in previous chapters, looks for class/enumeration declarations and instantiations across a source code tree. \n\nIf all files are just class and enumeration declarations, `moduleinfo.js` produced file will contain which files are required by each declared\nmember.\n\nBut what if instead of producing modules as classes `joopl-analyzer` should produce true modules grouping the required files to load a set of\nclasses or even a full namespace? No problem since it is about creating a file which instantiates all namespace classes inside a *placeholder class*\nand `joopl-analyzer` will be smart enough to detect a module which will load more than a class!\n\nSee the following sample code:\n    \n    // A.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"A\", {});\n    });\n\n    // B.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n    // C.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\n    // SomeOtherClass.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"SomeOtherClass\", {});\n    });\n\n    // TestClasses.js\n    // Now we create a module called \"TestClasses\" using a \"placeholder class\".\n    // The whole class has a constructor that instantiates all classes from the namespace...\n\n    $import.modules(\"joopl.test.TestClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            this.declareClass(\"TestClasses\", {\n                ctor: function() {\n                    new test.A();\n                    new test.B();\n                    new test.C();\n                    new test.SomeOtherClass();\n                }\n            });\n        });\n    });\n\nAfter executing `joopl-analyzer` for this hypothetical source code tree, `moduleinfo.js` file will contain a module called\n**\"joopl.test.testClasses\"** containing JavaScript code files of the instantiated classes within the placeholder class constructor:\n\n    $import.mapMany({\n        \"joopl.test.TestClasses\": [\n            \"A.js\",\n            \"B.js\",\n            \"C.js\",\n            \"SomeOtherClass.js\",\n            \"testClasses.js\"\n        ]\n    });\n\nNote that the code file defining which classes or enumerations will contain the whole module *TestClasses* is not included in the \n`moduleinfo.js` file. [This is because of the **Rule VI: Modules which load themself don't include the code file from which are loaded**](#rule-module-load-itself). This\nis extremely useful because import/load the whole module using `$import.modules` will not load the placeholder class but just only the classes \ngroup by the module itself!\n\nGreat! **joopl.test.testClasses** module can be used to load 5 classes in order with less code:\n\n    // First of all, load the whole module\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Now joopl.test namespace will be correctly loaded\n            // and A, B, C and SomeOtherClass classes will be available!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.SomeOtherClass(); // This will work!\n        });\n    });\n\nAn important detail is above code instantiates classes in order (A, B, C...). This is not mandatory, since `joopl-analyzer` detects code file\nloading order:\n\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Instantiation order has been altered, but code files will be detected\n            // in the same order as previous sample!\n            var a = new test.SomeOtherClass(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n        });\n    });"
+        },
+        "$import": {
+            "name": "$import",
+            "shortname": "$import",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\joopl.doc.modules.js",
+            "line": 1,
+            "description": "<h2 id=\"index\">1.0 Index of contents</h2>\n\n- [2.0 Introduction to asynchronous dependency loading](#intro)\n- [3.0 What is a module in jOOPL?](#modules)\n- [4.0 Using `$import.mapMany`](#mapmany)\n- [5.0 Using `$import.modules` to asynchronously-loading JavaScript resources](#load-modules)\n- [6.0 Samples](#samples)\n\n<hr />\n\n<h2 id=\"intro\">2.0 Introduction to asynchronous dependency loading</h2>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL introduces asynchronous dependency loading thanks to the new `$import` object. That is, now jOOPL can load JavaScript files on the client-side.\n\nThis is a great advantage, since jOOPL can load many JavaScript files in parallel using modern Web browsers improvements on resource loading.\n\nFor those who are not familarized with asynchronous dependency loading, it means that JavaScript files are not imported using `<script>` elements in the\nHTML markup but they are loaded using AJAX under the hoods and parsed on the page asynchronously.\n\nAsynchronous dependency loading configuration and the resource loading itself is managed by the new `$import` object in the global JavaScript scope.\n\nWhile `$import` is absolutely decoupled from how JavaScript resources are loaded, current implementation internally relies on a small but powerful\nlibrary called *HeadJS* (http://headjs.com) for this purpose.   \n\n**For that reason, HeadJS should be added with a `<script>` tag on the HTML page always before `$import.modules` statements are executed.**\n\n<h2 id=\"modules\">3.0 What is a module in jOOPL?</h2>\n\n<a href=\"#index\">Back to index of contents</a>\n\nMost trending definition of JavaScript module is the *module pattern*:\n\n    var module = {};\n\n    (function(module) {\n        module.SomeObject = function() {};\n\n        module.SomeObject.prototype = {\n            doSomething: function() {\n                // Do some stuff\n            }\n        };\n    })(module);\n\nIn the above sample, a global scope variable called `module` is the input parameter of a self-invoked function which adds an object prototype to the\nwhole `module`. \n\nThis ensures that objects are encloused by the `module` and they are not added to the JavaScript global scope (in browsers, this is the `Window` object).\n\nIn jOOPL, instead of implementing this concept of module, since it incorporates namespacing and classes or enumerations, there is no need for the regular\n*module pattern*: \n\n    $namespace.using(\"mynamespace.other\", function(other) {\n        // Classes are never declared in the global scope but \n        // as namespace object member! \n        other.declareClass(\"Boo\");\n    });\n\nActually, the definition of module in jOOPL is just an identifier which represents a group of JavaScript resources/files:\n\n- **sampleModule** loads **fileA.js**, **fileB.js**, **fileN.js**...\n\nWhile loaded files by a module could be also non-jOOPL-based code files, it is expected to be JavaScript code developed using jOOPL and this means that\nas they will declare classes or enumerations inside namespaces, they will never introduce *garbage* in the global scope.\n\n<h2 id=\"mapmany\">4.0 Using `$import.mapMany`</h2>\n\n<a href=\"#index\">Back to index of contents</a>\n\nIn order to asynchronously load JavaScript resources, these should be configured before using the `$import.mapMany` function/method. \n\nThis function/method takes an object as parameter, where the object properties are module names and each property\nhas an array of string, where these strings are absolute or relative paths to a JavaScript resource in order:\n\n    $import.mapMany({\n        // Some module called 'module1' depends on the following 3 files...\n        \"module1\": [\n            \"/scripts/someFile.js\",\n            \"/scripts/someOtherFile.js\",\n            \"/scripts/yetAnotherFile.js\"\n        ],\n\n        \"module2\": [\n            \"/scripts/oneFile.js\",\n            \"/scripts/foo.js\"\n        ]\n    });\n\n> **NOTE:** *Manually configuring JavaScript dependencies may be a waste of time when project has dozens or hundreds of JavaScript source code files. That is why*\n> *jOOPL project has introduced **jOOPL Analyzer**, a command-line tool capable of reading source code files in order to automatically generate a massive*\n> *`$import.mapMany` statement reflecting dependencies of all declared classes within a source code tree! [**Learn more here!!**](joopl-analyzer.html)*\n\n`$import.mapMany` statements must be executed before `$import.modules` (see next chapter).\n\n<h2 id=\"load-modules\">5.0 Using `$import.modules` to asynchronously-loading JavaScript resources</h2>\n\n<a href=\"#index\">Back to index of contents</a>\n\nOnce JavaScript resources are configured using `$import.mapMany` statements, these resources are loaded by using `$import.modules` statement.\n\n`$import.modules` function/method takes as arguments previously-configured module names and a callback function that will be called once JavaScript resources\nhave been loaded and parsed on the Web browser:\n\n    $import.modules(\"module1\", \"module2\", function() {\n        // Do stuff here when both modules are already loaded!\n    }); \n\nIf HeadJS is not included in the Web page before `$import.modules` statements, then its callback is still executed but JavaScript modules will not be loaded.\n\nIn the other hand, if everything worked as expected, for the time that callback is invoked, specified modules will be already loaded and accessible by callback's\nJavaScript code.\n\n<h2 id=\"samples\">6.0 Samples</h2>\n\n<a href=\"#index\">Back to index of contents</a>\n\nCheck the following code sample on jsFiddle.net. It configures a basic module that will load both jQuery and KnockoutJS in order, and once they get loaded\nthe callback of `$import.modules` will check that both libraries were loaded successfully (click on *Result* tab to execute the whole code):\n\n<iframe width=\"100%\" height=\"250\" src=\"http://jsfiddle.net/mfidemraizer/JGHY5/embedded/\" allowfullscreen=\"allowfullscreen\" frameborder=\"0\"></iframe>"
         },
         "$namespace": {
             "name": "$namespace",
@@ -110,9 +174,9 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "joopl.doc.namespaces.js",
+            "file": "src\\joopl.doc.namespaces.js",
             "line": 1,
-            "description": "The `$namespace` keyword represents an static object holding methods/functions to manage namespaces.\n\n*If you are looking for code samples, <a href=\"../test/namespace.test.html\" target=\"_blank\">opening `$namespace` tests</a> and browsing their source code could be a good idea!*\n\n### What is a namespace?\n<p>A namespace is an identifier holding zero or more members like classes and enumerations. </p>\n\n<p>In object-oriented programming namespaces are a key and strong feature, since it prevents name collisions: for example, two or more classes can live \ninto the same code library, but since each one belongs to a different namespace, this can happen with no issues:</p>\n\n    MyNamespace.Class1\n    MyNamespace.MyOtherNamespace.Class1\n    MyNamespace.AnotherNamespace.Class1\n    YetAnotherNamespace.Class1\n\n<p>Namespaces <strong>must be defined using the <a href=\"#method_register\">$namespace.register</a></strong> method.</p>\n\n<p>Once some code requires to use these classes, it can access the right class by using the full namespace path:</p>\n\n    var instance = new $global.MyNamespace.Class1();\n    var instance2 = new $global.$MyNamespace.MyOtherNamespace.Class1();\n    var instance3 = new $global.$MyNamespace.AnotherNamespace.Class1();\n    var instance4 = new $global.YetAnotherNamespace.Class1();\n\n<p>This is very useful in order to let different JavaScript libraries define classes with exactly the same name but doing absolutely different things. Namespaces\nisolate each one.</p>\n\n### How to register a namespace\nThe second use case of the `$namespace.register` is the most powerful one: both register the whole namespace and add members to the\nit in the same operation and with a shorter syntax. \n\n`$namespace.register` supports a second parameter in addition to the namespace path called `scopedFunc`. It is a parameterless function that, when\nexecuted,  the `this` keyword in the scope of the function (i.e. *the function body*) will be the childest registered namespace. For example:\n\n    $namespace.register(\"joopl.samples\", function() {\n        // The this keyword now is the 'samples' namespace! \n        // That's great because there is no need to access to the full namespace path\n        // to work on adding members to it!\n        this.declareClass(\"A\", {\n            members: {\n                someMethod: function() {\n                    return \"hello world\";\n                }\n            }\n        })\n    });\n\n<h3 id=\"namespace-global\">The $global namespace</h3>\n<p>jOOPL has a top-most namespace called `$global`. Any namespace registered using the whole `$namespace.register(...)` method will be nested into the\n`$global` namespace.</p>\n<p>As JavaScript top-most object is the `Window` object and any variable or function defined in the global scope belongs to `Window`, this can lead to\nbad practices, because more than a JavaScript library may define the same variable names, functions and other constructs. jOOPL isolates any member\ndefined by itself in the `$global` namespace in order to prevent issues with other libraries.</p>\n\n###Importing one or more namespaces\n####1. Importing all members from some given namespaces into a variable\nIf the `$namespace.using` method is called only giving the first input parameter `paths` (*an arrary of strings where each index is a namespace path*).\n\nThat is, if a namespace has been previously registered this way in some JavaScript file:\n    $namespace.register(\"joopl.samples\");\n    $namespace.register(\"jooopl.samples.ui\");\n\n...`$namespace.using` would be used like this:\n\nvar importedMembers = $namespace.using([\"joopl.samples\", \"joopl.samples.ui\"]);\n\nThe `importedMembers` variable will hold *all* imported classes or enumerations within the `samples` and `ui` namespaces.\n\n####2. Importing all members in a scoped function\nThe second use case is importing members from some given namespaces into a scoped function:\n\n    $namespace.register(\"joopl.samples\", function() {\n        this.declareClass(\"ClassA\", {\n            members: {\n                someMethod: function() {\n                }\n            }\n        });\n    });\n\n    // Somewhere in the same or other file...\n    $namespace.using([\"joopl.samples\", \"joopl.samples.ui\"], function() {\n        // The \"this\" keyword contains an object with all imported members from the both namespaces\n        var instance = new this.ClassA();\n    });\n\nIn addition, there is a variation: if the scoped function has a single input parameter, jOOPL will import all members into the whole input argument\nand the `this` keyword will hold the `$global` namespace object:\n\n    $namespace.using([\"joopl.samples\", \"joopl.samples.ui\"], function(scope) {\n        // The scope input argument will hold the imported members\n        var instance = new scope.ClassA();\n    });"
+            "description": "The `$namespace` keyword represents an static object holding methods/functions to manage namespaces.\n\n## What is a *namespace*?\n\nA namespace is a container which may have zero or more members. Valid namespace members are:\n- Classes\n- Enumerations\n\nNamespaces are a simple but yet powerful way of distinguishing two ore more classes or enumerations with the same identifier. \n\nFor example, maybe a library should need to define two classes called 'SomeClass'. If both 'SomeClass' classes are imported in the same scope, which one\nwould be the available one? Usually the last imported one, because it was the latest to be defined...\n\nAvoiding situation described above is as easy as just use namespacing. If both 'SomeClass' classes would be defined in different namespaces, and both\ncan be referenced with their namespace plus their own class name, there is no more naming collisions! See example bellow:\n\n    namespaceA.SomeClass\n    namespaceB.SomeClass\n    \n    // They are both called with the same identifier, but \n    // in different namespaces, thus\n    // they are different classes!\n    new namespaceA.SomeClass(); \n    new namespaceB.SomeClass(); \n\n## jOOPL namespacing\n\njOOPL has built-in namespacing. Namespaces can be created and/or imported by calling `$namespace.using` method/function:\n\n    // This registers and imports \"mynamespace\" namespace and \n    // puts a reference to the whole namespace as an argument of the \n    // callback function found as second argument of $namespace.using\n    $namespace.using(\"mynamespace\", function(mynamespace) {\n        \n    });\n\nAlso, jOOPL supports importing/registering more than a namespace at once:\n\n    $namespace.using(\"mynamespace\", \"mynamespace2\", \"mynamespace3\", function(mynamespace, mynamespace2, mynamespace3) {\n\n    });\n\n`$namespace.using` can import an unlimited number of namespaces. Each one is imported in the corresponding callback function argument and by order. That is, \njOOPL will not care about function argument name, _but a right naming scheme will enforce code readability_.\n\nAs described before, `$namespace.using` requires a mandatory callback function known as **namespace scope**.  In fact, it can be given as first, second or any\nargument of $namespace.using - order is not important, but again, _providing it as the last argument will enforce readability!_ -:\n\n    $namespace.using(function(mynamespace) { }, \"mynamespace\");\n    $namespace.using(\"mynamespace\", function(mynamespace, mynamespace2) {}, \"mynamespace2\");\n    $namespace.using(\"mynamespace\", \"mynamespace2\", function(mynamespace, mynamespace2) { });\n\n### Nested namespaces\n\nNested namespaces are possible and also recommended. Nesting namespaces allows a right segmentation of classes exposed by a software library.\n\nFor example, next code listing would import/register a nested namespace:\n\n    $namespace.using(\"mynamespace.nestedNamespace\", function(nestedNamespace) {\n\n    });\n\nIt is about creating dot-separated paths. \n\nWhen importing nested namespaces, classes from parent namespaces **are not imported**. An explicit *using* is required:\n\n    $namespace.using(\"mynamespace\", \"mynamespace.nestedNamespace\", function(mynamespace, nestedNamespace) {\n\n    });\n\n### Global namespace access\n\nOnce a namespace has been used somewhere, it is also available using a global path, or in other words a namespace and its members can be accessed directly:\n\n    $global.mynamespace.MyClass\n\nSometimes this is useful: when some code requires a single class from some namespace and it is enough rather than creating a namespace scope."
         },
         "joopl.Namespace": {
             "name": "joopl.Namespace",
@@ -123,8 +187,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 30,
+            "file": "src\\joopl.js",
+            "line": 27,
             "description": "Represents a namespace which can declare classes and enumerations, and provides metadata.",
             "is_constructor": 1
         },
@@ -137,8 +201,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 743,
+            "file": "src\\joopl.js",
+            "line": 753,
             "description": "Represents the base type of any class defined by jOOPL",
             "is_constructor": 1
         },
@@ -151,8 +215,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 790,
+            "file": "src\\joopl.js",
+            "line": 820,
             "description": "Represents type information and provides access to types' metadata.",
             "final": 1,
             "since": "2.3.0"
@@ -166,9 +230,9 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 902,
-            "description": "<h2 id=\"index\">Index</h2>\n\n* 1.0\\. [What is an attribute?](#attribute-definition)\n* 2.0\\. [How to implement and consume an attribute](#attribute-howto)\n    * 2.1\\. [Attributes with parameters](#attribute-params)\n\n<h2 id=\"attribute-definition\">1.0 What is an attribute?</h2>\n\nUsually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. \n\nIn some cases, classes require some descriptive information that may be useful by the consumers. \n\nFor example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. \n\nHow can an arbitrary class tell the environment \"*I will not work if the authenticated user is not an administrator*\"? **The answer is *attributes**.*\n\nAn attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.\n\nFinally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.\n\n<h2 id=\"attribute-howto\">2.0 How to implement and consume an attribute</h2>\n\nThe so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:\n\n    $namespace.register(\"myNamespace\", function() {\n        this.declareClass(\"RequiresAuthenticationAttribute\", {\n            inherits: $global.joopl.Attribute\n        });\n    });\n\nLater on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:\n\n    $namespace.register(\"myNamespace\", function() {\n        this.declareClass(\"MyClass\", {\n            attributes: [new this.RequiresAuthenticationAttribute()]\n        });\n    });\n\nFinally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:\n\n    $namespace.using(\"myNamespace\", function() {\n        if(this.MyClass.type.hasAttribute(this.RequiresAuthenticationAttribute)) {\n            // Do some stuff if MyClass has the whole attribute\n        } else {\n            throw Error(\"Sorry, this code will not execute classes if they do not require authentication...\");\n        }\n    });\n\n<h3 id=\"attribute-params\">2.1 Attributes with parameters</h3>\nSometimes using an attribute *as is* is not enough, because the attribute itself should contain data. \n\nFor example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?\n\n    $namespace.register(\"myNamespace\", function() {\n        this.declareClass(\"DefaultPropertyAttribute\", {\n            inherits: $global.joopl.Attribute,\n            ctor: function(args) {\n                this._.defaultPropertyName = args.defaultPropertyName;\n            },\n            members: {\n                get defaultPropertyName() { return this._.defaultPropertyName; }\n            }\n        });\n\n        this.declareClass(\"Person\", {\n            attributes: [new this.DefaultPropertyAttribute(\"nickname\")],\n            ctor: function() {\n                this._.firstName = null;\n                this._.surname = null;\n                this._.nickname = null;\n            }\n            members: {\n                get firstName() { return this._.firstName; },\n                set firstName(value) { this._.firstName = value; },\n\n                get surname() { return this._.surname; },\n                set surname(value) { this._.surname = value; },\n\n                get nickname() { return this._.nickname; },\n                set nickname(value) { this._.nickname = value; }\n            }\n        });\n    });\n\n\nNow, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:\n\n    $namespace.using(\"myNamespace\", function() {\n        \n        // The first step is creating a regular instance of Person\n        var person = new this.Person();\n        person.firstName = \"Matias\";\n        person.surname = \"Fidemraizer\";\n        person.nickname = \"mfidemraizer\";\n\n        // Secondly, this is checking if the Person class has the whole attribute\n        if(Person.type.hasAttribute(this.DefaultPropertyAttribute)) {\n            // Yes, it has the attribute!\n            //\n            // Then, the attribute instance is retrieved from the type information\n            var defaultProperty = Person.type.getAttribute(this.DefaultPropertyAttribute);\n\n            // Once the attribute is retrieved, the code can access the \"defaultPropertyName\" instance property\n            // of the DefaultPropertyAttribute\n            var defaultPropertyName = defaultProperty.defaultPropertyName;\n            \n            // Since any object is also an associative array (this is plain JavaScript!), \n            // the default property can be retrieved by using the \"defaultPropertyName\" variable\n            // as key of the array\n            var defaultPropertyValue = person[defaultPropertyName];\n\n            // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, \n            // it will be \"mfidemraizer\", because the Person class has the DefaultPropertyAttribute set to \"nickname\"!\n            var p = document.createElement(\"p\");\n            p.appendChild(document.createTextNode(defaultPropertyValue));\n            document.body.appendChild(p);\n        }\n    });",
+            "file": "src\\joopl.js",
+            "line": 932,
+            "description": "<h2 id=\"index\">Index</h2>\n\n* 1.0\\. [What is an attribute?](#attribute-definition)\n* 2.0\\. [How to implement and consume an attribute](#attribute-howto)\n    * 2.1\\. [Attributes with parameters](#attribute-params)\n\n<h2 id=\"attribute-definition\">1.0 What is an attribute?</h2>\n\nUsually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. \n\nIn some cases, classes require some descriptive information that may be useful by the consumers. \n\nFor example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. \n\nHow can an arbitrary class tell the environment \"*I will not work if the authenticated user is not an administrator*\"? **The answer is *attributes**.*\n\nAn attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.\n\nFinally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.\n\n<h2 id=\"attribute-howto\">2.0 How to implement and consume an attribute</h2>\n\nThe so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:\n\n    $namespace.using(\"joopl\", \"myNamespace\", function(joopl, myNamespace) {\n        myNamespace.declareClass(\"RequiresAuthenticationAttribute\", {\n            inherits: joopl.Attribute\n        });\n    });\n\nLater on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        myNamespace.declareClass(\"MyClass\", {\n            attributes: [new myNamespace.RequiresAuthenticationAttribute()]\n        });\n    });\n\nFinally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        if(myNamespace.MyClass.type.hasAttribute(myNamespace.RequiresAuthenticationAttribute)) {\n            // Do some stuff if MyClass has the whole attribute\n        } else {\n            throw Error(\"Sorry, this code will not execute classes if they do not require authentication...\");\n        }\n    });\n\n<h3 id=\"attribute-params\">2.1 Attributes with parameters</h3>\nSometimes using an attribute *as is* is not enough, because the attribute itself should contain data. \n\nFor example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?\n\n    $namespace.using(\"joopl\", \"myNamespace\", function(joopl, myNamespace) {\n        myNamespace.declareClass(\"DefaultPropertyAttribute\", {\n            inherits: oopl.Attribute,\n            ctor: function(args) {\n                this._.defaultPropertyName = args.defaultPropertyName;\n            },\n            members: {\n                get defaultPropertyName() { return this._.defaultPropertyName; }\n            }\n        });\n\n        myNamespace.declareClass(\"Person\", {\n            attributes: [new myNamespace.DefaultPropertyAttribute(\"nickname\")],\n            ctor: function() {\n                this._.firstName = null;\n                this._.surname = null;\n                this._.nickname = null;\n            }\n            members: {\n                get firstName() { return this._.firstName; },\n                set firstName(value) { this._.firstName = value; },\n\n                get surname() { return this._.surname; },\n                set surname(value) { this._.surname = value; },\n\n                get nickname() { return this._.nickname; },\n                set nickname(value) { this._.nickname = value; }\n            }\n        });\n    });\n\n\nNow, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        \n        // The first step is creating a regular instance of Person\n        var person = new myNamespace.Person();\n        person.firstName = \"Matias\";\n        person.surname = \"Fidemraizer\";\n        person.nickname = \"mfidemraizer\";\n\n        // Secondly, this is checking if the Person class has the whole attribute\n        if(Person.type.hasAttribute(myNamespace.DefaultPropertyAttribute)) {\n            // Yes, it has the attribute!\n            //\n            // Then, the attribute instance is retrieved from the type information\n            var defaultProperty = Person.type.getAttribute(myNamespace.DefaultPropertyAttribute);\n\n            // Once the attribute is retrieved, the code can access the \"defaultPropertyName\" instance property\n            // of the DefaultPropertyAttribute\n            var defaultPropertyName = defaultProperty.defaultPropertyName;\n            \n            // Since any object is also an associative array (this is plain JavaScript!), \n            // the default property can be retrieved by using the \"defaultPropertyName\" variable\n            // as key of the array\n            var defaultPropertyValue = person[defaultPropertyName];\n\n            // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, \n            // it will be \"mfidemraizer\", because the Person class has the DefaultPropertyAttribute set to \"nickname\"!\n            var p = document.createElement(\"p\");\n            p.appendChild(document.createTextNode(defaultPropertyValue));\n            document.body.appendChild(p);\n        }\n    });",
             "since": "2.3.0"
         },
         "joopl.EnumValue": {
@@ -180,9 +244,9 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1030,
-            "description": "Represents an enumeration value and provides access to common operations for the whole enumeration value.\n\nSee {{#crossLink \"$enumdef\"}}{{/crossLink}} to learn more about enumerations.",
+            "file": "src\\joopl.js",
+            "line": 1060,
+            "description": "Represents an enumeration value and provides access to common operations for the whole enumeration value.\n\nSee {{#crossLink \"Enumerations\"}}{{/crossLink}} to learn more about enumerations.",
             "final": 1,
             "since": "2.3.0"
         },
@@ -195,11 +259,55 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1107,
+            "file": "src\\joopl.js",
+            "line": 1148,
             "description": "Represents an utility class to work with enumerations.",
             "static": 1,
             "since": "2.3.0"
+        },
+        "joopl.Event": {
+            "name": "joopl.Event",
+            "shortname": "Event",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "joopl",
+            "file": "src\\joopl.js",
+            "line": 1222,
+            "description": "Represents a multi-cast event. \n\nAn event is an observable object which notifies multiple objects listening event raises.",
+            "final": 1,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "source",
+                    "description": "The object who will be raising this event",
+                    "type": "Object"
+                }
+            ]
+        },
+        "joopl.EventManager": {
+            "name": "joopl.EventManager",
+            "shortname": "EventManager",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "joopl",
+            "file": "src\\joopl.js",
+            "line": 1305,
+            "description": "Represents an event manager for some class supporting events.\n\nIt is capable of registering events and managing their life-cycle.",
+            "final": 1,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "source",
+                    "description": "The object who is associated with the event manager",
+                    "type": "Object"
+                }
+            ]
         },
         "joopl.Environment": {
             "name": "joopl.Environment",
@@ -210,8 +318,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1311,
+            "file": "src\\joopl.js",
+            "line": 1355,
             "description": "Represents a set of environmental values and operations",
             "final": 1
         },
@@ -224,8 +332,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1369,
+            "file": "src\\joopl.js",
+            "line": 1413,
             "description": "Represents the base class for any exception \n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "is_constructor": 1,
             "params": [
@@ -253,8 +361,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1483,
+            "file": "src\\joopl.js",
+            "line": 1526,
             "description": "Represents an exception that occurs when some method argument is missing or invalid\n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "extends": "joopl.Exception",
             "is_constructor": 1,
@@ -271,7 +379,7 @@
                 }
             ],
             "example": [
-                "\n    throw new Error(new $global.joopl.ArgumentException({ argName: \"someArgument\"}));"
+                "\n    throw new $global.joopl.ArgumentException({ argName: \"someArgument\"});"
             ]
         },
         "joopl.NotImplementedException": {
@@ -283,8 +391,8 @@
             "plugin_for": [],
             "extension_for": [],
             "namespace": "joopl",
-            "file": "joopl.js",
-            "line": 1526,
+            "file": "src\\joopl.js",
+            "line": 1569,
             "description": "Represents an exception that occurs when a class member is not implemented.\n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "extends": "joopl.Exception",
             "is_constructor": 1,
@@ -296,59 +404,37 @@
                 }
             ],
             "example": [
-                "\n    throw new Error(new $global.joopl.NotImplementedException({ memberName: \"someMethod\"}));"
+                "\n    throw new $global.joopl.NotImplementedException({ memberName: \"someMethod\"});"
             ]
         }
     },
     "classitems": [
         {
-            "file": "joopl.doc.namespaces.js",
-            "line": 99,
-            "description": "Registers a namespace.",
-            "itemtype": "method",
-            "name": "register",
-            "params": [
-                {
-                    "name": "path",
-                    "description": "A namespace path. For example, \"joopl.sample\" will register \"joopl\" and its child \"sample\".",
-                    "type": "String"
-                },
-                {
-                    "name": "scopedFunc",
-                    "description": "A parameterless function representing the scope where the `this` keyword is the childest registered namespace (for example, registering \"joopl.sample', the `this` keyword will be the *sample* namespace).",
-                    "type": "Function"
-                }
-            ],
-            "class": "$namespace"
-        },
-        {
-            "file": "joopl.doc.namespaces.js",
-            "line": 107,
-            "description": "Imports the members of given namespace path. \n\nThe `$namespace.using` method will not register a namespace if a given namespace path is not previously registered with `$namespace.register`.",
+            "file": "src\\joopl.doc.namespaces.js",
+            "line": 83,
+            "description": "Imports the members of a set of given namespace paths. If some or all paths do no exist, they will get automatically registered.",
             "itemtype": "method",
             "name": "using",
             "params": [
                 {
                     "name": "paths",
-                    "description": "An array of strings of the namespaces to import, or just a string with a single namespace path.",
-                    "type": "Array|string"
+                    "description": "A comma-separated list of string literals, where each one is a namespace path.",
+                    "type": "String"
                 },
                 {
                     "name": "scopedFunc",
-                    "description": "A function to create a namespace scope (optional)",
+                    "description": "A function to create a namespace scope. It must have as many arguments as imported namespaces.",
                     "type": "Function"
-                },
-                {
-                    "name": "scopeIsNs",
-                    "description": "USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)",
-                    "type": "Boolean"
                 }
+            ],
+            "example": [
+                "\n    $namespace.using(\"path1\", \"path1.ns1\", function(path1, ns1) {\n\n    });"
             ],
             "class": "$namespace"
         },
         {
-            "file": "joopl.js",
-            "line": 38,
+            "file": "src\\joopl.js",
+            "line": 35,
             "description": "Gets namespace name",
             "itemtype": "property",
             "name": "name",
@@ -356,8 +442,8 @@
             "class": "Namespace"
         },
         {
-            "file": "joopl.js",
-            "line": 54,
+            "file": "src\\joopl.js",
+            "line": 51,
             "description": "Gets namespace full namespace path",
             "itemtype": "property",
             "name": "fullName",
@@ -365,8 +451,8 @@
             "class": "Namespace"
         },
         {
-            "file": "joopl.js",
-            "line": 70,
+            "file": "src\\joopl.js",
+            "line": 67,
             "description": "Gets the parent namespace object",
             "itemtype": "property",
             "name": "parent",
@@ -374,8 +460,8 @@
             "class": "Namespace"
         },
         {
-            "file": "joopl.js",
-            "line": 86,
+            "file": "src\\joopl.js",
+            "line": 83,
             "description": "Declares a class inside the namespace (see <a href=\"define classes with joopl.html\" target=\"_self\">how to define classes</a>)",
             "itemtype": "method",
             "name": "declareClass",
@@ -394,73 +480,14 @@
             "class": "Namespace"
         },
         {
-            "file": "joopl.js",
-            "line": 495,
-            "description": "Aliases an existing namespace.",
-            "itemtype": "method",
-            "name": "alias",
-            "params": [
-                {
-                    "name": "namespace",
-                    "description": "The namespace to alias",
-                    "type": "Object"
-                },
-                {
-                    "name": "alias",
-                    "description": "The alias",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n    $namespace.register(\"joopl.samples\");\n    $namespace.alias($global.joopl.samples, \"samples\");"
-            ],
-            "class": "Namespace"
-        },
-        {
-            "file": "joopl.js",
-            "line": 509,
-            "description": "Imports the members of given namespace path.\n\nThe `$namespace.using` method will not register a namespace if a given namespace path is not previously registered with `$namespace.register`.",
-            "itemtype": "method",
-            "name": "using",
-            "params": [
-                {
-                    "name": "paths",
-                    "description": "An array of strings of the namespaces to import",
-                    "type": "Array"
-                },
-                {
-                    "name": "scopedFunc",
-                    "description": "A function to create a namespace scope (optional)",
-                    "type": "Function"
-                },
-                {
-                    "name": "scopeIsNs",
-                    "description": "USED BY THE SYSTEM. IT IS NOT RECOMMENDED FOR DEVELOPERS. A boolean flag specifying if the this keyword in the scoped function must be the childest namespace or not (optional)",
-                    "type": "Boolean"
-                }
-            ],
-            "class": "Namespace"
-        },
-        {
-            "file": "joopl.js",
-            "line": 737,
+            "file": "src\\joopl.js",
+            "line": 749,
             "class": "joopl.Namespace",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 754,
-            "description": "Gets jOOPL library version (f.e. \"2.4.0\")",
-            "itemtype": "property",
-            "name": "joopl",
-            "type": "string",
-            "readonly": "",
-            "class": "joopl.Object",
-            "namespace": "joopl"
-        },
-        {
-            "file": "joopl.js",
-            "line": 763,
+            "file": "src\\joopl.js",
+            "line": 787,
             "description": "Determines if a given type is of type of current object",
             "itemtype": "method",
             "name": "isTypeOf",
@@ -472,14 +499,14 @@
                 }
             ],
             "example": [
-                " obj.isTypeOf(this.A)\n"
+                " \n    obj.isTypeOf(this.A)\n"
             ],
             "class": "joopl.Object",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 805,
+            "file": "src\\joopl.js",
+            "line": 835,
             "description": "Gets type name (f.e. \"MyClass\")",
             "itemtype": "property",
             "name": "name",
@@ -489,8 +516,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 816,
+            "file": "src\\joopl.js",
+            "line": 846,
             "description": "Gets current type name including full namespace path (f.e. \"joopl.test.MyClass\")",
             "itemtype": "property",
             "name": "fullName",
@@ -500,8 +527,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 827,
+            "file": "src\\joopl.js",
+            "line": 857,
             "description": "Gets current base type (i.e. parent class) metadata.",
             "itemtype": "property",
             "name": "baseType",
@@ -511,8 +538,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 838,
+            "file": "src\\joopl.js",
+            "line": 868,
             "description": "Gets current namespace instance",
             "itemtype": "property",
             "name": "baseType",
@@ -522,8 +549,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 849,
+            "file": "src\\joopl.js",
+            "line": 879,
             "description": "Gets all type's attributes.",
             "itemtype": "property",
             "name": "attributes",
@@ -533,8 +560,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 860,
+            "file": "src\\joopl.js",
+            "line": 890,
             "description": "Gets an attribute instance by giving its type, if the type has the whole attribute",
             "itemtype": "method",
             "name": "getAttribute",
@@ -550,14 +577,14 @@
                 "type": "joopl.Attribute"
             },
             "example": [
-                " \n    this.MyClass.type.getAttribute(this.MyAttribute);"
+                " \n    myNamespace.MyClass.type.getAttribute(this.MyAttribute);"
             ],
             "class": "joopl.Type",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 888,
+            "file": "src\\joopl.js",
+            "line": 918,
             "description": "Determines whether a given type has an attribute giving its class (rather than giving an instance!)",
             "itemtype": "method",
             "name": "hasAttribute",
@@ -575,8 +602,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1044,
+            "file": "src\\joopl.js",
+            "line": 1075,
             "description": "Gets the enumeration value.",
             "itemtype": "property",
             "name": "value",
@@ -585,8 +612,19 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1052,
+            "file": "src\\joopl.js",
+            "line": 1083,
+            "description": "Gets the enumeration value name",
+            "itemtype": "property",
+            "name": "name",
+            "type": "string",
+            "readonly": "",
+            "class": "joopl.EnumValue",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1092,
             "description": "Performs a bitwise OR with the given enumeration value",
             "itemtype": "method",
             "name": "or",
@@ -602,14 +640,14 @@
                 "type": "Number"
             },
             "example": [
-                " \n    var flag = State.open.enum.or(State.closed); // This is State.open | State.closed"
+                " \n    var flag = myNamespace.State.open.enum.or(State.closed); // This is State.open | State.closed"
             ],
             "class": "joopl.EnumValue",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1072,
+            "file": "src\\joopl.js",
+            "line": 1112,
             "description": "Performs a bitwise AND with the given enumeration value",
             "itemtype": "method",
             "name": "and",
@@ -625,14 +663,14 @@
                 "type": "Number"
             },
             "example": [
-                " var flag = State.open.enum.and(State.closed); // This is State.open & State.closed"
+                " \n    var flag = myNamespace.State.open.enum.and(myNamespace.State.closed); // This is State.open & State.closed"
             ],
             "class": "joopl.EnumValue",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1091,
+            "file": "src\\joopl.js",
+            "line": 1132,
             "description": "Determines if some enumeration value contains other enumeration value.",
             "itemtype": "method",
             "name": "hasFlag",
@@ -648,14 +686,14 @@
                 "type": "Boolean"
             },
             "example": [
-                " \n    var flag = State.open.enum.or(State.closed);\n    var hasOpen = flag.enum.hasFlag(State.open);"
+                " \n    var flag = myNamespace.State.open.enum.or(myNamespace.State.closed);\n    var hasOpen = flag.enum.hasFlag(myNamespace.State.open);"
             ],
             "class": "joopl.EnumValue",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1116,
+            "file": "src\\joopl.js",
+            "line": 1157,
             "description": "Parses a text into a given enumeration value",
             "itemtype": "method",
             "name": "parseName",
@@ -673,14 +711,14 @@
             ],
             "static": 1,
             "example": [
-                "\n    $namespace.using(\"joopl\", function() {\n        this.declareEnum(\"State\", {\n            open: 1,\n            closed: 2\n        });\n\n        var open = this.Enum.parseName(State, \"open\")\n    });"
+                "\n    $namespace.using(\"joopl\", function(joopl) {\n        joopl.declareEnum(\"State\", {\n            open: 1,\n            closed: 2\n        });\n\n        var open = joopl.Enum.parseName(State, \"open\")\n    });"
             ],
             "class": "joopl.Enum",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1144,
+            "file": "src\\joopl.js",
+            "line": 1185,
             "description": "Parses a comma-separated list of text values as a mask of given enumeration",
             "itemtype": "method",
             "name": "parseNames",
@@ -698,14 +736,104 @@
             ],
             "static": 1,
             "example": [
-                "\n    $namespace.using(\"joopl\", function() {\n        this.declareEnum(\"State\", {\n            open: 1,\n            closed: 2\n        });\n\n        this.Enum.parseNames(State, \"open, closed\")\n    });"
+                "\n    $namespace.using(\"joopl\", function(joopl) {\n        joopl.declareEnum(\"State\", {\n            open: 1,\n            closed: 2\n        });\n\n        joopl.Enum.parseNames(State, \"open, closed\")\n    });"
             ],
             "class": "joopl.Enum",
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1319,
+            "file": "src\\joopl.js",
+            "line": 1239,
+            "description": "Gets an array of event handlers listenting for event raise",
+            "itemtype": "property",
+            "name": "handlers",
+            "return": {
+                "description": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "joopl.Event",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1248,
+            "description": "Gets the object who raises the event",
+            "itemtype": "property",
+            "name": "source",
+            "type": "Object",
+            "access": "private",
+            "tagname": "",
+            "class": "joopl.Event",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1257,
+            "description": "Adds and binds a function to this event that will be called whenever\nthis event is raised.\n\nIt supports unlimited event listeners and they will be called in order *FIFO*.",
+            "itemtype": "method",
+            "name": "addEventListener",
+            "params": [
+                {
+                    "name": "handler",
+                    "description": "A function reference which handles the event",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "joopl.Event",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1275,
+            "description": "Removes and unbinds a function from this event.\n\nGiven function handler should be the one that was previously added with `addEventListener`.",
+            "itemtype": "method",
+            "name": "addEventListener",
+            "params": [
+                {
+                    "name": "handler",
+                    "description": "A function reference which handles the event",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "joopl.Event",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1320,
+            "description": "Gets the object who is associated with the event manager",
+            "itemtype": "property",
+            "name": "source",
+            "type": "object",
+            "access": "private",
+            "tagname": "",
+            "class": "joopl.EventManager",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1331,
+            "description": "Registers an event in the event manager",
+            "itemtype": "method",
+            "name": "register",
+            "return": {
+                "description": "void"
+            },
+            "class": "joopl.EventManager",
+            "namespace": "joopl"
+        },
+        {
+            "file": "src\\joopl.js",
+            "line": 1363,
             "description": "Occurs when any exception of any type is thrown within current application",
             "itemtype": "event",
             "name": "exceptionThrown",
@@ -723,8 +851,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1335,
+            "file": "src\\joopl.js",
+            "line": 1379,
             "description": "Notifies a given exception to all subscribers",
             "itemtype": "method",
             "name": "notifyException",
@@ -742,8 +870,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1349,
+            "file": "src\\joopl.js",
+            "line": 1393,
             "description": "Gets current Environment instance",
             "itemtype": "property",
             "name": "current",
@@ -754,8 +882,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1420,
+            "file": "src\\joopl.js",
+            "line": 1463,
             "description": "Gets the human-readable reason text for this exception",
             "itemtype": "property",
             "name": "message",
@@ -765,8 +893,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1431,
+            "file": "src\\joopl.js",
+            "line": 1474,
             "description": "Gets an inner exception (optional) which provides information about the sorrounding one",
             "itemtype": "property",
             "name": "innerException",
@@ -776,8 +904,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1442,
+            "file": "src\\joopl.js",
+            "line": 1485,
             "description": "Gets the exception's stack trace as an array where each index is a code line",
             "itemtype": "property",
             "name": "stackTrace",
@@ -787,8 +915,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1453,
+            "file": "src\\joopl.js",
+            "line": 1496,
             "description": "Gets underlying `Error` instance",
             "itemtype": "property",
             "name": "error",
@@ -798,8 +926,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1464,
+            "file": "src\\joopl.js",
+            "line": 1507,
             "description": "Returns the exception message plus the stack trace as a concatenated string",
             "itemtype": "method",
             "name": "toString",
@@ -811,8 +939,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1510,
+            "file": "src\\joopl.js",
+            "line": 1553,
             "description": "Gets the affected argument name",
             "itemtype": "property",
             "name": "argName",
@@ -822,8 +950,8 @@
             "namespace": "joopl"
         },
         {
-            "file": "joopl.js",
-            "line": 1551,
+            "file": "src\\joopl.js",
+            "line": 1594,
             "description": "Gets the not implemented member name",
             "itemtype": "property",
             "name": "memberName",
@@ -836,7 +964,7 @@
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " joopl.js:737"
+            "line": " src\\joopl.js:749"
         }
     ]
 }
