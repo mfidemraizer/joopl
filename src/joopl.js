@@ -528,6 +528,17 @@ if (typeof $namespace == "undefined") {
                     }
                 );
 
+                // Fix for PhantomJS, which doesn't fully support
+                // ES5 property definitions in prototypes...
+                if($userAgent_phantomjs) {
+                    Object.defineProperty(
+                        instance,
+                        "derived", {
+                            value: instance
+                        }
+                    );
+                }
+
                 if (callctor) {
                     instance.ctor.call(instance, args);
                 }
