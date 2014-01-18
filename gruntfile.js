@@ -86,6 +86,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-run-grunt");
   grunt.loadNpmTasks('grunt-contrib-yuidoc');   
 
-  grunt.registerTask('default', ['uglify', 'yuidoc', 'copy', 'qunit'/*, 'run_grunt'*/]);
+  grunt.registerTask('default', ['uglify', 'yuidoc', 'copy', 'qunit', 'run_grunt']);
   grunt.registerTask("doc-only", ["yuidoc", "copy"]);
 }
