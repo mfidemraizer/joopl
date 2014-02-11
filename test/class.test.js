@@ -1,6 +1,17 @@
 (function (undefined) {
     "use strict";
 
+    module("$global methods");
+
+    test("Define some class and try to get it by its full name (i.e. namespace qualified type name)", function () {
+        $namespace.using("test1", function (ns) {
+            ns.declareClass("ClassA", {
+            });
+
+            ok($global.getType("test1.ClassA") != null, "Some test class could be retrieved by its full name");
+        });
+    });
+
     module("Class attributes");
 
     test("Define a new class with attributes. Check that the given attributes are present", function () {
