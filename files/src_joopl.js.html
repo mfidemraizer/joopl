@@ -390,6 +390,7 @@ if (typeof $namespace == &quot;undefined&quot;) {
                     value: function (className, classDef) {
                         if (!this.hasOwnProperty(className)) {
                             var builtDef = TypeUtil.declareClass(className, this, classDef);
+                            $global.__types__[this.fullName + &quot;.&quot; + className] = builtDef;
 
                             Object.defineProperty(
                                 this,
@@ -418,6 +419,7 @@ if (typeof $namespace == &quot;undefined&quot;) {
                     value: function (name, enumDef) {
                         if (!this.hasOwnProperty(name)) {
                             var builtDef = TypeUtil.declareEnum(name, this, enumDef);
+                            $global.__types__[this.fullName + &quot;.&quot; + name] = builtDef;
 
                             Object.defineProperty(
                                 this,
@@ -443,7 +445,29 @@ if (typeof $namespace == &quot;undefined&quot;) {
 
         Object.freeze(Namespace);
 
-        $global = new Namespace({ name: &quot;$global&quot;, fullName: &quot;$global&quot;, parent: null });
+        var globalNamespace = new Namespace({ name: &quot;$global&quot;, fullName: &quot;$global&quot;, parent: null });
+
+        $global = Object.create(globalNamespace, {
+            __types__: {
+                value: {},
+                writable: false,
+                configurable: false,
+                enumerable: false
+            },
+
+            getType: {
+                value: function (fullName) {
+                    if ($global.__types__.hasOwnProperty(fullName)) {
+                        return $global.__types__[fullName];
+                    } else {
+                        return null;
+                    }
+                },
+                writable: false,
+                configurable: false,
+                enumerable: true
+            }
+        });
 
         var BrowserUtil = {
             get isIE() {
@@ -825,6 +849,17 @@ if (typeof $namespace == &quot;undefined&quot;) {
                     }
                 );
 
+                // Fix for PhantomJS, which doesn&#x27;t fully support
+                // ES5 property definitions in prototypes...
+                if ($userAgent_phantomjs) {
+                    Object.defineProperty(
+                        instance,
+                        &quot;derived&quot;, {
+                            value: instance
+                        }
+                    );
+                }
+
                 if (callctor) {
                     instance.ctor.call(instance, args);
                 }
@@ -1059,7 +1094,7 @@ if (typeof $namespace == &quot;undefined&quot;) {
             joopl.Object.prototype = Object.defineProperties(joopl.Object.prototype, {
                 joopl: {
                     get: function () {
-                        return &quot;2.5.2&quot;;
+                        return &quot;2.5.3&quot;;
                     },
                     configurable: false,
                     enumerable: true

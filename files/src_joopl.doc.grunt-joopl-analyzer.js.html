@@ -302,7 +302,6 @@ jOOPL Analyzer&#x27;s &#x60;joopl-analyzer&#x60; command may be integrated on a 
 
 The whole task is distributed as a NodeJS Package Manager (NPM) module and it can be installed using the following regular approach:
 
-    npm install joopl-analyzer
     npm install grunt-joopl-analyzer
 
 This should both install the whole task and &#x60;joopl-analyzer&#x60; dependencies in your local development directory.
@@ -317,11 +316,18 @@ In order to integrate &#x60;joopl-analyzer&#x60; task in your own &#x60;Gruntfil
 
         // joopl-analyzer specific settings
         jooplanalyzer: {
-          all: {
-            baseDirectory: &quot;./scripts&quot;,
-            watch: grunt.option(&quot;watch&quot;) || false
-          }
-        }
+            all: {
+                options: {
+                    baseDirectory: &quot;./js&quot;, // The relative of absolute directory path from which to start the analysis
+                    quiet: false, // Reduces console output just by showing errors and minimal warnings
+
+                    // Defines an array of relative or absolute directory paths to exclude from the analysis
+                    fileExcludes: [
+                        &quot;./js/jquery&quot;,
+                        &quot;./js/knockout&quot;
+                    ]
+                }
+            }
       });
 
       grunt.loadNpmTasks(&quot;grunt-joopl-analyzer&quot;);
@@ -334,13 +340,55 @@ In order to integrate &#x60;joopl-analyzer&#x60; task in your own &#x60;Gruntfil
 &#x60;jooplanalyzer&#x60; task supports the following settings:
 
 - &#x60;baseDirectory&#x60;. Configures the absolute or relative base directory from which the analyzer should start looking for code files.
-- &#x60;watch&#x60; (true/false). Holds the build open indefinitely and, after any change within the given base directory, automatically re-analyzes it.
+- &#x60;quiet&#x60;. Defaults to &#x60;false&#x60;. If &#x60;true&#x60;, it will reduce console output just by showing errors and minimal warnings.
+- &#x60;fileExcludes&#x60;. Defines an array of relative of absolute directory paths to exclude from the analysis.
+- &#x60;baseDirectoryOverrides&#x60;. Described bellow.
 
-&lt;h4&gt;About &#x60;watch&#x60; setting&lt;/h4&gt;
-As shown in configuration sample, &#x60;watch&#x60; is &#x60;false&#x60; by default until option &#x60;watch&#x60; is given when running GruntJS from the command-line. In order to 
-activate &#x60;watch&#x60;, just run GruntJS as follows:
+&lt;h4&gt;&#x60;baseDirectoryOverrides&#x60; task setting&lt;/h4&gt;
 
-    grunt jooplanalyzer --watch=true
+This settings defines rules to replace a part of the resulting detected files during the analysis with other string.
+
+For example, if given base directory is &#x60;./web/js&#x60; but once &#x60;moduleinfo.js&#x60; file is included in some page requires that the relative
+base directory should be just &#x60;./js&#x60;, sample task settings should look like this:
+
+    module.exports = function(grunt) {
+      grunt.initConfig({
+        pkg: grunt.file.readJSON(&#x27;package.json&#x27;),
+
+        // joopl-analyzer specific settings
+        jooplanalyzer: {
+            all: {
+                options: {
+                    baseDirectory: &quot;./js&quot;, // The relative of absolute directory path from which to start the analysis
+                    quiet: false, // Reduces console output just by showing errors and minimal warnings
+
+                    // Defines an array of relative or absolute directory paths to exclude from the analysis
+                    fileExcludes: [
+                        &quot;./js/jquery&quot;,
+                        &quot;./js/knockout&quot;
+                    ],
+
+                    baseDirectoryOverrides: {
+                      // &quot;$2&quot; is the non-replaced part that will be concatenated to the new base directory
+                      { startsWith: &quot;./web/js&quot;, replaceWith: &quot;./js/$2&quot; }
+                    }
+                }
+            }
+      });
+
+      grunt.loadNpmTasks(&quot;grunt-joopl-analyzer&quot;);
+
+      // Default task(s).
+      grunt.registerTask(&#x27;default&#x27;, [&#x27;jooplanalyzer&#x27;]);
+    };
+
+One of most practical use cases of &#x60;baseDirectoryOverrides&#x60; is overriding base directory to convert it to a URI:
+
+    .....
+    baseDirectoryOverrides: {
+      { startsWith: &quot;./web/js&quot;, replaceWith: &quot;http://www.mysite.com/js/$2&quot; }
+    }
+
 
 This will hold the execution as expected and any change in the base directory and any of its own sub-directories will trigger &#x60;jooplanalyzer&#x60; GruntJS task.
 

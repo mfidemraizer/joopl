@@ -305,15 +305,15 @@
     - [6.0 Configuring jOOPL Analyzer](#configuration)
     - [7.0 How to run jOOPL Analyzer](#run)
         - [7.1 Executing &#x60;joopl-analyzer&#x60; command](#execute)
-    - [8.0 How to use &#x60;joopl-analyzer&#x60;](#how-to-use)
-    - [9.0 Rules that JavaScript code must follow to be analyzable by &#x60;joopl-analyzer&#x60;](#rules)
+    - [8.0 Rules that JavaScript code must follow to be analyzable by &#x60;joopl-analyzer&#x60;](#rules)
         - [Rule I: One &#x60;$import.modules&#x60; per source code file](#rule-import)
         - [Rule II: One &#x60;$namespace.using&#x60; per source code file](#rule-using)
         - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)
         - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)
         - [Rule V: Object instantiation always with &#x60;new&#x60; operator](#rule-instantiation)
         - [Rule VI: Modules which load themself don&#x27;t include the code file from which are loaded](#rule-module-load-itself)
-    - [10.0 Using &#x60;moduleinfo.js&#x60; resulting file](#using-moduleinfo)
+    - [9.0 Using &#x60;moduleinfo.js&#x60; resulting file](#using-moduleinfo)
+    - [10.0 Module including](#module-includes)
     - [11.0 Producing true modules](#modules)
 
     &lt;hr /&gt;
@@ -400,67 +400,7 @@
 
     &lt;hr /&gt;
 
-    &lt;h3 id=&quot;configuration&quot;&gt;6.0 Configuring jOOPL Analyzer&lt;/h3&gt;
-
-    &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
-
-    Command-line tool accepts configuration but there is no global configuration. Instead of a global configuration, there is an optional &#x60;joopl-analyzer.json&#x60; JSON
-    configuration file that should be located in the base directory where the analyzer should start dependency detection.
-
-    #### 6.1 Configuration scheme
-
-    &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
-
-    The JSON configuration must be contained in a file called **joopl-analyzer.json** in the root directory of JavaScript files.
-
-    The whole file has the following configuration parameters:
-
-    - **fileExcludes**. It is an array of strings where each string is either a relative path to a file or directory that should be excluded from the analyzing process.
-    - **baseDirectoryOverrides**. Overrides base directory in the resulting **moduleinfo.js** file after JavaScript source code analysis. It is an array of objects, where each object has two properties
-    &gt; - *startsWith*, which defines the directory to override (for example, &quot;./scripts&quot;)
-    &gt; - *replaceWith*, which defines the directory to replace from the source one.
-
-    ##### 6.1.1 About &quot;baseDirectoryOverrides&quot; configuration parameter
-
-    &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
-
-    This parameter - *baseDirectoryOverrides* - is the ideal approach to change a local path to production one, even to a full HTTP URI:
-
-        {
-            &quot;baseDirectoryOverrides&quot;: [
-                &quot;startsWith&quot;: &quot;./scripts&quot;,
-                &quot;replaceWith&quot;: &quot;http://cdn.mywebsite.com/scripts&quot;
-            ]
-        }
-
-    ##### 6.1.2 Full configuration sample
-
-    &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
-
-    **joopl-analyzer.json**
-
-        {
-    
-            &quot;baseDirectoryOverrides&quot;: [
-                { 
-                    &quot;startsWith&quot;: &quot;./scripts/foo&quot;, 
-                    &quot;replaceWith&quot;: &quot;./scripts/boo&quot; 
-                },
-                { 
-                    &quot;startsWith&quot;: &quot;./scripts/libs&quot;, 
-                    &quot;replaceWith&quot;: &quot;http://cdn.mysite.com/scripts/libs&quot; 
-                }
-            ],
-
-            &quot;fileExcludes&quot;: [
-                &quot;./scripts/jquery&quot;,
-                &quot;./knockout.min.js&quot;
-            ]
-        }
-
-    &lt;hr /&gt;
-
-    &lt;h3 id=&quot;run&quot;&gt;7.0 How to run jOOPL Analyzer&lt;/h3&gt;
+    &lt;h3 id=&quot;run&quot;&gt;6.0 How to run jOOPL Analyzer&lt;/h3&gt;
 
     &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
 
@@ -474,12 +414,40 @@
 
               Options:
 
-                -h, --help                 output usage information
-                -V, --version              output the version number
-                -w, --watch                Holds this CLI open and executes the analyzer whenever some file changes within the given base directory
-                -d, --directory &lt;basedir&gt;  Specifies the base directory from which the analyzer must start the search of JavaScript dependencies
-                -q, --quiet                Quiet mode: no console output
-                -n, --nologo               Hides jOOPL logo
+                -h, --help                  output usage information
+
+                -V, --version               output the version number
+
+                -d, --directory &lt;basedir&gt;   Specifies the base directory from which the analyzer must start 
+                                            the search of JavaScript dependencies
+
+                -e, --excludes &lt;excludes&gt;   A semicolon-separated list of directories to exclude from the analysis 
+                                            (f.e. ./js/jquery;./js/other)
+
+                -i, --includes &lt;includes&gt;   A semicolon-separated list of other moduleinfo.js files (either from local file
+                                            system or http:// or https://) that must be included to let analysis reference
+                                            their files in the analysis 
+
+                                            For example: http://mysite.com/js/moduleinfo.js;./otherproject/js/moduleinfo.js
+                
+                -b, --baseDirectoryOverrides &lt;baseDirectoryOverrides&gt; 
+
+                                            A semicolon-separated list of key-value pairs, where key is a base directory and
+                                            value is the replace with expression.
+
+                                            This allows analysis to replace base directories to an arbitrary base directory in
+                                            the resulting analysis.
+
+                                            For example, if given base directory is ./web/js, resulting moduleinfo.js will 
+                                            have paths like ./web/js/myclass.js. But maybe the HTML page which hosts the 
+                                            JavaScript files require JavaScript files to be loaded from ./js. 
+
+                                            Then, this parameter should provide a list like this: 
+                                                -b ./web/js=./js/$2
+
+                -q, --quiet                 Quiet mode: no console output
+
+                -n, --nologo                Hides jOOPL logo
 
 
     &lt;h4 id=&quot;execute&quot;&gt;7.1 Executing &#x60;joopl-analyzer&#x60; command&lt;/h4&gt;
@@ -498,37 +466,8 @@
         joopl-analyzer --directory /home/myproject/scripts
 
     When &#x60;joopl-analyzer&#x60; command execution finishes it creates a file called &#x60;moduleinfo.js&#x60; in the given base directory.
-
-    &lt;h3 id=&quot;how-to-use&quot;&gt;8.0 How to use &#x60;joopl-analyzer&#x60;&lt;/h3&gt;
-
-    Apart of its command-line arguments and other details, there is an important point and it is *how to use it in real-world projects*.
-
-    Since jOOPL is a library to build object-oriented frameworks, some project may require to load code files belonging to other one. 
-
-    For example, there is a Web application which needs to use a framework - which is a second project developed alone -. Even the Web application
-    might require 3 or 4 different framework projects.
-
-    In the above sample, &#x60;joopl-analyzer&#x60; should not run for each of the projects but for the Web application only.
-
-    The so-called Web application should have a copy of the whole frameworks and, if the Web Application requires some class found in some of 
-    copied frameworks, as everything is within the same directory tree, &#x60;joopl-analyzer&#x60; will detect dependencies as expected.
-
-    A sample Web Application would have a &#x60;Libs&#x60; directory where other frameworks required by the whole Web Application may reside in. 
     
-        Web application
-        └───Libs
-            ├───Framework A
-            ├───Framework B
-            └───Framework C
-
-    When using JavaScript package managers like NodeJS Package Manager or Bower (or similar projects), that sample &#x60;Libs&#x60; directory would be 
-    the standard &#x60;node_modules&#x60; directory, since third-party projects or just dependencies are downloaded in a dedicated directory as child of
-    the application directory.
-
-    The whole point is that, when using &#x60;joopl-analyzer&#x60;, dependency detection must be done against a full source tree and any dependency must be within
-    that *source tree*.
-
-    &lt;h3 id=&quot;rules&quot;&gt;9.0  Rules that JavaScript code must follow to be analyzable by &#x60;joopl-analyzer&#x60;&lt;/h3&gt;
+    &lt;h3 id=&quot;rules&quot;&gt;8.0  Rules that JavaScript code must follow to be analyzable by &#x60;joopl-analyzer&#x60;&lt;/h3&gt;
 
     &lt;a href=&quot;#index&quot;&gt;Back to index of contents&lt;/a&gt;
 
@@ -639,6 +578,37 @@
     configured before &#x60;$import.modules&#x60; statements are executed.
 
     &lt;hr /&gt;
+
+    &lt;h3 id=&quot;module-includes&quot;&gt;10.0   Module including - A very powerful feature!&lt;/h3&gt;
+
+    There is a first project which produces a &#x60;moduleinfo.js&#x60; hosted in a place A. And later, there is a second project which
+    is hosted in place B.
+
+    The whole second project requires classes from the first project.
+
+    This requirement is covered by *module including* feature.
+
+    When includes are provided to the analyzer, and it is executed against second project, it will only analyze its own 
+    code files but it will also include already produced dependencies from the first project&#x27;s &#x60;moduleinfo.js&#x60; file.
+
+    For example, if first project has a class &#x60;A&#x60; and second project a class &#x60;B&#x60; which inherits &#x60;A&#x60;, if first project&#x27;s
+    &#x60;moduleinfo.js&#x60; file is included during second project&#x27;s analysis, the resulting &#x60;moduleinfo.js&#x60; will contain something like:
+
+        $import.mapMany({
+            &quot;project1.A&quot;: [
+                &quot;http://myproject1.com/js/classA.js&quot;
+            ],
+
+            // 2nd project&#x27;s B class has also detected that inherits from A!!!!!!!!!!!!!
+            &quot;project2.B&quot;: [
+                &quot;http://myproject1.com/js/classA.js&quot;,
+                &quot;http://myproject2.com/js/classB.js&quot;
+            ]
+        });
+
+    This is possible thanks to the &#x60;-i&#x60; or &#x60;--includes&#x60; command-line parameter:
+
+        joopl-analyzer -d ./js -i http://myproject1.com/js/moduleinfo.js
 
     &lt;h3 id=&quot;modules&quot;&gt;11.0 Producing true modules with &#x60;joopl-analyzer&#x60;!&lt;/h3&gt;
     

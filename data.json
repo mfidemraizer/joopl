@@ -140,7 +140,7 @@
             "extension_for": [],
             "file": "src\\joopl.doc.grunt-joopl-analyzer.js",
             "line": 1,
-            "description": "<h2>Installation</h2>\n\njOOPL Analyzer's `joopl-analyzer` command may be integrated on a *GruntJS* build using the `grunt-joopl-analyzer` task.\n\nThe whole task is distributed as a NodeJS Package Manager (NPM) module and it can be installed using the following regular approach:\n\n    npm install joopl-analyzer\n    npm install grunt-joopl-analyzer\n\nThis should both install the whole task and `joopl-analyzer` dependencies in your local development directory.\n\n<h2>Configuring `Gruntfile.js`</h2>\n\nIn order to integrate `joopl-analyzer` task in your own `Gruntfile.js` and  be able to run it, `grunt-joopl-analyzer` should be imported and configured this way:\n\n    module.exports = function(grunt) {\n      grunt.initConfig({\n        pkg: grunt.file.readJSON('package.json'),\n\n        // joopl-analyzer specific settings\n        jooplanalyzer: {\n          all: {\n            baseDirectory: \"./scripts\",\n            watch: grunt.option(\"watch\") || false\n          }\n        }\n      });\n\n      grunt.loadNpmTasks(\"grunt-joopl-analyzer\");\n\n      // Default task(s).\n      grunt.registerTask('default', ['jooplanalyzer']);\n    };\n\n<h3>Available settings</h3>\n`jooplanalyzer` task supports the following settings:\n\n- `baseDirectory`. Configures the absolute or relative base directory from which the analyzer should start looking for code files.\n- `watch` (true/false). Holds the build open indefinitely and, after any change within the given base directory, automatically re-analyzes it.\n\n<h4>About `watch` setting</h4>\nAs shown in configuration sample, `watch` is `false` by default until option `watch` is given when running GruntJS from the command-line. In order to \nactivate `watch`, just run GruntJS as follows:\n\n    grunt jooplanalyzer --watch=true\n\nThis will hold the execution as expected and any change in the base directory and any of its own sub-directories will trigger `jooplanalyzer` GruntJS task."
+            "description": "<h2>Installation</h2>\n\njOOPL Analyzer's `joopl-analyzer` command may be integrated on a *GruntJS* build using the `grunt-joopl-analyzer` task.\n\nThe whole task is distributed as a NodeJS Package Manager (NPM) module and it can be installed using the following regular approach:\n\n    npm install grunt-joopl-analyzer\n\nThis should both install the whole task and `joopl-analyzer` dependencies in your local development directory.\n\n<h2>Configuring `Gruntfile.js`</h2>\n\nIn order to integrate `joopl-analyzer` task in your own `Gruntfile.js` and  be able to run it, `grunt-joopl-analyzer` should be imported and configured this way:\n\n    module.exports = function(grunt) {\n      grunt.initConfig({\n        pkg: grunt.file.readJSON('package.json'),\n\n        // joopl-analyzer specific settings\n        jooplanalyzer: {\n            all: {\n                options: {\n                    baseDirectory: \"./js\", // The relative of absolute directory path from which to start the analysis\n                    quiet: false, // Reduces console output just by showing errors and minimal warnings\n\n                    // Defines an array of relative or absolute directory paths to exclude from the analysis\n                    fileExcludes: [\n                        \"./js/jquery\",\n                        \"./js/knockout\"\n                    ]\n                }\n            }\n      });\n\n      grunt.loadNpmTasks(\"grunt-joopl-analyzer\");\n\n      // Default task(s).\n      grunt.registerTask('default', ['jooplanalyzer']);\n    };\n\n<h3>Available settings</h3>\n`jooplanalyzer` task supports the following settings:\n\n- `baseDirectory`. Configures the absolute or relative base directory from which the analyzer should start looking for code files.\n- `quiet`. Defaults to `false`. If `true`, it will reduce console output just by showing errors and minimal warnings.\n- `fileExcludes`. Defines an array of relative of absolute directory paths to exclude from the analysis.\n- `baseDirectoryOverrides`. Described bellow.\n\n<h4>`baseDirectoryOverrides` task setting</h4>\n\nThis settings defines rules to replace a part of the resulting detected files during the analysis with other string.\n\nFor example, if given base directory is `./web/js` but once `moduleinfo.js` file is included in some page requires that the relative\nbase directory should be just `./js`, sample task settings should look like this:\n\n    module.exports = function(grunt) {\n      grunt.initConfig({\n        pkg: grunt.file.readJSON('package.json'),\n\n        // joopl-analyzer specific settings\n        jooplanalyzer: {\n            all: {\n                options: {\n                    baseDirectory: \"./js\", // The relative of absolute directory path from which to start the analysis\n                    quiet: false, // Reduces console output just by showing errors and minimal warnings\n\n                    // Defines an array of relative or absolute directory paths to exclude from the analysis\n                    fileExcludes: [\n                        \"./js/jquery\",\n                        \"./js/knockout\"\n                    ],\n\n                    baseDirectoryOverrides: {\n                      // \"$2\" is the non-replaced part that will be concatenated to the new base directory\n                      { startsWith: \"./web/js\", replaceWith: \"./js/$2\" }\n                    }\n                }\n            }\n      });\n\n      grunt.loadNpmTasks(\"grunt-joopl-analyzer\");\n\n      // Default task(s).\n      grunt.registerTask('default', ['jooplanalyzer']);\n    };\n\nOne of most practical use cases of `baseDirectoryOverrides` is overriding base directory to convert it to a URI:\n\n    .....\n    baseDirectoryOverrides: {\n      { startsWith: \"./web/js\", replaceWith: \"http://www.mysite.com/js/$2\" }\n    }\n\n\nThis will hold the execution as expected and any change in the base directory and any of its own sub-directories will trigger `jooplanalyzer` GruntJS task."
         },
         "joopl-analyzer": {
             "name": "joopl-analyzer",
@@ -152,7 +152,7 @@
             "extension_for": [],
             "file": "src\\joopl.doc.joopl-analyzer.js",
             "line": 1,
-            "description": "<h3 id=\"index\">1.0 Index of contents</h3>\n\n- [2.0 Introduction](#introduction)\n- [3.0 How it works?](#how-it-works)\n- [4.0 System requirements](#requirements)\n- [5.0 Installing jOOPL Analyzer](#install)\n- [6.0 Configuring jOOPL Analyzer](#configuration)\n- [7.0 How to run jOOPL Analyzer](#run)\n    - [7.1 Executing `joopl-analyzer` command](#execute)\n- [8.0 How to use `joopl-analyzer`](#how-to-use)\n- [9.0 Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`](#rules)\n    - [Rule I: One `$import.modules` per source code file](#rule-import)\n    - [Rule II: One `$namespace.using` per source code file](#rule-using)\n    - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)\n    - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)\n    - [Rule V: Object instantiation always with `new` operator](#rule-instantiation)\n    - [Rule VI: Modules which load themself don't include the code file from which are loaded](#rule-module-load-itself)\n- [10.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)\n- [11.0 Producing true modules](#modules)\n\n<hr />\n\n<h3 id=\"introduction\">2.0 Introduction</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a command-line tool which comprehensively analyzes source code deeply looking for namespaces, classes and enumerations, and automatically\ncreates a configuration that is used on run-time to load JavaScript file dependencies on the fly!\n\nFor example, there are three source code files where each file defines a class A, B, C. Now C inherits B and B inherits A:\n\n**A.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n\n        });\n    });\n\n**B.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n**C.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\nRunning jOOPL Analyzer command-line tool will result in a file called `moduleinfo.js` containing this code listing:\n\n    $import.mapMany({\n        \"test.A\": [\"A.js\"],\n        \"test.B\": [\"A.js\", \"B.js\"],\n        \"test.C\": [\"A.js\", \"B.js\", \"C.js\"]\n    });\n\nNote how jOOPL analyzer detects that class inheritance requires the file containing the base class declaration - *hopefully it is smart enough!* -.\n\nThis is just a simple sample of jOOPL Analyzer dependency detection!\n\n<hr />\n\n<h3 id=\"how-it-works\">3.0 How it works?</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nJavaScript files must be located in some diretory, but they can be distributed in subdirectories without a nesting limit. \n\njOOPL Analyzer is executed in the base directory where JavaScript files are located (i.e., usually Web sites have a `/scripts` directory) and looks for\nnamespaces, classes, enumerations and class instances across all files and identifies their physical dependencies. Once detection has ended, jOOPL Analyzer\ncreates a file called `moduleinfo.js` on the root of given base directory which will contain the whole phsyical file dependency configuration.\n\n<hr />\n\n<h3 id=\"requirements\">4.0 System requirements</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a NodeJS-based command-line tool. These are the minimum system requirements in order to work with jOOPL Analyzer:\n\n- NodeJS-compatible operating system (Windows, Mac, Linux...). Look for compatibiliy on <a href=\"http://nodejs.org\">NodeJS official site</a>.\n- JavaScript code written using at least jOOPL 2.5.\n\n<hr />\n\n<h3 id=\"install\">5.0 Installing jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nOnce NodeJS was installed in your operating system, next step is **globally** installing jOOPL Analyzer using NodeJS Package Manager (NPM):\n\n    npm install -g joopl-analyzer\n\nNow jOOPL Analyzer will be installed in your local system.\n\n<hr />\n\n<h3 id=\"configuration\">6.0 Configuring jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nCommand-line tool accepts configuration but there is no global configuration. Instead of a global configuration, there is an optional `joopl-analyzer.json` JSON\nconfiguration file that should be located in the base directory where the analyzer should start dependency detection.\n\n#### 6.1 Configuration scheme\n\n<a href=\"#index\">Back to index of contents</a>\n\nThe JSON configuration must be contained in a file called **joopl-analyzer.json** in the root directory of JavaScript files.\n\nThe whole file has the following configuration parameters:\n\n- **fileExcludes**. It is an array of strings where each string is either a relative path to a file or directory that should be excluded from the analyzing process.\n- **baseDirectoryOverrides**. Overrides base directory in the resulting **moduleinfo.js** file after JavaScript source code analysis. It is an array of objects, where each object has two properties\n> - *startsWith*, which defines the directory to override (for example, \"./scripts\")\n> - *replaceWith*, which defines the directory to replace from the source one.\n\n##### 6.1.1 About \"baseDirectoryOverrides\" configuration parameter\n\n<a href=\"#index\">Back to index of contents</a>\n\nThis parameter - *baseDirectoryOverrides* - is the ideal approach to change a local path to production one, even to a full HTTP URI:\n\n    {\n        \"baseDirectoryOverrides\": [\n            \"startsWith\": \"./scripts\",\n            \"replaceWith\": \"http://cdn.mywebsite.com/scripts\"\n        ]\n    }\n\n##### 6.1.2 Full configuration sample\n\n<a href=\"#index\">Back to index of contents</a>\n\n**joopl-analyzer.json**\n\n    {\n\n        \"baseDirectoryOverrides\": [\n            { \n                \"startsWith\": \"./scripts/foo\", \n                \"replaceWith\": \"./scripts/boo\" \n            },\n            { \n                \"startsWith\": \"./scripts/libs\", \n                \"replaceWith\": \"http://cdn.mysite.com/scripts/libs\" \n            }\n        ],\n\n        \"fileExcludes\": [\n            \"./scripts/jquery\",\n            \"./knockout.min.js\"\n        ]\n    }\n\n<hr />\n\n<h3 id=\"run\">7.0 How to run jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs jOOPL Analyzer package using NPM must be installed globally (NPM `-g` command-line argument), there is a `joopl-analyzer` command available\nfrom the operating system shell (bash, Windows command prompt CMD, Windows Powershell...).\n\nOnce `joopl-analyzer -h` or `joopl-analyzer --help` is executed, it writes down on the shell output the following documentation with basic details\nabout how to work with `joopl-analyzer` command-line interface:\n\n      Usage: cli.js [options]\n\n          Options:\n\n            -h, --help                 output usage information\n            -V, --version              output the version number\n            -w, --watch                Holds this CLI open and executes the analyzer whenever some file changes within the given base directory\n            -d, --directory <basedir>  Specifies the base directory from which the analyzer must start the search of JavaScript dependencies\n            -q, --quiet                Quiet mode: no console output\n            -n, --nologo               Hides jOOPL logo\n\n\n<h4 id=\"execute\">7.1 Executing `joopl-analyzer` command</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\n`joopl-analyzer` command is executed against a base directory from which the analyzer will do the whole code analysis. This base directory can be \ninferred from current shell working directory or by providing the `-d` / `--directory` argument. For example:\n\n    joopl-analyzer\n    joopl-analyzer -d ./scripts\n    joopl-analyzer -d C:\\myproject\\scripts\n    joopl-analyzer -d /home/myproject/scripts\n    joopl-analyzer --directory ./scripts\n    joopl-analyzer --directory C:\\myproject\\scripts\n    joopl-analyzer --directory /home/myproject/scripts\n\nWhen `joopl-analyzer` command execution finishes it creates a file called `moduleinfo.js` in the given base directory.\n\n<h3 id=\"how-to-use\">8.0 How to use `joopl-analyzer`</h3>\n\nApart of its command-line arguments and other details, there is an important point and it is *how to use it in real-world projects*.\n\nSince jOOPL is a library to build object-oriented frameworks, some project may require to load code files belonging to other one. \n\nFor example, there is a Web application which needs to use a framework - which is a second project developed alone -. Even the Web application\nmight require 3 or 4 different framework projects.\n\nIn the above sample, `joopl-analyzer` should not run for each of the projects but for the Web application only.\n\nThe so-called Web application should have a copy of the whole frameworks and, if the Web Application requires some class found in some of \ncopied frameworks, as everything is within the same directory tree, `joopl-analyzer` will detect dependencies as expected.\n\nA sample Web Application would have a `Libs` directory where other frameworks required by the whole Web Application may reside in. \n\n    Web application\n    └───Libs\n        ├───Framework A\n        ├───Framework B\n        └───Framework C\n\nWhen using JavaScript package managers like NodeJS Package Manager or Bower (or similar projects), that sample `Libs` directory would be \nthe standard `node_modules` directory, since third-party projects or just dependencies are downloaded in a dedicated directory as child of\nthe application directory.\n\nThe whole point is that, when using `joopl-analyzer`, dependency detection must be done against a full source tree and any dependency must be within\nthat *source tree*.\n\n<h3 id=\"rules\">9.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL-based JavaScript code should follow some rules in order to allow `joopl-analyzer` command to work as expected.\n \nOtherwise, any code that does not follow the next rules will be still analyzed but with no result in terms of file dependency\ndetection. *Free-style JavaScript code is still possible*.\n\n<h4 id=\"rule-import\">Rule I: One `$import.modules` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$import.modules` statement per source code file.\n\n**SomeFile.js**\n    \n    // One $import.modules per code file. Callback function sorrounds the code\n    // that will be executed and which depends on loaded modules\n    $import.modules(\"module1\", \"module2\", function() {\n        // Do stuff here\n    });\n\n<h4 id=\"rule-using\">Rule II: One `$namespace.using` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$namespace.using` statement in the same source code file: just import all namespaces using a single \nstatement:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // More code here, but never another $namespace.using!!!\n    });\n\n<h4 id=\"rule-one-nsmember-per-file\">Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever declare more than a class or enumeration in the same source code file.\n\n<h4 id=\"rule-no-aliases\">Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever alias namespaces and their members like classes or enumerations:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // NOOOOOOO!!!!\n        var nsAlias = ns2;\n\n        // This would store ns1.A class constructor on a variable so it can be called \n        // as the next sentence to this variable declaration/initialization...\n        var A = ns1.A;\n\n        var instance = new A();\n         // OK, this would work on run-time, but joopl-analyzer will not be able to cover\n         // this use case. ALWAYS INSTANTIATE CLASSES FROM THEIR ORIGINAL NAMESPACE!!\n\n        var instance2 = new ns1.A(); // This is fine for joopl-analyzer!\n    });\n\n<h4 id=\"rule-instantiation\">Rule V: Object instantiation always with `new` operator</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever instantiate objects using `Object.create` or any other approach. Always use `new` operator.\n\n<h4 id=\"rule-module-load-itself\">Rule VI: Modules which load themself don't include the code file from which are loaded</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nSee the following sample\n\n    // SomeClass.js\n\n    $import.modules(\"joopl.test.MyClass\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            test.declareClass(\"SomeClass\");\n        });\n    });\n\nOnce `joopl-analyzer` gets executed, resulting `moduleinfo.js` file would contain - along with other detected classes and enumerations - \nthe following code:\n\n    // moduleinfo.js\n\n    $import.mapyMany({\n        // ... other detected members\n\n        \"joopl.test.MyClass\": [] // It's empty!!\n    });\n\nWhen a code file imports itself as a module, it's skipped. This rule works as expected and it is extremely important because it prevents\nthe whole code file from being loaded twice!\n\n<hr />\n\n<h3 id=\"using-moduleinfo\">10.0 Using `moduleinfo.js` resulting file</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs explained in previous chapters, running `joopl-analyzer` command produces a file called `moduleinfo.js`. Also, as explained in \n[*Asynchronous dependency loading documentation*]($import.html), `moduleinfo.js` file\nmust be added on some HTML page just after jOOPL `<script>` tag. That is, detected JavaScript dependencies and their relations will be\nconfigured before `$import.modules` statements are executed.\n\n<hr />\n\n<h3 id=\"modules\">11.0 Producing true modules with `joopl-analyzer`!</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer, as explained in previous chapters, looks for class/enumeration declarations and instantiations across a source code tree. \n\nIf all files are just class and enumeration declarations, `moduleinfo.js` produced file will contain which files are required by each declared\nmember.\n\nBut what if instead of producing modules as classes `joopl-analyzer` should produce true modules grouping the required files to load a set of\nclasses or even a full namespace? No problem since it is about creating a file which instantiates all namespace classes inside a *placeholder class*\nand `joopl-analyzer` will be smart enough to detect a module which will load more than a class!\n\nSee the following sample code:\n    \n    // A.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"A\", {});\n    });\n\n    // B.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n    // C.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\n    // SomeOtherClass.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"SomeOtherClass\", {});\n    });\n\n    // TestClasses.js\n    // Now we create a module called \"TestClasses\" using a \"placeholder class\".\n    // The whole class has a constructor that instantiates all classes from the namespace...\n\n    $import.modules(\"joopl.test.TestClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            this.declareClass(\"TestClasses\", {\n                ctor: function() {\n                    new test.A();\n                    new test.B();\n                    new test.C();\n                    new test.SomeOtherClass();\n                }\n            });\n        });\n    });\n\nAfter executing `joopl-analyzer` for this hypothetical source code tree, `moduleinfo.js` file will contain a module called\n**\"joopl.test.testClasses\"** containing JavaScript code files of the instantiated classes within the placeholder class constructor:\n\n    $import.mapMany({\n        \"joopl.test.TestClasses\": [\n            \"A.js\",\n            \"B.js\",\n            \"C.js\",\n            \"SomeOtherClass.js\",\n            \"testClasses.js\"\n        ]\n    });\n\nNote that the code file defining which classes or enumerations will contain the whole module *TestClasses* is not included in the \n`moduleinfo.js` file. [This is because of the **Rule VI: Modules which load themself don't include the code file from which are loaded**](#rule-module-load-itself). This\nis extremely useful because import/load the whole module using `$import.modules` will not load the placeholder class but just only the classes \ngroup by the module itself!\n\nGreat! **joopl.test.testClasses** module can be used to load 5 classes in order with less code:\n\n    // First of all, load the whole module\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Now joopl.test namespace will be correctly loaded\n            // and A, B, C and SomeOtherClass classes will be available!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.SomeOtherClass(); // This will work!\n        });\n    });\n\nAn important detail is above code instantiates classes in order (A, B, C...). This is not mandatory, since `joopl-analyzer` detects code file\nloading order:\n\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Instantiation order has been altered, but code files will be detected\n            // in the same order as previous sample!\n            var a = new test.SomeOtherClass(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n        });\n    });"
+            "description": "<h3 id=\"index\">1.0 Index of contents</h3>\n\n- [2.0 Introduction](#introduction)\n- [3.0 How it works?](#how-it-works)\n- [4.0 System requirements](#requirements)\n- [5.0 Installing jOOPL Analyzer](#install)\n- [6.0 Configuring jOOPL Analyzer](#configuration)\n- [7.0 How to run jOOPL Analyzer](#run)\n    - [7.1 Executing `joopl-analyzer` command](#execute)\n- [8.0 Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`](#rules)\n    - [Rule I: One `$import.modules` per source code file](#rule-import)\n    - [Rule II: One `$namespace.using` per source code file](#rule-using)\n    - [Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file](#rule-one-nsmembers-per-file)\n    - [Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)](#rule-no-aliases)\n    - [Rule V: Object instantiation always with `new` operator](#rule-instantiation)\n    - [Rule VI: Modules which load themself don't include the code file from which are loaded](#rule-module-load-itself)\n- [9.0 Using `moduleinfo.js` resulting file](#using-moduleinfo)\n- [10.0 Module including](#module-includes)\n- [11.0 Producing true modules](#modules)\n\n<hr />\n\n<h3 id=\"introduction\">2.0 Introduction</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a command-line tool which comprehensively analyzes source code deeply looking for namespaces, classes and enumerations, and automatically\ncreates a configuration that is used on run-time to load JavaScript file dependencies on the fly!\n\nFor example, there are three source code files where each file defines a class A, B, C. Now C inherits B and B inherits A:\n\n**A.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"A\", {\n\n        });\n    });\n\n**B.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n**C.js**\n\n    $namespace.using(\"test\", function(test) {\n        test.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\nRunning jOOPL Analyzer command-line tool will result in a file called `moduleinfo.js` containing this code listing:\n\n    $import.mapMany({\n        \"test.A\": [\"A.js\"],\n        \"test.B\": [\"A.js\", \"B.js\"],\n        \"test.C\": [\"A.js\", \"B.js\", \"C.js\"]\n    });\n\nNote how jOOPL analyzer detects that class inheritance requires the file containing the base class declaration - *hopefully it is smart enough!* -.\n\nThis is just a simple sample of jOOPL Analyzer dependency detection!\n\n<hr />\n\n<h3 id=\"how-it-works\">3.0 How it works?</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nJavaScript files must be located in some diretory, but they can be distributed in subdirectories without a nesting limit. \n\njOOPL Analyzer is executed in the base directory where JavaScript files are located (i.e., usually Web sites have a `/scripts` directory) and looks for\nnamespaces, classes, enumerations and class instances across all files and identifies their physical dependencies. Once detection has ended, jOOPL Analyzer\ncreates a file called `moduleinfo.js` on the root of given base directory which will contain the whole phsyical file dependency configuration.\n\n<hr />\n\n<h3 id=\"requirements\">4.0 System requirements</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer is a NodeJS-based command-line tool. These are the minimum system requirements in order to work with jOOPL Analyzer:\n\n- NodeJS-compatible operating system (Windows, Mac, Linux...). Look for compatibiliy on <a href=\"http://nodejs.org\">NodeJS official site</a>.\n- JavaScript code written using at least jOOPL 2.5.\n\n<hr />\n\n<h3 id=\"install\">5.0 Installing jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nOnce NodeJS was installed in your operating system, next step is **globally** installing jOOPL Analyzer using NodeJS Package Manager (NPM):\n\n    npm install -g joopl-analyzer\n\nNow jOOPL Analyzer will be installed in your local system.\n\n<hr />\n\n<h3 id=\"run\">6.0 How to run jOOPL Analyzer</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs jOOPL Analyzer package using NPM must be installed globally (NPM `-g` command-line argument), there is a `joopl-analyzer` command available\nfrom the operating system shell (bash, Windows command prompt CMD, Windows Powershell...).\n\nOnce `joopl-analyzer -h` or `joopl-analyzer --help` is executed, it writes down on the shell output the following documentation with basic details\nabout how to work with `joopl-analyzer` command-line interface:\n\n      Usage: cli.js [options]\n\n          Options:\n\n            -h, --help                  output usage information\n\n            -V, --version               output the version number\n\n            -d, --directory <basedir>   Specifies the base directory from which the analyzer must start \n                                        the search of JavaScript dependencies\n\n            -e, --excludes <excludes>   A semicolon-separated list of directories to exclude from the analysis \n                                        (f.e. ./js/jquery;./js/other)\n\n            -i, --includes <includes>   A semicolon-separated list of other moduleinfo.js files (either from local file\n                                        system or http:// or https://) that must be included to let analysis reference\n                                        their files in the analysis \n\n                                        For example: http://mysite.com/js/moduleinfo.js;./otherproject/js/moduleinfo.js\n            \n            -b, --baseDirectoryOverrides <baseDirectoryOverrides> \n\n                                        A semicolon-separated list of key-value pairs, where key is a base directory and\n                                        value is the replace with expression.\n\n                                        This allows analysis to replace base directories to an arbitrary base directory in\n                                        the resulting analysis.\n\n                                        For example, if given base directory is ./web/js, resulting moduleinfo.js will \n                                        have paths like ./web/js/myclass.js. But maybe the HTML page which hosts the \n                                        JavaScript files require JavaScript files to be loaded from ./js. \n\n                                        Then, this parameter should provide a list like this: \n                                            -b ./web/js=./js/$2\n\n            -q, --quiet                 Quiet mode: no console output\n\n            -n, --nologo                Hides jOOPL logo\n\n\n<h4 id=\"execute\">7.1 Executing `joopl-analyzer` command</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\n`joopl-analyzer` command is executed against a base directory from which the analyzer will do the whole code analysis. This base directory can be \ninferred from current shell working directory or by providing the `-d` / `--directory` argument. For example:\n\n    joopl-analyzer\n    joopl-analyzer -d ./scripts\n    joopl-analyzer -d C:\\myproject\\scripts\n    joopl-analyzer -d /home/myproject/scripts\n    joopl-analyzer --directory ./scripts\n    joopl-analyzer --directory C:\\myproject\\scripts\n    joopl-analyzer --directory /home/myproject/scripts\n\nWhen `joopl-analyzer` command execution finishes it creates a file called `moduleinfo.js` in the given base directory.\n\n<h3 id=\"rules\">8.0  Rules that JavaScript code must follow to be analyzable by `joopl-analyzer`</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL-based JavaScript code should follow some rules in order to allow `joopl-analyzer` command to work as expected.\n \nOtherwise, any code that does not follow the next rules will be still analyzed but with no result in terms of file dependency\ndetection. *Free-style JavaScript code is still possible*.\n\n<h4 id=\"rule-import\">Rule I: One `$import.modules` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$import.modules` statement per source code file.\n\n**SomeFile.js**\n    \n    // One $import.modules per code file. Callback function sorrounds the code\n    // that will be executed and which depends on loaded modules\n    $import.modules(\"module1\", \"module2\", function() {\n        // Do stuff here\n    });\n\n<h4 id=\"rule-using\">Rule II: One `$namespace.using` per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever use more than one `$namespace.using` statement in the same source code file: just import all namespaces using a single \nstatement:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // More code here, but never another $namespace.using!!!\n    });\n\n<h4 id=\"rule-one-nsmember-per-file\">Rule III: One namespace member declaration (i.e. classes or enumerations) per source code file</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever declare more than a class or enumeration in the same source code file.\n\n<h4 id=\"rule-no-aliases\">Rule IV: Do not alias namespaces and their members (i.e. classes or enumerations)</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever alias namespaces and their members like classes or enumerations:\n\n**SomeFile.js**\n\n    $namespace.using(\"myapp.ns1\", \"myapp.ns2\", function(ns1, ns2) {\n        // NOOOOOOO!!!!\n        var nsAlias = ns2;\n\n        // This would store ns1.A class constructor on a variable so it can be called \n        // as the next sentence to this variable declaration/initialization...\n        var A = ns1.A;\n\n        var instance = new A();\n         // OK, this would work on run-time, but joopl-analyzer will not be able to cover\n         // this use case. ALWAYS INSTANTIATE CLASSES FROM THEIR ORIGINAL NAMESPACE!!\n\n        var instance2 = new ns1.A(); // This is fine for joopl-analyzer!\n    });\n\n<h4 id=\"rule-instantiation\">Rule V: Object instantiation always with `new` operator</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nNever instantiate objects using `Object.create` or any other approach. Always use `new` operator.\n\n<h4 id=\"rule-module-load-itself\">Rule VI: Modules which load themself don't include the code file from which are loaded</h4>\n\n<a href=\"#index\">Back to index of contents</a>\n\nSee the following sample\n\n    // SomeClass.js\n\n    $import.modules(\"joopl.test.MyClass\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            test.declareClass(\"SomeClass\");\n        });\n    });\n\nOnce `joopl-analyzer` gets executed, resulting `moduleinfo.js` file would contain - along with other detected classes and enumerations - \nthe following code:\n\n    // moduleinfo.js\n\n    $import.mapyMany({\n        // ... other detected members\n\n        \"joopl.test.MyClass\": [] // It's empty!!\n    });\n\nWhen a code file imports itself as a module, it's skipped. This rule works as expected and it is extremely important because it prevents\nthe whole code file from being loaded twice!\n\n<hr />\n\n<h3 id=\"using-moduleinfo\">10.0 Using `moduleinfo.js` resulting file</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\nAs explained in previous chapters, running `joopl-analyzer` command produces a file called `moduleinfo.js`. Also, as explained in \n[*Asynchronous dependency loading documentation*]($import.html), `moduleinfo.js` file\nmust be added on some HTML page just after jOOPL `<script>` tag. That is, detected JavaScript dependencies and their relations will be\nconfigured before `$import.modules` statements are executed.\n\n<hr />\n\n<h3 id=\"module-includes\">10.0   Module including - A very powerful feature!</h3>\n\nThere is a first project which produces a `moduleinfo.js` hosted in a place A. And later, there is a second project which\nis hosted in place B.\n\nThe whole second project requires classes from the first project.\n\nThis requirement is covered by *module including* feature.\n\nWhen includes are provided to the analyzer, and it is executed against second project, it will only analyze its own \ncode files but it will also include already produced dependencies from the first project's `moduleinfo.js` file.\n\nFor example, if first project has a class `A` and second project a class `B` which inherits `A`, if first project's\n`moduleinfo.js` file is included during second project's analysis, the resulting `moduleinfo.js` will contain something like:\n\n    $import.mapMany({\n        \"project1.A\": [\n            \"http://myproject1.com/js/classA.js\"\n        ],\n\n        // 2nd project's B class has also detected that inherits from A!!!!!!!!!!!!!\n        \"project2.B\": [\n            \"http://myproject1.com/js/classA.js\",\n            \"http://myproject2.com/js/classB.js\"\n        ]\n    });\n\nThis is possible thanks to the `-i` or `--includes` command-line parameter:\n\n    joopl-analyzer -d ./js -i http://myproject1.com/js/moduleinfo.js\n\n<h3 id=\"modules\">11.0 Producing true modules with `joopl-analyzer`!</h3>\n\n<a href=\"#index\">Back to index of contents</a>\n\njOOPL Analyzer, as explained in previous chapters, looks for class/enumeration declarations and instantiations across a source code tree. \n\nIf all files are just class and enumeration declarations, `moduleinfo.js` produced file will contain which files are required by each declared\nmember.\n\nBut what if instead of producing modules as classes `joopl-analyzer` should produce true modules grouping the required files to load a set of\nclasses or even a full namespace? No problem since it is about creating a file which instantiates all namespace classes inside a *placeholder class*\nand `joopl-analyzer` will be smart enough to detect a module which will load more than a class!\n\nSee the following sample code:\n    \n    // A.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"A\", {});\n    });\n\n    // B.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"B\", {\n            inherits: test.A\n        });\n    });\n\n    // C.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"C\", {\n            inherits: test.B\n        });\n    });\n\n    // SomeOtherClass.js\n    $namespace.using(\"joopl.test\", function(test) {\n        this.declareClass(\"SomeOtherClass\", {});\n    });\n\n    // TestClasses.js\n    // Now we create a module called \"TestClasses\" using a \"placeholder class\".\n    // The whole class has a constructor that instantiates all classes from the namespace...\n\n    $import.modules(\"joopl.test.TestClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            this.declareClass(\"TestClasses\", {\n                ctor: function() {\n                    new test.A();\n                    new test.B();\n                    new test.C();\n                    new test.SomeOtherClass();\n                }\n            });\n        });\n    });\n\nAfter executing `joopl-analyzer` for this hypothetical source code tree, `moduleinfo.js` file will contain a module called\n**\"joopl.test.testClasses\"** containing JavaScript code files of the instantiated classes within the placeholder class constructor:\n\n    $import.mapMany({\n        \"joopl.test.TestClasses\": [\n            \"A.js\",\n            \"B.js\",\n            \"C.js\",\n            \"SomeOtherClass.js\",\n            \"testClasses.js\"\n        ]\n    });\n\nNote that the code file defining which classes or enumerations will contain the whole module *TestClasses* is not included in the \n`moduleinfo.js` file. [This is because of the **Rule VI: Modules which load themself don't include the code file from which are loaded**](#rule-module-load-itself). This\nis extremely useful because import/load the whole module using `$import.modules` will not load the placeholder class but just only the classes \ngroup by the module itself!\n\nGreat! **joopl.test.testClasses** module can be used to load 5 classes in order with less code:\n\n    // First of all, load the whole module\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Now joopl.test namespace will be correctly loaded\n            // and A, B, C and SomeOtherClass classes will be available!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.SomeOtherClass(); // This will work!\n        });\n    });\n\nAn important detail is above code instantiates classes in order (A, B, C...). This is not mandatory, since `joopl-analyzer` detects code file\nloading order:\n\n    $import.modules(\"joopl.test.testClasses\", function() {\n        $namespace.using(\"joopl.test\", function(test) {\n            // Instantiation order has been altered, but code files will be detected\n            // in the same order as previous sample!\n            var a = new test.SomeOtherClass(); // This will work!\n            var a = new test.C(); // This will work!\n            var a = new test.A(); // This will work!\n            var a = new test.B(); // This will work!\n        });\n    });"
         },
         "$import": {
             "name": "$import",
@@ -202,7 +202,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 753,
+            "line": 788,
             "description": "Represents the base type of any class defined by jOOPL",
             "is_constructor": 1
         },
@@ -216,7 +216,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 820,
+            "line": 855,
             "description": "Represents type information and provides access to types' metadata.",
             "final": 1,
             "since": "2.3.0"
@@ -231,7 +231,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 932,
+            "line": 967,
             "description": "<h2 id=\"index\">Index</h2>\n\n* 1.0\\. [What is an attribute?](#attribute-definition)\n* 2.0\\. [How to implement and consume an attribute](#attribute-howto)\n    * 2.1\\. [Attributes with parameters](#attribute-params)\n\n<h2 id=\"attribute-definition\">1.0 What is an attribute?</h2>\n\nUsually class definitions contain a class ctor, properties, methods and/or events, also known as *class members*. Class members define the information and behavior of a given class. \n\nIn some cases, classes require some descriptive information that may be useful by the consumers. \n\nFor example, a class may need to define that requires user authentication and the minimum security role to use its members is *administrator*. \n\nHow can an arbitrary class tell the environment \"*I will not work if the authenticated user is not an administrator*\"? **The answer is *attributes**.*\n\nAn attribute is an inherited class of `Attribute` which defines some metadata that can be identified by other pieces and it is added to the class definition during desing-time.\n\nFinally, a class supports as many attributes as the code requires. The `attributes` parameters for the `$def` operator is an array of attributes.\n\n<h2 id=\"attribute-howto\">2.0 How to implement and consume an attribute</h2>\n\nThe so-called *I will not work if the authenticated user is not an administrator* attribute may be implemented as a class called `RequiresAuthenticationAttribute`:\n\n    $namespace.using(\"joopl\", \"myNamespace\", function(joopl, myNamespace) {\n        myNamespace.declareClass(\"RequiresAuthenticationAttribute\", {\n            inherits: joopl.Attribute\n        });\n    });\n\nLater on, some class that may require authentication to work will apply the whole `RequiresAuthenticationAttribute` as follows:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        myNamespace.declareClass(\"MyClass\", {\n            attributes: [new myNamespace.RequiresAuthenticationAttribute()]\n        });\n    });\n\nFinally, some other code which instantiate the `MyClass` class will inspect if the class requires authentication:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        if(myNamespace.MyClass.type.hasAttribute(myNamespace.RequiresAuthenticationAttribute)) {\n            // Do some stuff if MyClass has the whole attribute\n        } else {\n            throw Error(\"Sorry, this code will not execute classes if they do not require authentication...\");\n        }\n    });\n\n<h3 id=\"attribute-params\">2.1 Attributes with parameters</h3>\nSometimes using an attribute *as is* is not enough, because the attribute itself should contain data. \n\nFor example, some code may require some classes to define a default property. `Person` class may have `FirstName`, `Surname` and `Nickname` properties. Which one will be the one to display in some listing?\n\n    $namespace.using(\"joopl\", \"myNamespace\", function(joopl, myNamespace) {\n        myNamespace.declareClass(\"DefaultPropertyAttribute\", {\n            inherits: oopl.Attribute,\n            ctor: function(args) {\n                this._.defaultPropertyName = args.defaultPropertyName;\n            },\n            members: {\n                get defaultPropertyName() { return this._.defaultPropertyName; }\n            }\n        });\n\n        myNamespace.declareClass(\"Person\", {\n            attributes: [new myNamespace.DefaultPropertyAttribute(\"nickname\")],\n            ctor: function() {\n                this._.firstName = null;\n                this._.surname = null;\n                this._.nickname = null;\n            }\n            members: {\n                get firstName() { return this._.firstName; },\n                set firstName(value) { this._.firstName = value; },\n\n                get surname() { return this._.surname; },\n                set surname(value) { this._.surname = value; },\n\n                get nickname() { return this._.nickname; },\n                set nickname(value) { this._.nickname = value; }\n            }\n        });\n    });\n\n\nNow, some code consumes instances of `Person` and creates some HTML listing using standard DOM and the display name for the whole person will be taken from the `DefaultPropertyValueAttribute`:\n\n    $namespace.using(\"myNamespace\", function(myNamespace) {\n        \n        // The first step is creating a regular instance of Person\n        var person = new myNamespace.Person();\n        person.firstName = \"Matias\";\n        person.surname = \"Fidemraizer\";\n        person.nickname = \"mfidemraizer\";\n\n        // Secondly, this is checking if the Person class has the whole attribute\n        if(Person.type.hasAttribute(myNamespace.DefaultPropertyAttribute)) {\n            // Yes, it has the attribute!\n            //\n            // Then, the attribute instance is retrieved from the type information\n            var defaultProperty = Person.type.getAttribute(myNamespace.DefaultPropertyAttribute);\n\n            // Once the attribute is retrieved, the code can access the \"defaultPropertyName\" instance property\n            // of the DefaultPropertyAttribute\n            var defaultPropertyName = defaultProperty.defaultPropertyName;\n            \n            // Since any object is also an associative array (this is plain JavaScript!), \n            // the default property can be retrieved by using the \"defaultPropertyName\" variable\n            // as key of the array\n            var defaultPropertyValue = person[defaultPropertyName];\n\n            // Finally, this is creating a paragraph containing the defaultPropertyValue. In this case, \n            // it will be \"mfidemraizer\", because the Person class has the DefaultPropertyAttribute set to \"nickname\"!\n            var p = document.createElement(\"p\");\n            p.appendChild(document.createTextNode(defaultPropertyValue));\n            document.body.appendChild(p);\n        }\n    });",
             "since": "2.3.0"
         },
@@ -245,7 +245,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1060,
+            "line": 1095,
             "description": "Represents an enumeration value and provides access to common operations for the whole enumeration value.\n\nSee {{#crossLink \"Enumerations\"}}{{/crossLink}} to learn more about enumerations.",
             "final": 1,
             "since": "2.3.0"
@@ -260,7 +260,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1148,
+            "line": 1183,
             "description": "Represents an utility class to work with enumerations.",
             "static": 1,
             "since": "2.3.0"
@@ -275,7 +275,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1222,
+            "line": 1257,
             "description": "Represents a multi-cast event. \n\nAn event is an observable object which notifies multiple objects listening event raises.",
             "final": 1,
             "is_constructor": 1,
@@ -297,7 +297,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1305,
+            "line": 1340,
             "description": "Represents an event manager for some class supporting events.\n\nIt is capable of registering events and managing their life-cycle.",
             "final": 1,
             "is_constructor": 1,
@@ -319,7 +319,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1355,
+            "line": 1390,
             "description": "Represents a set of environmental values and operations",
             "final": 1
         },
@@ -333,7 +333,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1413,
+            "line": 1448,
             "description": "Represents the base class for any exception \n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "is_constructor": 1,
             "params": [
@@ -362,7 +362,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1526,
+            "line": 1561,
             "description": "Represents an exception that occurs when some method argument is missing or invalid\n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "extends": "joopl.Exception",
             "is_constructor": 1,
@@ -392,7 +392,7 @@
             "extension_for": [],
             "namespace": "joopl",
             "file": "src\\joopl.js",
-            "line": 1569,
+            "line": 1604,
             "description": "Represents an exception that occurs when a class member is not implemented.\n\n<a href=\"Exception%20handling%20best%20practices.html\" target=\"_self\">Please read more about exception handling by following this link to \"Exception handling best practices\"</a>",
             "extends": "joopl.Exception",
             "is_constructor": 1,
@@ -481,13 +481,13 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 749,
+            "line": 784,
             "class": "joopl.Namespace",
             "namespace": "joopl"
         },
         {
             "file": "src\\joopl.js",
-            "line": 787,
+            "line": 822,
             "description": "Determines if a given type is of type of current object",
             "itemtype": "method",
             "name": "isTypeOf",
@@ -506,7 +506,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 835,
+            "line": 870,
             "description": "Gets type name (f.e. \"MyClass\")",
             "itemtype": "property",
             "name": "name",
@@ -517,7 +517,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 846,
+            "line": 881,
             "description": "Gets current type name including full namespace path (f.e. \"joopl.test.MyClass\")",
             "itemtype": "property",
             "name": "fullName",
@@ -528,7 +528,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 857,
+            "line": 892,
             "description": "Gets current base type (i.e. parent class) metadata.",
             "itemtype": "property",
             "name": "baseType",
@@ -539,7 +539,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 868,
+            "line": 903,
             "description": "Gets current namespace instance",
             "itemtype": "property",
             "name": "baseType",
@@ -550,7 +550,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 879,
+            "line": 914,
             "description": "Gets all type's attributes.",
             "itemtype": "property",
             "name": "attributes",
@@ -561,7 +561,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 890,
+            "line": 925,
             "description": "Gets an attribute instance by giving its type, if the type has the whole attribute",
             "itemtype": "method",
             "name": "getAttribute",
@@ -584,7 +584,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 918,
+            "line": 953,
             "description": "Determines whether a given type has an attribute giving its class (rather than giving an instance!)",
             "itemtype": "method",
             "name": "hasAttribute",
@@ -603,7 +603,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1075,
+            "line": 1110,
             "description": "Gets the enumeration value.",
             "itemtype": "property",
             "name": "value",
@@ -613,7 +613,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1083,
+            "line": 1118,
             "description": "Gets the enumeration value name",
             "itemtype": "property",
             "name": "name",
@@ -624,7 +624,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1092,
+            "line": 1127,
             "description": "Performs a bitwise OR with the given enumeration value",
             "itemtype": "method",
             "name": "or",
@@ -647,7 +647,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1112,
+            "line": 1147,
             "description": "Performs a bitwise AND with the given enumeration value",
             "itemtype": "method",
             "name": "and",
@@ -670,7 +670,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1132,
+            "line": 1167,
             "description": "Determines if some enumeration value contains other enumeration value.",
             "itemtype": "method",
             "name": "hasFlag",
@@ -693,7 +693,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1157,
+            "line": 1192,
             "description": "Parses a text into a given enumeration value",
             "itemtype": "method",
             "name": "parseName",
@@ -718,7 +718,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1185,
+            "line": 1220,
             "description": "Parses a comma-separated list of text values as a mask of given enumeration",
             "itemtype": "method",
             "name": "parseNames",
@@ -743,7 +743,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1239,
+            "line": 1274,
             "description": "Gets an array of event handlers listenting for event raise",
             "itemtype": "property",
             "name": "handlers",
@@ -757,7 +757,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1248,
+            "line": 1283,
             "description": "Gets the object who raises the event",
             "itemtype": "property",
             "name": "source",
@@ -769,7 +769,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1257,
+            "line": 1292,
             "description": "Adds and binds a function to this event that will be called whenever\nthis event is raised.\n\nIt supports unlimited event listeners and they will be called in order *FIFO*.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -789,7 +789,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1275,
+            "line": 1310,
             "description": "Removes and unbinds a function from this event.\n\nGiven function handler should be the one that was previously added with `addEventListener`.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -809,7 +809,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1320,
+            "line": 1355,
             "description": "Gets the object who is associated with the event manager",
             "itemtype": "property",
             "name": "source",
@@ -821,7 +821,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1331,
+            "line": 1366,
             "description": "Registers an event in the event manager",
             "itemtype": "method",
             "name": "register",
@@ -833,7 +833,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1363,
+            "line": 1398,
             "description": "Occurs when any exception of any type is thrown within current application",
             "itemtype": "event",
             "name": "exceptionThrown",
@@ -852,7 +852,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1379,
+            "line": 1414,
             "description": "Notifies a given exception to all subscribers",
             "itemtype": "method",
             "name": "notifyException",
@@ -871,7 +871,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1393,
+            "line": 1428,
             "description": "Gets current Environment instance",
             "itemtype": "property",
             "name": "current",
@@ -883,7 +883,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1463,
+            "line": 1498,
             "description": "Gets the human-readable reason text for this exception",
             "itemtype": "property",
             "name": "message",
@@ -894,7 +894,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1474,
+            "line": 1509,
             "description": "Gets an inner exception (optional) which provides information about the sorrounding one",
             "itemtype": "property",
             "name": "innerException",
@@ -905,7 +905,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1485,
+            "line": 1520,
             "description": "Gets the exception's stack trace as an array where each index is a code line",
             "itemtype": "property",
             "name": "stackTrace",
@@ -916,7 +916,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1496,
+            "line": 1531,
             "description": "Gets underlying `Error` instance",
             "itemtype": "property",
             "name": "error",
@@ -927,7 +927,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1507,
+            "line": 1542,
             "description": "Returns the exception message plus the stack trace as a concatenated string",
             "itemtype": "method",
             "name": "toString",
@@ -940,7 +940,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1553,
+            "line": 1588,
             "description": "Gets the affected argument name",
             "itemtype": "property",
             "name": "argName",
@@ -951,7 +951,7 @@
         },
         {
             "file": "src\\joopl.js",
-            "line": 1594,
+            "line": 1629,
             "description": "Gets the not implemented member name",
             "itemtype": "property",
             "name": "memberName",
@@ -964,7 +964,7 @@
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " src\\joopl.js:749"
+            "line": " src\\joopl.js:784"
         }
     ]
 }
